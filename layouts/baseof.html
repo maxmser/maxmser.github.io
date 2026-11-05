@@ -7,6 +7,9 @@
   {{- with .Params.summary }}
   <meta name="description" content="{{ . }}">
   {{- end }}
+  {{- if site.Params.noindex }}
+  <meta name="robots" content="noindex">
+  {{- end }}
   <link rel="canonical" href="{{ .Permalink }}">
   {{- if .IsTranslated }}
   {{- range .AllTranslations }}
@@ -15,6 +18,7 @@
   {{- end }}
   {{- /* Empty favicon so the browser does not request /favicon.ico. */}}
   <link rel="icon" href="data:,">
+  <link rel="preload" href="{{ "fonts/inter/InterVariable.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
   {{- with resources.Get "css/main.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
   {{- end }}

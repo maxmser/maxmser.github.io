@@ -4,11 +4,33 @@
   Everything adjustable is a variable in :root.
 */
 
+/* ---------- Fonts ---------- */
+
+/*
+  Inter 4.1 (variable font), self-hosted, SIL Open Font License 1.1.
+  Files and license: static/fonts/inter/. Interim choice, see DECISIONS.md.
+*/
+@font-face {
+  font-family: "InterVariable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter/InterVariable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "InterVariable";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter/InterVariable-Italic.woff2") format("woff2");
+}
+
 /* ---------- Variables ---------- */
 
 :root {
-  /* Fonts: system stack for now; self-hosted fonts follow later. */
-  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Fonts: Inter first, system stack as fallback. */
+  --font-body: "InterVariable", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Type scale */
@@ -51,6 +73,7 @@
 
 html {
   font-family: var(--font-body);
+  font-optical-sizing: auto;
   font-size: 100%;
   line-height: var(--leading-base);
   color: var(--color-text);

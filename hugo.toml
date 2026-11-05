@@ -15,7 +15,9 @@ defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 
 # No blog: no taxonomies, no RSS feed.
-disableKinds = ["taxonomy", "term", "rss"]
+# The sitemap is switched off while the site is set to noindex (see [params]).
+# Remove "sitemap" from this list when noindex is removed.
+disableKinds = ["taxonomy", "term", "rss", "sitemap"]
 
 [languages.en]
   label = "English"
@@ -25,3 +27,8 @@ disableKinds = ["taxonomy", "term", "rss"]
 # Required by the official GitHub Pages workflow (image cache location).
 [caches.images]
   dir = ":cacheDir/images"
+
+[params]
+  # While the content is still placeholder text, search engines are asked
+  # not to index the site. Set to false (or delete) when the content is ready.
+  noindex = true

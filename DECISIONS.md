@@ -18,7 +18,7 @@ Der lokale Projektordner ist `~/Documents/Projekte/Website`.
 
 Der Titelsatz der Seite lautet: "Product leader who builds things to understand them." Er steht als Überschrift auf der Startseite. Der Seitenname im Browser-Tab und in der Navigation ist "Max Moser". Diesen Namen hat Max am 05.11.2026 festgelegt.
 
-Version 1 enthält kein JavaScript, keine externen Anfragen, keine Cookies und kein Analytics. Schriften werden später selbst gehostet. Bis dahin verwendet die Seite den System-Schriftstapel des jeweiligen Geräts. Damit der Browser nicht nach einer Datei `favicon.ico` fragt, ist ein leeres Favicon eingetragen. Auch der automatische Hugo-Generator-Hinweis im Seitenkopf ist abgeschaltet.
+Version 1 enthält kein JavaScript, keine externen Anfragen, keine Cookies und kein Analytics. Schriften werden selbst gehostet. Bis zum 05.11.2026 verwendete die Seite den System-Schriftstapel des jeweiligen Geräts, seitdem vorerst Inter (siehe Abschnitt "Schrift: vorerst Inter"). Damit der Browser nicht nach einer Datei `favicon.ico` fragt, ist ein leeres Favicon eingetragen. Auch der automatische Hugo-Generator-Hinweis im Seitenkopf ist abgeschaltet.
 
 Es gibt noch keine eigene Domain. Die Seite läuft vorerst unter https://maxmser.github.io/.
 
@@ -67,13 +67,41 @@ Stand 05.11.2026. Das Impressum ist ein Platzhalter mit den Feldern Name, Wohnor
 
 Eine Datenschutzseite gibt es nicht, solange kein Analytics läuft und keine Cookies gesetzt werden.
 
+## Veröffentlichung
+
+Stand 05.11.2026. Max hat die Veröffentlichung am 05.11.2026 freigegeben und selbst ausgeführt. Das öffentliche Repository ist https://github.com/maxmser/maxmser.github.io. Die Pages-Quelle wurde vor dem ersten Push über die GitHub-API auf "GitHub Actions" gestellt. Der erste Build und das Deployment liefen ohne Fehler durch. Die Seite ist unter https://maxmser.github.io/ erreichbar, vorerst noch mit Platzhaltern.
+
+Für Commits ist als Autor "Max Moser" mit der anonymen GitHub-Adresse 275640851+maxmser@users.noreply.github.com eingetragen. Grund: Das Repository ist öffentlich, und die E-Mail-Adresse steht in jedem Commit für alle sichtbar. Die Einstellung gilt global für Git auf Max' Mac.
+
+Die lokalen Git-Schritte führt Max selbst im Terminal aus. Claude arbeitet in einer Linux-VM, die zwar den Ordner sieht, aber nicht ins Terminal des Macs tippen kann und keine GitHub-Anmeldung hat.
+
+## Vorerst nicht in Suchmaschinen
+
+Stand 05.11.2026. Max hat entschieden, die Seite vorerst auf noindex zu setzen, solange sie nur Platzhalter enthält. Jede Seite trägt dafür im Kopf die Angabe `<meta name="robots" content="noindex">`. Gesteuert wird das über `noindex = true` im Abschnitt `[params]` in `hugo.toml`.
+
+Bewusst gibt es keine robots.txt, die das Crawlen sperrt. Laut Google Search Central wirkt noindex nur, wenn der Crawler die Seite abrufen darf. Eine Sperre in robots.txt würde verhindern, dass er die noindex-Angabe überhaupt sieht.
+
+Die Sitemap ist in dieser Zeit abgeschaltet, weil eine Sitemap mit Seiten, die nicht indexiert werden sollen, widersprüchliche Signale sendet.
+
+Wenn die Inhalte fertig sind, sind zwei Schritte nötig. Erstens wird `noindex` in `hugo.toml` auf false gesetzt oder gelöscht. Zweitens wird "sitemap" wieder aus `disableKinds` entfernt.
+
+## Schrift: vorerst Inter
+
+Stand 05.11.2026. Max hat entschieden, vorerst Inter zu verwenden. Eingebaut ist Inter in der Version 4.1 als variable Schrift, also eine Datei für alle Schriftstärken, dazu eine zweite Datei für Kursiv. Inter steht unter der SIL Open Font License 1.1 und darf frei auf Websites verwendet werden. Die Lizenzdatei liegt neben den Schriftdateien in `static/fonts/inter/`.
+
+Die Schrift wird selbst gehostet. Es gibt also keine Anfragen an Google Fonts oder andere fremde Server. Die Dateien stammen unverändert aus dem offiziellen Release auf GitHub (rsms/inter, Version 4.1 vom 16.11.2024). Die normale Schriftdatei wird im Seitenkopf vorgeladen, damit der Text schneller in Inter erscheint. Die Kursiv-Datei lädt der Browser nur, wenn auf einer Seite kursiver Text vorkommt.
+
+Jede der beiden Dateien ist etwa 350 KB groß, weil sie alle Schriftsysteme von Inter enthält, auch Kyrillisch, Griechisch und Vietnamesisch. Man könnte sie später auf lateinische Zeichen kürzen. Das würde die Ladezeit beim ersten Besuch spürbar senken.
+
+Inter ist eine Zwischenlösung. Die endgültige Schriftwahl bleibt offen, siehe unten.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
 
 Domain: Es gibt noch keine eigene Domain. Wenn eine gekauft ist, folgt der Umzug wie oben beschrieben.
 
-Schriftwahl: Söhne liegt nur als Desktop-Lizenz vor. Für die Website braucht es eine eigene Web-Lizenz. Alternativ sollen freie Schriften geprüft werden. Die gewählte Schrift wird dann selbst gehostet, also ohne Anfragen an fremde Server.
+Schriftwahl: Söhne liegt nur als Desktop-Lizenz vor. Für die Website braucht es eine eigene Web-Lizenz. Alternativ sollen freie Schriften geprüft werden. Die gewählte Schrift wird dann selbst gehostet, also ohne Anfragen an fremde Server. Seit dem 05.11.2026 ist vorerst Inter eingebaut.
 
 Inhalte der Projektseiten: Alle Texte sind noch Platzhalter. Max erarbeitet sie später Schritt für Schritt. Das betrifft auch den Einleitungsabsatz der Startseite, die Kurzbeschreibungen der Projekte sowie Status und Stack in jedem Projekt.
 
