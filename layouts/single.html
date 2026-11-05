@@ -1,0 +1,21 @@
+{{ define "main" }}
+<article class="project">
+  <header class="project-header">
+    <h1>{{ .Title }}</h1>
+    {{- with .Params.summary }}
+    <p class="summary">{{ . }}</p>
+    {{- end }}
+    <dl class="project-meta">
+      {{- with .Params.status }}
+      <dt>{{ T "status" }}</dt>
+      <dd>{{ . }}</dd>
+      {{- end }}
+      {{- with .Params.stack }}
+      <dt>{{ T "stack" }}</dt>
+      <dd>{{ delimit . ", " }}</dd>
+      {{- end }}
+    </dl>
+  </header>
+  {{ .Content }}
+</article>
+{{ end }}

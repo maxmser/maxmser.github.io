@@ -1,0 +1,8 @@
+{{ define "main" }}
+<section class="list">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+  {{ partial "project-list.html" .RegularPages }}
+</section>
+{{ partial "more-projects.html" . }}
+{{ end }}

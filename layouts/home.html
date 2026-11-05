@@ -1,0 +1,13 @@
+{{ define "main" }}
+<section class="intro">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+</section>
+{{- with site.GetPage "/projects" }}
+<section class="projects" aria-labelledby="projects-heading">
+  <h2 id="projects-heading">{{ T "projects" }}</h2>
+  {{ partial "project-list.html" .RegularPages }}
+</section>
+{{- end }}
+{{ partial "more-projects.html" . }}
+{{ end }}

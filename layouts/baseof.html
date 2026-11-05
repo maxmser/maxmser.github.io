@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} – {{ site.Title }}{{ end }}</title>
+  {{- with .Params.summary }}
+  <meta name="description" content="{{ . }}">
+  {{- end }}
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{- if .IsTranslated }}
+  {{- range .AllTranslations }}
+  <link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}">
+  {{- end }}
+  {{- end }}
+  {{- /* Empty favicon so the browser does not request /favicon.ico. */}}
+  <link rel="icon" href="data:,">
+  {{- with resources.Get "css/main.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+  {{- end }}
+</head>
+<body>
+  <a class="skip-link" href="#main">{{ T "skipToContent" }}</a>
+  <div class="page grid">
+    <header class="site-header">
+      {{ partial "nav.html" . }}
+    </header>
+    <main id="main" class="site-main">
+      {{ block "main" . }}{{ end }}
+    </main>
+    <footer class="site-footer">
+      {{ with site.GetPage "/imprint" }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
+    </footer>
+  </div>
+</body>
+</html>

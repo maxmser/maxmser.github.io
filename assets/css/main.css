@@ -1,0 +1,140 @@
+/*
+  Neutral base stylesheet. The actual design follows later in its own round
+  (direction: Swiss grid design, Josef Müller-Brockmann).
+  Everything adjustable is a variable in :root.
+*/
+
+/* ---------- Variables ---------- */
+
+:root {
+  /* Fonts: system stack for now; self-hosted fonts follow later. */
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Type scale */
+  --size-small: 0.875rem;
+  --size-base: 1rem;
+  --size-medium: 1.25rem;
+  --size-large: 1.75rem;
+  --size-xlarge: 2.5rem;
+
+  /* Line heights */
+  --leading-tight: 1.15;
+  --leading-base: 1.5;
+
+  /* Baseline unit and spacing scale */
+  --unit: 0.75rem;
+  --space-1: var(--unit);
+  --space-2: calc(var(--unit) * 2);
+  --space-3: calc(var(--unit) * 3);
+  --space-4: calc(var(--unit) * 4);
+  --space-6: calc(var(--unit) * 6);
+
+  /* Grid */
+  --grid-columns: 12;
+  --grid-gap: var(--space-2);
+  --grid-max-width: 75rem;
+  --page-margin: var(--space-2);
+
+  /* Colors */
+  --color-text: #000;
+  --color-background: #fff;
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-body);
+  font-size: 100%;
+  line-height: var(--leading-base);
+  color: var(--color-text);
+  background: var(--color-background);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-2);
+}
+
+h1 { font-size: var(--size-xlarge); }
+h2 { font-size: var(--size-large); }
+h3 { font-size: var(--size-medium); }
+
+p,
+ul,
+ol,
+dl {
+  margin: 0 0 var(--space-2);
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+}
+
+a {
+  color: inherit;
+}
+
+/* ---------- Grid ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  max-width: var(--grid-max-width);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+
+/* By default every direct child spans the full width. */
+.grid > * {
+  grid-column: 1 / -1;
+}
+
+/* ---------- Page regions ---------- */
+
+.site-header,
+.site-main,
+.site-footer {
+  padding-block: var(--space-3);
+}
+
+.site-header ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--space-2);
+}
+
+section,
+article {
+  margin-bottom: var(--space-4);
+}
+
+/* ---------- Accessibility ---------- */
+
+.skip-link {
+  position: absolute;
+  left: var(--space-1);
+  top: -100%;
+}
+
+.skip-link:focus {
+  top: var(--space-1);
+}

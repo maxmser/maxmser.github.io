@@ -1,0 +1,27 @@
+# Site configuration. See DECISIONS.md for the reasoning behind each setting.
+
+# The GitHub Actions build overrides baseURL with the Pages URL.
+# When moving to a custom domain, change this line and set the domain in
+# the repository under Settings > Pages > Custom domain.
+baseURL = "https://maxmser.github.io/"
+title = "Max Moser"
+timeZone = "Europe/Vienna"
+disableHugoGeneratorInject = true
+
+# Multilingual setup: English is the default and lives at the root (/).
+# A German version can be added later with a [languages.de] block and
+# content files named *.de.md next to the English ones.
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+
+# No blog: no taxonomies, no RSS feed.
+disableKinds = ["taxonomy", "term", "rss"]
+
+[languages.en]
+  label = "English"
+  locale = "en"
+  weight = 1
+
+# Required by the official GitHub Pages workflow (image cache location).
+[caches.images]
+  dir = ":cacheDir/images"

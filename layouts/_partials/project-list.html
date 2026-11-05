@@ -1,0 +1,11 @@
+{{- /* Expects a page collection of projects. */}}
+<ul class="project-list">
+  {{- range .ByWeight }}
+  <li>
+    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    {{- with .Params.summary }}
+    <p>{{ . }}</p>
+    {{- end }}
+  </li>
+  {{- end }}
+</ul>

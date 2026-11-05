@@ -1,0 +1,8 @@
+# Interface strings. A German version goes into i18n/de.toml.
+skipToContent = "Skip to content"
+home = "Home"
+projects = "Projects"
+moreProjects = "More projects"
+status = "Status"
+stack = "Stack"
+imprint = "Imprint"

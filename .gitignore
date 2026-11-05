@@ -1,0 +1,7 @@
+# Hugo build output, recreated on every build
+/public/
+/resources/_gen/
+.hugo_build.lock
+
+# macOS
+.DS_Store
