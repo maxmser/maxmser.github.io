@@ -658,6 +658,13 @@ sub {
 
 /* ---------- Footer ---------- */
 
+/* One line more before the footer than between sections: 121.5 px from the last
+   baseline to the footer rule, the same as from the introduction to the first
+   section, so the content has the same frame above and below. */
+.site-main {
+  padding-bottom: 1rlh;
+}
+
 /* A grey rule, so the footer does not read as one more empty section. */
 .site-footer {
   font-size: var(--step--1);

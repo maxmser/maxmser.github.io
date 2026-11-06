@@ -405,6 +405,8 @@ Abstand um Bilder: Über einem Bild lagen 55,5 Pixel Weißraum, zwischen zwei Ab
 
 Status und Stack auf dem Handy: Nach einem Text vor dem ersten Abschnitt standen sie im Abstand eines Absatzes, 43 Pixel, und wirkten wie ein weiterer Absatz. Sie haben dort jetzt zwei Zeilen Abstand statt einer, gemessen 70 Pixel. Ohne einen solchen Text bleibt es bei einer Zeile. Ab 40em stehen sie ohnehin in einer eigenen Spalte. Max hat am 06.11.2026 zugestimmt.
 
+Abstand vor der Fußzeile: Vom letzten Text bis zur Linie über der Fußzeile lagen 94,5 Pixel, so viel wie zwischen zwei Abschnitten, sodass die Fußzeile wie ein weiterer Abschnitt wirkte. Es ist jetzt eine Zeile mehr, gemessen 121,5 Pixel, genauso viel wie zwischen Einleitung und erstem Abschnitt. Max hat am 06.11.2026 zugestimmt.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
