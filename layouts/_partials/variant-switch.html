@@ -9,15 +9,19 @@
   finer grid of quarter lines, so captions and the project meta can have 138 %
   leading.
   Nothing is stored; the script only reads the address.
-  Version C is version B with Charter (XCharter) as running text instead of
-  Crimson Pro (see DECISIONS.md, "Version C mit Charter").
+  Versions C, D and E are version B with Charter as running text instead of
+  Crimson Pro, in three versions: C XCharter (Bitstream's free Charter of 1992),
+  D the Charter built into macOS and iOS (no download; XCharter where it is
+  missing), E a renamed subset of Charis SIL, a free redrawing of Charter
+  (see DECISIONS.md, "Version C mit Charter" and "Charter in drei Fassungen").
   Call with "head" for the style and script, "bar" for the switch.
 */ -}}
 {{- if eq . "head" }}
 <script>
-{ const v = new URLSearchParams(location.search).get("v");
-  if (v === "b" || v === "c") document.documentElement.classList.add("v-b");
-  if (v === "c") document.documentElement.classList.add("v-c"); }
+{ const v = new URLSearchParams(location.search).get("v"), c = document.documentElement.classList;
+  if (["b", "c", "d", "e"].includes(v)) c.add("v-b");          // C, D, E build on B
+  if (["c", "d", "e"].includes(v)) c.add("v-c");               // Charter as running text
+  if (v === "d" || v === "e") c.add("v-" + v); }
 </script>
 <style>
 html.v-b .intro-text { font-size: 1.33333rem; position: relative; top: var(--snap-standfirst, 0px); }
@@ -60,8 +64,18 @@ html.v-b .prose > .figure:not(:has(figcaption)) + * { margin-top: 1.5rlh; }
 @font-face { font-family: "XCharter"; font-weight: 400; font-style: italic; font-display: swap; src: url("/fonts/charter/XCharter-Italic.woff2") format("woff2"); }
 @font-face { font-family: "XCharter"; font-weight: 500 700; font-display: swap; src: url("/fonts/charter/XCharter-Bold.woff2") format("woff2"); }
 html.v-c { --charter-size: 1.05556rem; --charter-standfirst: 1.16667rem; --charter-cap: 0.671em; --snap-charter: 0px; --snap-charter-standfirst: -0.037rlh; } /* 19 px body lands on the grid by itself; 21 px standfirst -1 px, measured */
+/* D: the system's Charter (PostScript names of macOS/iOS). E: a free OFL redrawing of Charter, renamed. */
+@font-face { font-family: "SystemCharter"; font-weight: 400; src: local("Charter-Roman"), local("Charter Roman"); }
+@font-face { font-family: "SystemCharter"; font-weight: 400; font-style: italic; src: local("Charter-Italic"), local("Charter Italic"); }
+@font-face { font-family: "SystemCharter"; font-weight: 500 700; src: local("Charter-Bold"), local("Charter Bold"); }
+@font-face { font-family: "Test Serif E"; font-weight: 400; font-display: swap; src: url("/fonts/test-serif-e/TestSerifE-Regular.woff2") format("woff2"); }
+@font-face { font-family: "Test Serif E"; font-weight: 400; font-style: italic; font-display: swap; src: url("/fonts/test-serif-e/TestSerifE-Italic.woff2") format("woff2"); }
+@font-face { font-family: "Test Serif E"; font-weight: 500 700; font-display: swap; src: url("/fonts/test-serif-e/TestSerifE-Bold.woff2") format("woff2"); }
+html.v-c { --charter-family: "XCharter"; }
+html.v-d { --charter-family: "SystemCharter", "XCharter"; }
+html.v-e { --charter-family: "Test Serif E"; }
 html.v-c .prose,
-html.v-c .intro-text { font-family: "XCharter", var(--font-text); }
+html.v-c .intro-text { font-family: var(--charter-family), var(--font-text); }
 html.v-c .prose { font-size: var(--charter-size); }
 html.v-c .intro-text { font-size: var(--charter-standfirst); top: var(--snap-charter-standfirst); }
 /* Code keeps 15.75 px as in A and B (the code-block snap is measured for that size). */
@@ -80,7 +94,17 @@ html.v-c .figure img { margin-top: calc(-6.25rlh / 27); }
 <nav class="variant-switch" aria-label="Design version">
   <a href="?v=a" id="v-a">A: current</a>
   <a href="?v=b" id="v-b">B: proposals</a>
-  <a href="?v=c" id="v-c">C: Charter</a>
+  <a href="?v=c" id="v-c">C: XCharter</a>
+  <a href="?v=d" id="v-d">D: Apple</a>
+  <a href="?v=e" id="v-e">E: OFL redraw</a>
+  <span id="v-note" hidden>(no system Charter here, showing C)</span>
 </nav>
-<script>{ const c = document.documentElement.classList; document.getElementById(c.contains("v-c") ? "v-c" : c.contains("v-b") ? "v-b" : "v-a").setAttribute("aria-current", "true"); }</script>
+<script>{
+  const c = document.documentElement.classList;
+  const id = ["v-e", "v-d", "v-c", "v-b"].find((v) => c.contains(v)) || "v-a";
+  document.getElementById(id).setAttribute("aria-current", "true");
+  // D: tell the reader if this device has no built-in Charter (the page then shows XCharter).
+  if (c.contains("v-d")) new FontFace("probe", 'local("Charter-Roman"), local("Charter Roman")').load()
+    .catch(() => { document.getElementById("v-note").hidden = false; });
+}</script>
 {{- end }}

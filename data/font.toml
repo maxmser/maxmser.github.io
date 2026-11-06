@@ -56,9 +56,20 @@ weight_max = 500
 # license (tools/fonts-src/charter/LICENSE.txt). Static fonts, no weight axis.
 # The source has two different sets of vertical metrics (hhea and typo) with
 # USE_TYPO_METRICS set, so browsers would place the baseline differently, and the
-# italic is taller (ascent 980) than roman and bold (963), so an italic word would
-# make its line taller. The build gives all three the roman's metrics in every
-# table, with no line gaps (vertical_metrics: ascent, descent in font units).
+# italic is taller than roman and bold, so an italic word would make its line
+# taller. The build gives every style the same metrics in every table, with no line
+# gaps: those of the Charter built into macOS and iOS (0.98 and -0.24 of the font
+# size), so all Charter versions of the test page sit on the grid alike
+# (vertical_metrics: ascent, descent in em).
 [charter]
 characters = "serif"   # use the character list and features of [serif]
-vertical_metrics = [963, -236]
+vertical_metrics = [0.98, -0.2402]
+
+# Test only: Charis SIL 6.101 (google/fonts, commit dfad63d), a redrawing of Charter
+# under the SIL Open Font License, version E of /projects/layout-test/ (?v=e).
+# "Charis" and "SIL" are Reserved Font Names, and subsetting is a modification
+# (OFL-FAQ 2.6), so the build renames the font (rename) and never uses those names.
+[charis]
+characters = "serif"
+vertical_metrics = [0.98, -0.2402]
+rename = "Test Serif E"

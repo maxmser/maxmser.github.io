@@ -52,7 +52,8 @@ def build(src, out, cfg):
     if "vertical_metrics" in cfg:
         # The same vertical metrics in every table and every style, no line gaps,
         # so all browsers place the baseline alike and no style makes a line taller.
-        asc, desc = cfg["vertical_metrics"]
+        upm = font["head"].unitsPerEm
+        asc, desc = (round(v * upm) for v in cfg["vertical_metrics"])
         hhea, os2 = font["hhea"], font["OS/2"]
         hhea.ascent, hhea.descent = os2.sTypoAscender, os2.sTypoDescender = asc, desc
         os2.sTypoLineGap = hhea.lineGap = 0
@@ -71,6 +72,21 @@ def build(src, out, cfg):
     sub = subset.Subsetter(opts)
     sub.populate(unicodes=unicodes(cfg["unicodes"]))
     sub.subset(font)
+
+    if "rename" in cfg:
+        # A new family name in every name record that names the font (OFL: a Modified
+        # Version must not use the Reserved Font Names). Copyright and license stay.
+        style = font["name"].getDebugName(2) or "Regular"
+        new = {1: cfg["rename"], 3: f"{cfg['rename']} {style}; web subset", 4: f"{cfg['rename']} {style}",
+               6: f"{cfg['rename']}-{style}".replace(" ", ""), 16: cfg["rename"], 17: style}
+        for rec in list(font["name"].names):
+            # 7 trademark and 8 manufacturer name the original too; copyright (0) and
+            # license (13, 14) stay, as the OFL requires.
+            if rec.nameID in (1, 3, 4, 6, 7, 8, 16, 17, 18, 21, 22, 25):
+                font["name"].removeNames(nameID=rec.nameID)
+        for nid, text in new.items():
+            font["name"].setName(text, nid, 3, 1, 0x409)
+        font["name"].setName(cfg["rename"], 1, 1, 0, 0)
 
     sfnt = io.BytesIO()
     font.flavor = None
@@ -92,8 +108,9 @@ def build(src, out, cfg):
 def main():
     cfg = tomllib.loads((ROOT / "data" / "font.toml").read_text())
     serif = cfg.pop("serif")
-    charter = cfg.pop("charter")
+    charter, charis = cfg.pop("charter"), cfg.pop("charis")
     charter = {**serif, **charter} if charter.get("characters") == "serif" else charter
+    charis = {**serif, **charis} if charis.get("characters") == "serif" else charis
     jobs = [
         (SRC / "InterVariable.woff2", OUT / "inter" / "InterVariable.woff2", cfg),
         (SRC / "InterVariable-Italic.woff2", OUT / "inter" / "InterVariable-Italic.woff2", cfg),
@@ -102,6 +119,9 @@ def main():
     ] + [
         (SRC / "charter" / f"XCharter-{n}.woff2", OUT / "charter" / f"XCharter-{n}.woff2", charter)
         for n in ("Roman", "Italic", "Bold")
+    ] + [
+        (SRC / "charis" / f"CharisSIL-{n}.woff2", OUT / "test-serif-e" / f"TestSerifE-{n}.woff2", charis)
+        for n in ("Regular", "Italic", "Bold")
     ]
     for src, out, settings in jobs:
         build(src, out, settings)

@@ -339,6 +339,14 @@ Version C der Testseite (`?v=c`) ist Version B mit XCharter 1.26 als Lauftext. X
 
 Zwei Mängel der Quelle wurden beim Bauen behoben. Die Schrift hatte zwei verschiedene Sätze von Höhenmaßen, und der kursive Schnitt war höher als der normale. Ohne Korrektur hätten Browser die Grundlinie verschieden gesetzt, und jedes kursive Wort hätte seine Zeile um einen Pixel höher gemacht. Die Prüfung `tools/raster-check.mjs` hatte genau das gefunden. Jetzt haben alle drei Schnitte dieselben Maße (`vertical_metrics` in `data/font.toml`). Bilder hängen in Version C an der Versalhöhe von Charter, die bei 19 Pixel 12,75 Pixel beträgt, und Code steht wie in den anderen Versionen in 15,75 Pixel. Am 06.11.2026 lagen in Version C alle Grundlinien im Raster, auch bei doppelter Textgröße.
 
+## Charter in drei Fassungen
+
+Stand 06.11.2026. Max fand, dass die Charter der Testseite anders aussieht als die, die auf dem iPhone eingebaut ist oder die Medium verwendet. Gemessen ist die Charter in macOS eine überarbeitete Fassung von Bitstream aus den Jahren 1990 bis 2003 im TrueType-Format, mit einem zusätzlichen schwarzen Schnitt. XCharter beruht auf den PostScript-Schriften von 1992. Beide haben dieselben Zeichenbreiten sowie dieselbe Versal- und x-Höhe, unterscheiden sich aber in der Digitalisierung und in den Höhenmaßen. Medium nennt Charter als Schrift für Texte. Welche Fassung Medium verwendet, ließ sich nicht prüfen, weil Medium den automatischen Abruf sperrt.
+
+Die Testseite zeigt deshalb drei Fassungen, alle auf Grundlage von Version B in derselben Größe. C ist XCharter. D ist die in macOS und iOS eingebaute Charter, die über `local()` ohne Download verwendet wird. Fehlt sie auf einem Gerät, zeigt die Leiste einen Hinweis, und es erscheint XCharter. Ob iOS Webseiten die eingebaute Charter nutzen lässt, war zum Zeitpunkt des Baus nicht geprüft. E ist eine gekürzte Fassung von Charis SIL 6.101, der freien Nachzeichnung von Charter. Weil "Charis" und "SIL" geschützte Namen sind und das Kürzen als Veränderung gilt, heißt die Schrift intern "Test Serif E", die Einträge zu Marke und Hersteller sind entfernt, Urheberrecht und Lizenz bleiben, und weder die Leiste noch der Quelltext der Seite nennt den Namen. Die Lizenz liegt in `static/fonts/test-serif-e/OFL.txt`.
+
+Damit alle drei Fassungen genau gleich im Raster stehen, bekommen XCharter und die Nachzeichnung beim Bauen die Höhenmaße der Apple-Charter, 0,98 und −0,24 der Schriftgröße. Charis hatte von Haus aus sehr große Maße, 1,20 und −0,44. Am 06.11.2026 lagen in allen drei Fassungen alle Grundlinien im Raster, auch bei doppelter Textgröße. In Chrome auf dem Mac sehen C und D fast gleich aus, D etwas feiner. E läuft deutlich breiter und kräftiger.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
