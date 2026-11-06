@@ -445,6 +445,12 @@ C ist deshalb jetzt nach Engine getrennt. Nur in WebKit, also in Safari und in j
 
 Auf Max' iPhone zeigte der Schalter "WebKit", die Weiche greift also. Safari trennte, die Kurzbeschreibung behielt ihre letzte Zeile, und das letzte Wort blieb ganz ("the circulation." statt "cir-culation."). Ob Safari höchstens eine Trennung in Folge erlaubt, zeigte das Beispiel nicht, weil die Trennungen drei Zeilen auseinander lagen. Unschön bleibt, dass Safari "dri-ving" statt "driv-ing" trennt. Das kommt aus Safaris Wörterbuch, und die Eigenschaft, mit der man das beeinflussen könnte, hat Safari laut MDN nur in der Vorschau. Max hat am 06.11.2026 entschieden, C auf allen Seiten einzuführen. Die Regeln stehen jetzt in `main.css`, die letzten zwei Wörter werden auf allen Projektseiten und Textseiten gebunden, und der Schalter ist wieder entfernt.
 
+## Britisches Englisch
+
+Stand 06.11.2026. Die Seite ist auf britisches Englisch gestellt (`locale = "en-GB"` in `hugo.toml`, daraus `lang="en-GB"` im HTML). Texte werden britisch geschrieben, mit der Endung -ise, also "organisation", "prioritise", "optimise". So schreibt es auch der Stilleitfaden der Europäischen Kommission vor, und Max' neuester Lebenslauf vom Oktober 2026 ist ebenfalls britisch. Frühere Lebensläufe waren amerikanisch oder gemischt.
+
+Anlass war die Silbentrennung in Safari. Safari holt die Trennstellen vom Betriebssystem. Mit `lang="en"` nimmt es das amerikanische Wörterbuch von Apple, und das trennt "dri-ving". Gemessen am 06.11.2026 mit der Systemfunktion `CFStringGetHyphenationLocationBeforeIndex` auf macOS: Das amerikanische Wörterbuch liefert "dri-ving", "ar-chiving" und "au-tomation", das britische "driv-ing", "archiv-ing" und "auto-ma-tion". Von 106 geprüften Wörtern trennt das britische Wörterbuch 55 anders, nach britischem Brauch, etwa "pro-ject" und "re-cords". Chrome trennt mit beiden Angaben fast gleich. Für einzelne Wörter, die auch das britische Wörterbuch schlecht trennt (aufgefallen ist "amp-li-fi-er"), wäre später eine Ausnahmeliste mit weichen Trennstellen möglich. Laut CSS-Spezifikation gelten in einem Wort mit weicher Trennstelle nur noch diese.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

@@ -21,7 +21,7 @@ disableKinds = ["taxonomy", "term", "rss", "sitemap"]
 
 [languages.en]
   label = "English"
-  locale = "en"
+  locale = "en-GB"  # British English: spelling with -ise, British hyphenation (DECISIONS.md, "Britisches Englisch")
   weight = 1
 
 # Required by the official GitHub Pages workflow (image cache location).
