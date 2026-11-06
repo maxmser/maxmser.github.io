@@ -1,0 +1,7 @@
+{{- /*
+  Expects the rendered content of a page (.Content). Returns the text before the
+  first level-2 heading, or "" if there is none. The templates put it into the
+  page header right after the summary, so it reads as part of the introduction
+  (see DECISIONS.md, "Gestaltungs-Review").
+*/ -}}
+{{- return strings.TrimSpace (index (split (string .) "<h2") 0) }}

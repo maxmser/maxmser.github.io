@@ -299,6 +299,24 @@ Dabei aufgefallen und behoben: Hugo hat Codeblöcke bisher mit dunklem Hintergru
 
 Die Prüfung `tools/raster-check.mjs` kontrolliert jetzt auch die Höhe aller Blöcke im Lauftext, also Abbildungen, Listen, Zitate und Code. Seiten, die nirgends verlinkt sind, werden als zusätzliche Pfade übergeben: `node tools/raster-check.mjs http://localhost:1313 /projects/layout-test/`. Am 06.11.2026 lagen alle Grundlinien auf acht Seiten in fünf Ansichten im Raster. Code steht in der Festbreitenschrift des Betriebssystems, deren Maße je nach System verschieden sind. Bei doppelter Textgröße liegt er deshalb zwei Pixel neben dem Raster, und die Prüfung lässt dort zwei Pixel zu.
 
+## Gestaltungs-Review
+
+Stand 06.11.2026. Max wollte wissen, ob der senkrechte Rhythmus und die Größen der Überschriften stimmen. Ein eigener Prüfer hat Code, Screenshots und die Typografie-Regeln unabhängig begutachtet. Sein Urteil: Der Rhythmus funktioniert als System, mit wenigen, klar abgestuften Abständen (0, eine halbe, eine, zwei, drei und vier Zeilen). Die Befunde wurden an der Seite nachgemessen. Bei einem davon war die Zahl falsch: Der Abstand vor dem Einleitungstext betrug auf dem Desktop vier Zeilen und nicht acht. Die Aussage bleibt trotzdem richtig. Max hat am 06.11.2026 die sechs klaren Mängel zur Umsetzung freigegeben.
+
+Erstens stand Text vor dem ersten Abschnitt näher am folgenden Abschnitt als an der Kurzbeschreibung, zu der er gehört. Er steht jetzt im Kopf der Seite, eine Zeile unter der Kurzbeschreibung und vier Zeilen vor dem ersten Abschnitt (`layouts/_partials/lead.html`).
+
+Zweitens war der Abschnittsname mit 14,6 Pixel kleiner als die Zwischenüberschrift im Text mit 18 Pixel. Auf dem Handy, wo beide in einer Spalte stehen, wirkte die untergeordnete Überschrift dadurch lauter. Beide haben jetzt 18 Pixel. Den Rang des Abschnitts tragen die Linie darüber, die linke Spalte und der größere Abstand.
+
+Drittens hingen die Aufzählungszeichen auf dem Handy im Seitenrand, etwa zehn Pixel vom Bildschirmrand entfernt. Listen sind dort jetzt um eine Zeile eingerückt. Ab 40em hängen die Zeichen wie bisher im Zwischenraum vor der Textspalte.
+
+Viertens lagen Bilder im Hochformat mit 324 Pixel Breite nicht auf den Spalten des Rasters. Sie sind jetzt auf dem Desktop genau drei und auf dem Tablet vier der sechs Textspalten breit, auf dem Handy so breit wie der Text.
+
+Fünftens war Code zu groß: Die x-Höhe lag 14 Prozent über der von Crimson Pro. Code steht jetzt in 0,75 der Textgröße. Ein Versuch mit 0,8, um auch bei doppelter Textgröße näher am Raster zu liegen, brachte nichts, weil Chrome die Maße der Festbreitenschrift des Systems anders rundet als berechnet. Die Prüfung lässt für Codeblöcke deshalb drei Pixel zu. Bei normaler Textgröße sitzt der Codeblock auf macOS genau im Raster.
+
+Sechstens hatten Status und Stack auf dem Handy sechs kurze Zeilen mit 185 Prozent Zeilenabstand. Das Raster erlaubt für kleine Schrift nur ganze oder halbe Zeilen, deshalb ist die Lösung weniger Zeilen und nicht engere. Auf dem Handy stehen Name und Wert jetzt nebeneinander, das sind drei Zeilen. Ab 40em bleibt die eigene Spalte neben der Kurzbeschreibung.
+
+Nicht umgesetzt sind die Vorschläge, die Geschmackssache sind. Bildunterschriften könnten schmaler sein, etwa 60 statt 93 Zeichen pro Zeile. Die Kurzbeschreibung könnte als Vorspann eine Stufe größer stehen, in 24 Pixel. Der Abschnittsname könnte auf dem Handy näher am Text stehen. Die Linie über der Fußzeile könnte grau sein, damit "Imprint" nicht wie ein leerer Abschnitt wirkt. Der Titel der Startseite könnte auf dem Handy 36 statt 48 Pixel groß sein, weil er heute in fünf Zeilen umbricht. Kurzbeschreibung und Lauftext könnten auf dem Tablet dieselbe rechte Kante haben.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

@@ -5,6 +5,9 @@
     {{- with .Params.summary }}
     <p class="intro-text">{{ partial "typo.html" (dict "page" $ "text" .) }}</p>
     {{- end }}
+    {{- with partial "lead.html" .Content }}
+    <div class="intro-lead prose">{{ . | safeHTML }}</div>
+    {{- end }}
     {{- if or .Params.status .Params.stack }}
     <dl class="project-meta">
       {{- with .Params.status }}

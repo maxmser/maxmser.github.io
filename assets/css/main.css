@@ -227,7 +227,6 @@ body {
 /* Small text: letter-spacing in em resolves at the element's own size, so
    every element in the small size sets it again. */
 .site-header,
-.block-label,
 .project-meta,
 .num,
 .site-footer,
@@ -349,14 +348,32 @@ a:hover {
   letter-spacing: 0;
 }
 
+/* Text before the first section heading: part of the introduction, one line
+   below the summary (two if there is no summary). */
+.intro-lead {
+  margin-top: 2rlh;
+  max-width: var(--measure);
+}
+
+.intro-text + .intro-lead {
+  margin-top: 1rlh;
+}
+
+/* Status and stack. On phones a two-column table (name | value), so six short
+   lines become three; from 40em a column of its own beside the summary. */
 .project-meta {
   margin-top: 1rlh;
   font-size: var(--step--1);
+  display: grid;
+  grid-template-columns: subgrid;
 }
 
-.project-meta > div + div {
-  margin-top: 1rlh;
+.project-meta > div {
+  display: contents;
 }
+
+.project-meta dt { grid-column: 1 / 3; }
+.project-meta dd { grid-column: 3 / -1; }
 
 .project-meta dt {
   font-weight: var(--weight-medium);
@@ -370,8 +387,10 @@ a:hover {
   background: linear-gradient(var(--ink), var(--ink)) top / 100% 1px no-repeat;
 }
 
+/* Section names in the size of the h3 inside the text (18 px), so a section
+   never ranks below its own subheading. The rank comes from the rule above,
+   the left column and the space before (see DECISIONS.md, "Gestaltungs-Review"). */
 .block-label {
-  font-size: var(--step--1);
   margin-bottom: 1rlh;
 }
 
@@ -433,17 +452,18 @@ a:hover {
   text-underline-offset: 0.2em;
 }
 
-/* Bullets and numbers hang outside the text column, so the text stays
-   flush with the grid. */
+/* On phones lists are indented by one line, so bullets and numbers stay off
+   the screen edge. From 40em they hang in the gutter outside the text column,
+   so the text stays flush with the grid (see the media queries). */
 .prose ul,
 .prose ol {
-  padding-left: 0;
+  padding-left: 1rlh;
 }
 
 .prose code,
 .prose pre {
   font-family: var(--font-mono);
-  font-size: 0.875em;
+  font-size: 0.75em; /* x-height close to Crimson 21 px (SF Mono: about 8.6 px) */
   letter-spacing: 0;
 }
 
@@ -512,8 +532,9 @@ a:hover {
   }
 }
 
-/* Phone screenshots and other tall images: about the width of a phone
-   (12 lines = 324 px), so they do not fill several screens. */
+/* Phone screenshots and other tall images: about the width of a phone, on the
+   columns of the grid: 4 of the 6 text columns from 40em, 3 from 64em
+   (see the media queries). On phones the full text width. */
 .figure-portrait {
   max-width: 12rlh;
 }
@@ -524,11 +545,6 @@ a:hover {
   font-size: var(--step--1);
   letter-spacing: var(--tracking--1);
   color: var(--muted);
-}
-
-/* Text before the first section heading on a page. */
-.lead-text {
-  margin-bottom: 3rlh;
 }
 
 /* Inline elements in another font or position must not make a line taller
@@ -543,7 +559,6 @@ sub {
 
 /* Inter 14.6 px elements, moved onto the baseline grid (see --snap-small). */
 .site-header,
-.block-label,
 .project-meta,
 .figure figcaption,
 .site-footer {
@@ -564,14 +579,26 @@ sub {
 @media (min-width: 40em) {
   .display { grid-column: 1 / 8; }
 
-  .intro-text,
+  .intro-text { grid-row: 2; grid-column: 3 / 8; }
+  .intro-lead { grid-row: 3; grid-column: 3 / 8; }
   .project-meta {
-    grid-row: 2;
-  }
-  .intro-text { grid-column: 3 / 8; }
-  .project-meta {
+    grid-row: 2 / span 2;
+    align-self: start;
     grid-column: 1 / 3;
     margin-top: 2rlh;
+    display: block;
+  }
+  .project-meta > div { display: block; }
+  .project-meta > div + div { margin-top: 1rlh; }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 0;
+  }
+
+  .figure-portrait {
+    max-width: none;
+    width: calc((100% + var(--gutter)) * 4 / 6 - var(--gutter));
   }
 
   .block-label {
@@ -592,7 +619,12 @@ sub {
 
   .display { grid-column: 1 / 10; }
   .intro-text { grid-column: 4 / 10; }
+  .intro-lead { grid-column: 4 / 10; }
   .project-meta { grid-column: 1 / 4; }
+
+  .figure-portrait {
+    width: calc((100% + var(--gutter)) * 3 / 6 - var(--gutter));
+  }
 
   .block-label { grid-column: 1 / 4; }
   .block-body { grid-column: 4 / -1; }

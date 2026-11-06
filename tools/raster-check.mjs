@@ -10,8 +10,9 @@
 //    1 px: browsers round font metrics to whole pixels, and Inter 18 px and
 //    Crimson Pro 21 px differ by 0.6 px before rounding (1.2 px at double size).
 //    At normal size both round to the same pixel.
-//    Text in code blocks gets 2 px: it is set in the system's monospace font
-//    (SF Mono, Consolas, ...), whose metrics differ by operating system.
+//    Text in code blocks gets 3 px: it is set in the system's monospace font
+//    (SF Mono, Consolas, ...), whose metrics differ by operating system and are
+//    rounded differently at larger sizes. At normal size it sits exactly (macOS).
 // 2. Heights: every block with its own text whose line height is on the grid is a
 //    whole number of half lines tall, so nothing below it leaves the grid (an inline
 //    element in another font or a superscript can stretch a line). Elements with a
@@ -122,7 +123,7 @@ for (const view of VIEWS) {
     if (!ref) { fail(`${where}: no text found`); continue; }
     for (const i of m.items) {
       let d = Math.abs(i.phase - ref.phase); d = Math.min(d, m.G - d);
-      if (d > Math.max(view.tolerance || 0.25, i.mono ? 2 : 0) + 1e-6) fail(`${where}: baseline of ${i.el} (${i.font} ${i.size}px) is ${(i.phase - ref.phase).toFixed(2)}px off the grid`);
+      if (d > Math.max(view.tolerance || 0.25, i.mono ? 3 : 0) + 1e-6) fail(`${where}: baseline of ${i.el} (${i.font} ${i.size}px) is ${(i.phase - ref.phase).toFixed(2)}px off the grid`);
       if (i.height !== null) {
         const rest = i.height % m.G;
         if (Math.min(rest, m.G - rest) > 0.01) fail(`${where}: ${i.el} is ${i.height.toFixed(2)}px tall, not a multiple of ${m.G}px`);

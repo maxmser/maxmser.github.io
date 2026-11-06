@@ -3,15 +3,11 @@
   Wraps every level-2 heading and the text after it into a section, so the
   heading can sit in the left column and the text in the right column,
   like the section names on the home page. Text before the first heading
-  is placed in the text column without a section.
+  is left out: the templates put it into the page header (_partials/lead.html).
 */}}
 {{- $parts := split (string .) "<h2" }}
 {{- range $i, $part := $parts }}
-  {{- if eq $i 0 }}
-    {{- with strings.TrimSpace $part }}
-<div class="block-body prose lead-text">{{ . | safeHTML }}</div>
-    {{- end }}
-  {{- else }}
+  {{- if gt $i 0 }}
     {{- $pieces := split $part "</h2>" }}
 <section class="block">
   {{ printf "<h2 class=\"block-label\"%s</h2>" (index $pieces 0) | safeHTML }}
