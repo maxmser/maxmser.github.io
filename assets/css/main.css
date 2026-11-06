@@ -475,6 +475,12 @@ a:hover {
   background: none;
 }
 
+/* The last entry has no padding below either, so a list ends like a paragraph:
+   94.5 px from its last baseline to the next rule (it was 108). */
+.list li:last-child {
+  padding-bottom: 0;
+}
+
 .num {
   grid-column: 1 / 2;
   font-size: var(--step--1);

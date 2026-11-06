@@ -395,6 +395,12 @@ Max hat sich für die Variante entschieden, bei der die Linie über einem Abschn
 
 Alle Linien nutzen denselben Versatz, `--rule-offset`, 6,5 Pixel unter der Oberkante ihres Kastens. Die Prüfung `tools/raster-check.mjs` prüft jetzt auch die Linien. Eine Gegenprobe mit dem alten Stylesheet hat gezeigt, dass sie verrutschte Linien findet. Am 06.11.2026 lagen alle Grundlinien und alle Linien auf acht Seiten in fünf Ansichten auf dem Raster.
 
+## Einzelne Abstände, mit Max besprochen
+
+Stand 06.11.2026. Die offenen Abstandsvorschläge aus der Prüfung werden einzeln besprochen, jeweils mit Bildern in Retina-Auflösung und eingezeichnetem Raster.
+
+Ende der Projektliste: Jede Zeile einer Liste hat oben und unten eine halbe Zeile Innenabstand. Bei der ersten Zeile war der obere entfernt, bei der letzten blieb der untere stehen, sodass nach einer Liste 108 Pixel Weißraum bis zur nächsten Linie lagen statt 94,5 wie nach einem Absatz. Max hat am 06.11.2026 zugestimmt, die letzte Zeile hat jetzt unten keinen Innenabstand mehr.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
