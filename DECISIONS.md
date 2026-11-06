@@ -421,6 +421,16 @@ Damit gilt die frühere Regel von nur zwei Stärken nicht mehr. Stärke 600 gibt
 
 Die Ersatzschrift hat eine dritte Fassung für Stärke 600 bekommen, gemessen wie die anderen beiden: `size-adjust: 102.28%`, `ascent-override: 94.72%`, `descent-override: 23.58%`. Gewichtet wurde nach englischer Buchstabenhäufigkeit, mit Leerzeichen in einem Anteil von 18 zu 100 Buchstaben. Diese Messung ergibt für die Stärken 400 und 500 die bisherigen Werte bis auf 0,01 Prozentpunkte. Mit der Ersatzschrift stehen die Überschriften auf derselben Grundlinie wie mit Inter, und ihre Breite weicht höchstens 0,7 Prozent ab.
 
+## Aufzählungszeichen und Nummern
+
+Stand 06.11.2026. Auf dem Handy sind Listen eine Zeile eingerückt. Der Browser setzte den Punkt oder die Nummer mit eigenem Abstand davor, sodass der Punkt bei etwa 31 Pixel stand, zwischen der Textkante bei 20 Pixel und dem Listentext bei 47 Pixel, an keiner Kante ausgerichtet. Max fand, die Punkte hingen im Nirgendwo. Punkt und Nummer stehen auf dem Handy jetzt genau auf der Textkante, der Listentext bleibt eine Zeile eingerückt. Hat eine nummerierte Liste zehn oder mehr Einträge, ist sie auf dem Handy anderthalb Zeilen eingerückt, weil eine zweistellige Nummer sonst an den Text stößt.
+
+Die Nummern stehen in Mediävalziffern wie der Fließtext, und zwar in gleicher Breite, damit sie untereinander stehen. Der Browser setzt seine eigenen Nummern immer in Normalziffern. Max hat die Mediävalziffern am 06.11.2026 gewählt.
+
+Umgesetzt sind Punkt und Nummer mit `::before`, weil sich das Zeichen des Browsers nicht genau platzieren lässt und Safari daran laut MDN nur Farbe und Größe ändern lässt, nicht die Ziffernform. Das Zeichen des Browsers bleibt unsichtbar bestehen, damit Listen für Bildschirmleser Listen bleiben. Das gezeichnete Zeichen hat einen leeren Alternativtext, damit es nicht doppelt vorgelesen wird. Laut MDN verstehen das Chrome ab 77, Firefox ab 128 und Safari ab 17.4, ältere Browser zeigen das Zeichen trotzdem. Die Nummern zählt ein eigener Zähler. Eine Liste, die nicht bei eins beginnt, behält deshalb die Nummern des Browsers, denn ein Zähler in CSS kann den Startwert nicht lesen. Ab 40em hängen Punkt und Nummer wie bisher links vor der Textspalte, im selben Abstand wie zuvor, gemessen 13,25 Pixel vom Punkt und 5,25 Pixel vom Punkt nach der Nummer bis zum Text.
+
+Bekannte Schwäche, nicht geändert: Ab 40em sind verschachtelte Listen nicht eingerückt, ihre Einträge stehen bündig mit denen der äußeren Liste. Das war schon vorher so.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

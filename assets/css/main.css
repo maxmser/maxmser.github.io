@@ -545,11 +545,66 @@ a:hover {
 }
 
 /* On phones lists are indented by one line, so bullets and numbers stay off
-   the screen edge. From 40em they hang in the gutter outside the text column,
-   so the text stays flush with the grid (see the media queries). */
+   the screen edge; the bullet or number stands on the text edge. From 40em they
+   hang in the gutter outside the text column, so the text stays flush with the
+   grid (see the media queries).
+   Bullets and numbers are drawn by ::before, because the browser's own marker
+   cannot be placed exactly, and in Safari it cannot take oldstyle figures
+   (Safari styles only color and font-size of ::marker, MDN). The own marker
+   stays, transparent, so lists keep their list semantics. Numbers: oldstyle
+   figures like the running text, tabular so 9 and 10 line up. A list that
+   starts at another number (<ol start>) keeps the browser's own numbers,
+   because a CSS counter cannot read the start value. The trailing no-break
+   space is the gap the browser leaves after its marker. The second content
+   line gives the drawn marker empty alternative text, so screen readers do not
+   read it twice; browsers without that syntax keep the first line. */
 .prose ul,
 .prose ol {
-  padding-left: 1rlh;
+  --list-indent: 1rlh;
+  padding-left: var(--list-indent);
+}
+
+.prose ol:not([start]) {
+  counter-reset: list-item item;
+}
+
+/* From the tenth entry the number has two digits and fills the indent of one
+   line, so such lists get half a line more on phones (:has, from Chrome 105,
+   Firefox 121, Safari 15.4, MDN). */
+.prose ol:not([start]):has(> li:nth-child(10)) {
+  --list-indent: 1.5rlh;
+}
+
+.prose ul > li,
+.prose ol:not([start]) > li {
+  position: relative;
+}
+
+.prose ol:not([start]) > li {
+  counter-increment: item;
+}
+
+.prose ul > li::marker,
+.prose ol:not([start]) > li::marker {
+  color: transparent;
+}
+
+.prose ul > li::before,
+.prose ol:not([start]) > li::before {
+  position: absolute;
+  left: calc(-1 * var(--list-indent));
+  font-variant-numeric: oldstyle-nums tabular-nums;
+}
+
+.prose ul > li::before {
+  content: "\2022\a0";
+  content: "\2022\a0" / "";
+  padding-right: 0.375em; /* hanging from 40em: 13 px to the text, as the browser's own bullet */
+}
+
+.prose ol:not([start]) > li::before {
+  content: counter(item) ".\a0";
+  content: counter(item) ".\a0" / "";
 }
 
 .prose code,
@@ -712,6 +767,12 @@ sub {
   .prose ul,
   .prose ol {
     padding-left: 0;
+  }
+
+  .prose ul > li::before,
+  .prose ol:not([start]) > li::before {
+    left: auto;
+    right: 100%;
   }
 
   .figure-portrait {
