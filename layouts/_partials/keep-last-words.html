@@ -1,0 +1,14 @@
+{{- /*
+  Expects rendered HTML. Binds the last two words of every paragraph and list
+  item with a no-break space, so no word stands alone in the last line, in every
+  browser, while hyphenation stays on (see DECISIONS.md, "Silbentrennung in
+  Safari"). The words themselves can still be hyphenated.
+  The pattern replaces the last white space before </p> or </li>. What follows
+  that space may only be text and the inline tags listed; a space inside a tag
+  can never match, because the bare ">" that closes the tag is not allowed.
+  Code, nested lists and other tags at the end stop the match: nothing is bound.
+  Test page only for now (front matter "variants: true").
+*/ -}}
+{{- $inline := `</?(?:a|em|strong|i|b|sup|sub|abbr|span|q|small|mark)\b[^>]*>` }}
+{{- $re := printf `\s((?:[^\s<>]|%s)+</(?:p|li)>)` $inline }}
+{{- return replaceRE $re "&nbsp;${1}" (string .) }}

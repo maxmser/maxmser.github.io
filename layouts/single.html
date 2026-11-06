@@ -1,11 +1,13 @@
 {{ define "main" }}
+{{- $content := .Content }}
+{{- if .Params.variants }}{{ $content = partial "keep-last-words.html" $content }}{{ end }}
 <article class="article">
   <header class="intro">
     <h1 class="display">{{ partial "typo.html" (dict "page" . "text" .Title) }}</h1>
     {{- with .Params.summary }}
     <p class="intro-text">{{ partial "typo.html" (dict "page" $ "text" .) }}</p>
     {{- end }}
-    {{- with partial "lead.html" .Content }}
+    {{- with partial "lead.html" $content }}
     <div class="intro-lead prose">{{ . | safeHTML }}</div>
     {{- end }}
     {{- if or .Params.status .Params.stack }}
@@ -27,6 +29,6 @@
     </dl>
     {{- end }}
   </header>
-  {{ partial "sections.html" .Content }}
+  {{ partial "sections.html" $content }}
 </article>
 {{ end }}
