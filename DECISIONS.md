@@ -403,6 +403,8 @@ Ende der Projektliste: Jede Zeile einer Liste hat oben und unten eine halbe Zeil
 
 Abstand um Bilder: Über einem Bild lagen 55,5 Pixel Weißraum, zwischen zwei Absätzen 42. Ein Bild setzte sich damit kaum stärker ab als ein neuer Absatz. Über und unter jeder Abbildung liegt jetzt eine halbe Zeile mehr. Gemessen sind es 69 Pixel über dem Bild, so viel wie vor einer Zwischenüberschrift, und 69 Pixel unter der Unterschrift, nach einer Unterschrift mit gerader Zeilenzahl 75,75. Max hat am 06.11.2026 zugestimmt.
 
+Status und Stack auf dem Handy: Nach einem Text vor dem ersten Abschnitt standen sie im Abstand eines Absatzes, 43 Pixel, und wirkten wie ein weiterer Absatz. Sie haben dort jetzt zwei Zeilen Abstand statt einer, gemessen 70 Pixel. Ohne einen solchen Text bleibt es bei einer Zeile. Ab 40em stehen sie ohnehin in einer eigenen Spalte. Max hat am 06.11.2026 zugestimmt.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
