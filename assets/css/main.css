@@ -151,6 +151,7 @@
      In rlh, not px, so they grow with the reader's text size setting.
      Change a font size and these must be measured again. */
   --snap-small: 0.0741rlh;    /* 2 px: Inter 14.6 px */
+  --snap-mono: 0.03704rlh;      /* 1 px: code blocks, SF Mono at 0.75em (other systems' monospace fonts may differ) */
   --snap-display: 0.1111rlh;  /* 3 px: page title, 48 px */
 
   /* Two weights only. */
@@ -469,6 +470,8 @@ a:hover {
 
 .prose pre {
   overflow-x: auto;
+  position: relative;
+  top: var(--snap-mono);
 }
 
 /* Code inside a code block keeps the block's size (otherwise 0.875em twice). */

@@ -1,0 +1,34 @@
+{{- /*
+  Test only: two design versions on one page, switched with ?v=b in the address.
+  Used by pages with "variants: true" in the front matter (the layout test page).
+  Version A is the site as it is. Version B adds the design review's proposals
+  that are a matter of taste (see DECISIONS.md, "Gestaltungs-Review"):
+  narrower captions, a 24 px standfirst, section names closer to the text on
+  phones, a grey footer rule, a 36 px page title on phones.
+  Nothing is stored; the script only reads the address.
+  Call with "head" for the style and script, "bar" for the switch.
+*/ -}}
+{{- if eq . "head" }}
+<script>if (new URLSearchParams(location.search).get("v") === "b") document.documentElement.classList.add("v-b");</script>
+<style>
+html.v-b .intro-text { font-size: 1.33333rem; position: relative; top: var(--snap-standfirst, 0px); }
+html.v-b { --snap-standfirst: -0.0741rlh; } /* -2 px, measured */
+html.v-b .site-footer { background: linear-gradient(var(--rule), var(--rule)) top / 100% 1px no-repeat; }
+@media (max-width: 39.9375em) {
+  html.v-b { --display-size: 2rem; --display-leading: 1.5rlh; --snap-display: 0.0185rlh; } /* 36 on 40.5 px, +0.5 px measured */
+  html.v-b .block-label { margin-bottom: 0.5rlh; }
+}
+@media (min-width: 40em) {
+  html.v-b .figure:not(.figure-portrait) figcaption { max-width: calc((100% + var(--gutter)) * 4 / 6 - var(--gutter)); }
+}
+.variant-switch { position: fixed; z-index: 10; left: 50%; bottom: 0.5rlh; translate: -50% 0; display: flex; gap: 0.5rlh; padding: 0 0.5rlh; background: var(--paper); box-shadow: 0 0 0 1px var(--rule); font-size: var(--step--1); letter-spacing: var(--tracking--1); white-space: nowrap; }
+.variant-switch a { padding: 0 0.25rlh; }
+.variant-switch a[aria-current] { font-weight: var(--weight-medium); text-decoration: underline; text-underline-offset: 0.2em; }
+</style>
+{{- else }}
+<nav class="variant-switch" aria-label="Design version">
+  <a href="?v=a" id="v-a">A: current</a>
+  <a href="?v=b" id="v-b">B: proposals</a>
+</nav>
+<script>document.getElementById(document.documentElement.classList.contains("v-b") ? "v-b" : "v-a").setAttribute("aria-current", "true");</script>
+{{- end }}

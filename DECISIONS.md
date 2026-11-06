@@ -297,7 +297,7 @@ Damit Bilder das Grundlinienraster nicht stören, wird ihre Höhe mit der CSS-Fu
 
 Dabei aufgefallen und behoben: Hugo hat Codeblöcke bisher mit dunklem Hintergrund im Stil "Monokai" eingefärbt, als feste Stilangaben im HTML. Das passte nicht zum schwarz-weißen Design und war nur nicht sichtbar, weil es noch keinen Codeblock gab. Die Färbung ist jetzt aus. Außerdem war Code in einem Codeblock doppelt verkleinert, auf 0,875 von 0,875 der Schriftgröße.
 
-Die Prüfung `tools/raster-check.mjs` kontrolliert jetzt auch die Höhe aller Blöcke im Lauftext, also Abbildungen, Listen, Zitate und Code. Seiten, die nirgends verlinkt sind, werden als zusätzliche Pfade übergeben: `node tools/raster-check.mjs http://localhost:1313 /projects/layout-test/`. Am 06.11.2026 lagen alle Grundlinien auf acht Seiten in fünf Ansichten im Raster. Code steht in der Festbreitenschrift des Betriebssystems, deren Maße je nach System verschieden sind. Bei doppelter Textgröße liegt er deshalb zwei Pixel neben dem Raster, und die Prüfung lässt dort zwei Pixel zu.
+Die Prüfung `tools/raster-check.mjs` kontrolliert jetzt auch die Höhe aller Blöcke im Lauftext, also Abbildungen, Listen, Zitate und Code. Seiten, die nirgends verlinkt sind, werden als zusätzliche Pfade übergeben: `node tools/raster-check.mjs http://localhost:1313 /projects/layout-test/`. Am 06.11.2026 lagen alle Grundlinien auf acht Seiten in fünf Ansichten im Raster. Code steht in der Festbreitenschrift des Betriebssystems, deren Maße je nach System verschieden sind. Zu Codeblöcken siehe den Abschnitt "Gestaltungs-Review".
 
 ## Gestaltungs-Review
 
@@ -311,11 +311,17 @@ Drittens hingen die Aufzählungszeichen auf dem Handy im Seitenrand, etwa zehn P
 
 Viertens lagen Bilder im Hochformat mit 324 Pixel Breite nicht auf den Spalten des Rasters. Sie sind jetzt auf dem Desktop genau drei und auf dem Tablet vier der sechs Textspalten breit, auf dem Handy so breit wie der Text.
 
-Fünftens war Code zu groß: Die x-Höhe lag 14 Prozent über der von Crimson Pro. Code steht jetzt in 0,75 der Textgröße. Ein Versuch mit 0,8, um auch bei doppelter Textgröße näher am Raster zu liegen, brachte nichts, weil Chrome die Maße der Festbreitenschrift des Systems anders rundet als berechnet. Die Prüfung lässt für Codeblöcke deshalb drei Pixel zu. Bei normaler Textgröße sitzt der Codeblock auf macOS genau im Raster.
+Fünftens war Code zu groß: Die x-Höhe lag 14 Prozent über der von Crimson Pro. Code steht jetzt in 0,75 der Textgröße. Ein Versuch mit 0,8 brachte nichts, weil Chrome die Maße der Festbreitenschrift des Systems anders rundet als berechnet. Korrektur vom selben Tag: Zunächst stand hier, der Codeblock sitze bei normaler Textgröße genau im Raster. Das stimmte nur für die alte Größe 0,875. Mit 0,75 lag er einen Pixel daneben, was eine großzügige Toleranz der Prüfung verdeckt hatte. Codeblöcke werden jetzt wie die übrigen Schriften um einen gemessenen Betrag verschoben (`--snap-mono`, ein Pixel), und die Sonderregel in der Prüfung ist entfernt. Auf macOS liegen sie damit bei normaler und doppelter Textgröße im Raster. Andere Systeme haben eine andere Festbreitenschrift und können abweichen.
 
 Sechstens hatten Status und Stack auf dem Handy sechs kurze Zeilen mit 185 Prozent Zeilenabstand. Das Raster erlaubt für kleine Schrift nur ganze oder halbe Zeilen, deshalb ist die Lösung weniger Zeilen und nicht engere. Auf dem Handy stehen Name und Wert jetzt nebeneinander, das sind drei Zeilen. Ab 40em bleibt die eigene Spalte neben der Kurzbeschreibung.
 
 Nicht umgesetzt sind die Vorschläge, die Geschmackssache sind. Bildunterschriften könnten schmaler sein, etwa 60 statt 93 Zeichen pro Zeile. Die Kurzbeschreibung könnte als Vorspann eine Stufe größer stehen, in 24 Pixel. Der Abschnittsname könnte auf dem Handy näher am Text stehen. Die Linie über der Fußzeile könnte grau sein, damit "Imprint" nicht wie ein leerer Abschnitt wirkt. Der Titel der Startseite könnte auf dem Handy 36 statt 48 Pixel groß sein, weil er heute in fünf Zeilen umbricht. Kurzbeschreibung und Lauftext könnten auf dem Tablet dieselbe rechte Kante haben.
+
+## Zwei Versionen zum Umschalten
+
+Stand 06.11.2026. Max wollte die Vorschläge aus dem Review, die Geschmackssache sind, auf dem Handy mit dem aktuellen Stand vergleichen. Die Testseite hat dafür unten eine kleine Leiste mit "A: current" und "B: proposals". Version B wird mit `?v=b` in der Adresse eingeschaltet. Ein kurzes Skript liest nur die Adresse, gespeichert wird nichts. Die Regeln für Version B stehen nur in `layouts/_partials/variant-switch.html` und werden nur auf Seiten mit `variants: true` geladen, nicht im Stylesheet der Seite.
+
+Version B enthält: Bildunterschriften höchstens vier von sechs Textspalten breit (ab 40em), die Kurzbeschreibung als Vorspann in Crimson Pro 24 Pixel, den Abschnittsnamen auf dem Handy eine halbe Zeile über dem Text statt einer ganzen, die Linie über der Fußzeile grau und den Seitentitel auf dem Handy in 36 auf 40,5 Pixel statt 48 auf 54. Alle Grundlinien liegen auch in Version B im Raster, mit einer Ausnahme: Der Vorspann in 24 Pixel liegt bei doppelter Textgröße zwei Pixel daneben. Exakt gerechnet liegt er einen Pixel neben Crimson Pro in 21 Pixel, und Chrome rundet das bei normaler und doppelter Größe verschieden. Wird Version B übernommen, muss das gelöst werden.
 
 ## Offene Punkte
 
