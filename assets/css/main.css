@@ -262,7 +262,10 @@ body {
 }
 
 /* No single short word alone in the last line of a paragraph (Chrome, Edge,
-   Safari 26; other browsers ignore it). */
+   Safari 26; other browsers ignore it). Safari's pretty evens out the whole
+   paragraph and then hardly hyphenates, so it is off in hyphenated running text
+   in WebKit (see the hyphenation rules below and DECISIONS.md, "Silbentrennung
+   in Safari"). */
 p, li, dd {
   text-wrap: pretty;
 }
@@ -407,9 +410,33 @@ a:hover {
 
 .prose h3,
 .prose code,
-.prose pre {
+.prose pre,
+.prose .last-word {
   -webkit-hyphens: manual;
   hyphens: manual;
+}
+
+/* The last word of a paragraph is never hyphenated: a word fragment alone in
+   the last line is worse than a short line. The templates wrap it in
+   span.last-word and bind it to the word before (_partials/keep-last-words.html).
+   At most one hyphenated line in a row, where supported (MDN: Safari preview;
+   WebKit has the prefixed property in its source, whether Safari honours it is
+   unverified). */
+.prose {
+  -webkit-hyphenate-limit-lines: 1;
+  hyphenate-limit-lines: 1;
+}
+
+/* WebKit only (Safari, and every browser on iOS): text-wrap: pretty off in
+   hyphenated running text, because WebKit's pretty avoids hyphenation. The
+   bound last words keep a single word out of the last line instead. WebKit is
+   recognised by the font keyword -apple-system-body, which only WebKit on Apple
+   systems knows (WebKit Source/WebCore/css/CSSValueKeywords.in); Chrome keeps
+   pretty, it hyphenates with it. Confirmed on Max's iPhone on 2026-11-06. */
+@supports (font: -apple-system-body) {
+  .prose:not(.intro-text) :is(p, li) {
+    text-wrap: wrap;
+  }
 }
 
 /* Oldstyle figures in running text (Bringhurst 3.2.1, rule 5.2 of the CV

@@ -1,7 +1,7 @@
 {{- /* Simple text page, used with "layout: text" in the front matter (for example the imprint). */}}
 {{ define "main" }}
-{{- $content := .Content }}
-{{- if .Params.variants }}{{ $content = partial "keep-last-words.html" $content }}{{ end }}
+{{- /* Running text with the last two words of every paragraph bound (_partials/keep-last-words.html). */}}
+{{- $content := partial "keep-last-words.html" .Content }}
 <article class="article">
   <header class="intro">
     <h1 class="display">{{ partial "typo.html" (dict "page" . "text" .Title) }}</h1>
