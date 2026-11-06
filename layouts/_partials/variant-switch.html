@@ -4,7 +4,8 @@
   Version A is the site as it is. Version B adds the design review's proposals
   that are a matter of taste (see DECISIONS.md, "Gestaltungs-Review"):
   narrower captions, a 24 px standfirst, section names closer to the text on
-  phones, a grey footer rule, a 36 px page title on phones.
+  phones, a grey footer rule, a 36 px page title on phones; and images aligned
+  to cap height and baseline, with the caption closer and equal space around.
   Nothing is stored; the script only reads the address.
   Call with "head" for the style and script, "bar" for the switch.
 */ -}}
@@ -18,6 +19,19 @@ html.v-b .site-footer { background: linear-gradient(var(--rule), var(--rule)) to
   html.v-b { --display-size: 2rem; --display-leading: 1.5rlh; --snap-display: 0.0185rlh; } /* 36 on 40.5 px, +0.5 px measured */
   html.v-b .block-label { margin-bottom: 0.5rlh; }
 }
+/* Figures: the image hangs from the cap height of a text line (Crimson 21 px:
+   12 px above its baseline) and stands on a baseline, as in Müller-Brockmann's
+   grid systems. Top 5.5 px above the grid line, height = n * 13.5 + 12 px, then
+   7 px to the next grid line, so the caption's baseline lies one line below the
+   image's. Space before and after the figure is the same (55.5 px from a
+   baseline to the image, from the caption's baseline to the next capitals). */
+html.v-b .figure { display: flow-root; }
+html.v-b .figure img { margin-top: -0.2037rlh; margin-bottom: 0.2593rlh; }
+@supports (height: round(down, 100cqi, 1px)) {
+  html.v-b .figure img { height: calc(round(down, calc(100cqi / var(--ratio) - 0.4444rlh), 0.5rlh) + 0.4444rlh); }
+}
+html.v-b .figure figcaption { margin-top: 0; }
+html.v-b .prose > .figure + * { margin-top: 0.5rlh; }
 @media (min-width: 40em) {
   html.v-b .figure:not(.figure-portrait) figcaption { max-width: calc((100% + var(--gutter)) * 4 / 6 - var(--gutter)); }
 }

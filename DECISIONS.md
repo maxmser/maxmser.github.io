@@ -323,6 +323,10 @@ Stand 06.11.2026. Max wollte die Vorschläge aus dem Review, die Geschmackssache
 
 Version B enthält: Bildunterschriften höchstens vier von sechs Textspalten breit (ab 40em), die Kurzbeschreibung als Vorspann in Crimson Pro 24 Pixel, den Abschnittsnamen auf dem Handy eine halbe Zeile über dem Text statt einer ganzen, die Linie über der Fußzeile grau und den Seitentitel auf dem Handy in 36 auf 40,5 Pixel statt 48 auf 54. Alle Grundlinien liegen auch in Version B im Raster, mit einer Ausnahme: Der Vorspann in 24 Pixel liegt bei doppelter Textgröße zwei Pixel daneben. Exakt gerechnet liegt er einen Pixel neben Crimson Pro in 21 Pixel, und Chrome rundet das bei normaler und doppelter Größe verschieden. Wird Version B übernommen, muss das gelöst werden.
 
+Nachtrag vom 06.11.2026: Max findet Version B besser und fragte, ob die Bilder auf den Linien liegen und ob die Bildunterschrift zu weit weg steht. Gemessen lagen Ober- und Unterkante der Bilder auf den Zeilenkanten, also 6,5 Pixel neben den Grundlinien. Von der Bildkante bis zur Oberkante der Unterschrift waren es 22,9 Pixel. Über dem Bild lagen 61 Pixel Weißraum, unter der Unterschrift 96 Pixel, zwischen zwei Absätzen 42 Pixel. In Version B hängt das Bild jetzt oben an der Versalhöhe einer Textzeile und steht unten auf einer Grundlinie, wie in den Rastersystemen von Müller-Brockmann. Die Unterschrift steht eine Zeile tiefer, mit 16,4 Pixel Abstand zum Bild, und über und unter der Abbildung liegen jeweils 55,5 Pixel. Ein feineres Raster als 13,5 Pixel ist dafür nicht nötig, weil sich die Bilder an Versalhöhe und Grundlinie ausrichten und nicht am Raster selbst.
+
+Offen ist der Zeilenabstand von Bildunterschriften. Kleine Schrift kann im Raster nur 13,5 oder 27 Pixel Zeilenabstand haben, also 92 oder 185 Prozent. Zweizeilige Unterschriften wirken mit 185 Prozent locker, und die schmaleren Unterschriften von Version B brechen öfter um. Möglich wären kurze, einzeilige Unterschriften als Schreibregel, die volle Textbreite wie in Version A oder ein feineres Raster nur für Unterschriften, das die Grundlinien danach wieder einfangen müsste.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
