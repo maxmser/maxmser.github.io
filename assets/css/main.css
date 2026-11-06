@@ -15,8 +15,14 @@
   Inter (variable font), self-hosted, SIL Open Font License 1.1.
   Built from the Inter source code (version 4.2 in development, commit 353b61b),
   because only that version contains cv16, the lower-case a with tail.
-  Subset to Latin characters and to the weights 400 to 500, the only ones the
-  site uses. Files and license: static/fonts/inter/. See DECISIONS.md.
+  Subset to English and German characters, the weights 400 to 500 and the
+  features in use (data/font.toml, built by tools/build-fonts.py).
+  Files and license: static/fonts/inter/. See DECISIONS.md.
+
+  The upright face below is rewritten by baseof.html: on a first visit the page
+  carries the font inline as base64, so text appears in Inter at once. The lean
+  pages the service worker serves keep this URL. Keep the src line exactly as it
+  is, the template looks for it.
 */
 @font-face {
   font-family: "InterVariable";
@@ -34,11 +40,39 @@
   src: url("/fonts/inter/InterVariable-Italic.woff2") format("woff2");
 }
 
+/*
+  Fallback faces with Inter's proportions, so the layout does not jump when
+  Inter replaces them. Arial and Helvetica have the same widths, so one set of
+  values fits macOS, iOS and Windows. Values measured on 2026-11-06 against
+  Inter at the sizes the site uses (see DECISIONS.md, "Ersatzschrift").
+  Android has neither font and falls back to the unadjusted system font.
+*/
+@font-face {
+  font-family: "InterFallbackText";
+  font-weight: 400 500;
+  src: local("Arial"), local("ArialMT"), local("Helvetica");
+  size-adjust: 107.48%;
+  ascent-override: 90.14%;
+  descent-override: 22.44%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "InterFallbackDisplay";
+  font-weight: 400 500;
+  src: local("Arial"), local("ArialMT"), local("Helvetica");
+  size-adjust: 100.16%;
+  ascent-override: 96.72%;
+  descent-override: 24.08%;
+  line-gap-override: 0%;
+}
+
 /* ---------- Variables ---------- */
 
 :root {
   /* Fonts: Inter first, system stack as fallback. */
-  --font-body: "InterVariable", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: "InterVariable", "InterFallbackText", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "InterVariable", "InterFallbackDisplay", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Optical size of Inter: 14 is the text design, 32 is Inter Display.
@@ -107,8 +141,11 @@ html {
   line-height: var(--root-leading);
   font-weight: var(--weight-regular);
   font-variation-settings: "opsz" var(--opsz-text);
-  /* cv16: lower-case a with tail (upright only; the italic has no such variant) */
-  font-feature-settings: "cv16";
+  /* Variants chosen on 2026-11-06, see design/schriftmuster/:
+     cv16 lower-case a with tail (upright only; the italic has no such variant),
+     cv05 lower-case l with tail, cv10 capital G with spur,
+     ss02 disambiguation (slashed zero, capital I with serifs). */
+  font-feature-settings: "cv16", "cv05", "cv10", "ss02";
   color: var(--ink);
   background: var(--paper);
   -webkit-text-size-adjust: 100%;
@@ -208,6 +245,7 @@ a:hover {
 }
 
 .display {
+  font-family: var(--font-display);
   font-size: var(--display-size);
   line-height: var(--display-leading);
   letter-spacing: var(--display-tracking);

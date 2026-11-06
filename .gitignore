@@ -5,3 +5,6 @@
 
 # macOS
 .DS_Store
+
+# Generated specimen page, rebuild with: python3 design/schriftmuster/build.py
+/design/schriftmuster/index.html

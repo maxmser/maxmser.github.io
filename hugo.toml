@@ -32,3 +32,18 @@ disableKinds = ["taxonomy", "term", "rss", "sitemap"]
   # While the content is still placeholder text, search engines are asked
   # not to index the site. Set to false (or delete) when the content is ready.
   noindex = true
+
+# Every page is rendered twice: index.html carries the font inline for a first
+# visit, lean.html links the font file. The service worker serves the lean pages.
+# See DECISIONS.md, "Schrift beim ersten Besuch im HTML".
+[outputFormats.lean]
+  mediaType = "text/html"
+  baseName = "lean"
+  isHTML = true
+  notAlternative = true
+  permalinkable = false
+
+[outputs]
+  home = ["html", "lean"]
+  section = ["html", "lean"]
+  page = ["html", "lean"]

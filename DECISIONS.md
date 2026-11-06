@@ -165,6 +165,12 @@ Die Lizenz erlaubt das. Inter nennt nach dem Copyright-Hinweis keinen geschützt
 
 So wurde gekürzt, mit fontTools: Zuerst begrenzt `fontTools.varLib.instancer` die Stärken-Achse mit `wght=400:500`. Dann behält `fontTools.subset` den lateinischen Zeichenbereich `U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD`, mit den Optionen `--layout-features='*' --name-IDs='*' --name-languages='*' --notdef-outline --flavor=woff2`. Ausgangspunkt sind die ungekürzten Dateien aus Commit 2eba55d. Das Werkzeug glyphhanger wurde nicht verwendet. Es ruft intern dasselbe fontTools auf, sucht die Zeichen aber aus den Seiten heraus, und die Texte sind noch Platzhalter.
 
+Geändert am 06.11.2026, zweiter Schritt: Die Schrift enthält jetzt nur noch Englisch und Deutsch und nur die Funktionen, die die Seite nutzt. Die normale Datei ist von 72 KB auf 34,6 KB geschrumpft, die kursive auf 36,2 KB. Enthalten sind 130 Zeichen: Grundlatein, ÄÖÜäöüß, é, deutsche und englische Anführungszeichen, Binde- und Gedankenstriche, Auslassungspunkte, Paragraf, Copyright, Grad, Mal, Euro, Markenzeichen, Minus und vier Pfeile. An Funktionen bleiben Kerning, Akzente, kontextabhängige Formen, Brüche, Tabellenziffern sowie die Varianten cv16, cv05, cv10 und ss02. Die beiden Achsen Stärke 400 bis 500 und optische Größe 14 bis 32 sind erhalten.
+
+Zeichensatz, Funktionen und Stärken stehen jetzt an einer einzigen Stelle, in `data/font.toml`. Das Skript `tools/build-fonts.py` baut daraus die Dateien in `static/fonts/inter/`, ausgehend von den vollständigen Schriften in `tools/fonts-src/`. Die Teilvorlage `font-check.html` liest dieselbe Datei und bricht den Build ab, wenn eine Seite ein Zeichen enthält, das nicht in der Schrift ist. Sonst würde so ein Zeichen still in einer anderen Schrift erscheinen. Geprüft am 06.11.2026 mit einem "ñ" in einer Kurzbeschreibung: Der Build bricht mit einer klaren Meldung ab. Für ein neues Zeichen wird es in `data/font.toml` ergänzt und `python3 tools/build-fonts.py` ausgeführt.
+
+Zur Kompression: WOFF2 packt intern mit Brotli. fontTools ruft Brotli ohne Qualitätsangabe auf, und der Standard ist die höchste Stufe 11. Zopfli ist ein Packer für gzip und das ältere WOFF 1 und für WOFF2 nicht zuständig. Zusätzlich nutzt das Skript die freiwillige Umwandlung der Breitentabelle `hmtx`, das spart 112 Bytes.
+
 ## Geschwindigkeit: Vorladen und Service Worker
 
 Stand 06.11.2026. Max will, dass die Seite sehr schnell lädt, und zwar vor allem die Zeit bis zur ersten Antwort des Servers bei jedem Klick. Gemessen am 06.11.2026: Hat der Zwischenspeicher von GitHub Pages die Seite vorrätig, antwortet er nach etwa 10 bis 25 Millisekunden. Hat er sie nicht, dauert es etwa 170 bis 190 Millisekunden. Bei einer Seite mit wenigen Besuchern dürfte der zweite Fall häufig sein.
@@ -189,6 +195,38 @@ Notausschalter, falls der Service Worker einmal Probleme macht: Den Inhalt von `
 
 Rechtlich gilt nach den Leitlinien 2/2023 des Europäischen Datenschutzausschusses jedes Ablegen von Daten auf dem Gerät als Speichern im Sinne der ePrivacy-Regel. Ob dafür eine Einwilligung nötig ist oder eine Ausnahme greift, lassen die Leitlinien ausdrücklich offen. Streng gelesen betrifft das auch das Vorladen in den normalen Zwischenspeicher des Browsers. Max hat das am 06.11.2026 als vernachlässigbar eingestuft. Gespeichert werden nur die öffentlichen Seiten der Website selbst, keine Daten über Besucher.
 
+## Schrift: Varianten cv05, cv10 und ss02
+
+Stand 06.11.2026. Max hat zusätzlich zu cv16 drei Varianten gewählt: cv05 "l" mit Schweif, cv10 "G" mit Sporn wie bei Helvetica und ss02 zur Unterscheidung ähnlicher Zeichen, also Null mit Strich, großes "I" mit Serifen und "l" mit Schweif. ss02 enthält den Schweif am "l" schon, cv05 ist damit doppelt, schadet aber nicht. Der Sporn am "G" ist sehr fein und erst bei starker Vergrößerung deutlich.
+
+Geprüft am 06.11.2026: Der Quellcode von Inter hat nur den Zweig `master` auf Commit 353b61b. Gegenüber der offiziellen Version 4.1 sind nur cv15 "Simplified tabular one" und cv16 neu. Über keine Funktion erreichbar sind nur fünf Glyphen, nämlich kyrillische Gegenstücke zum Schweif-a und Bauteile. Weitere versteckte Varianten gibt es nicht.
+
+Zum Vergleichen gibt es die Musterseite `design/schriftmuster/index.html`. Sie zeigt alle 24 benannten Varianten und weitere Funktionen jeweils links normal und rechts verändert, dazu alle 2849 Zeichen der vollständigen Schrift, markiert danach, ob sie in der Schrift der Seite sind. Sie wird mit `python3 design/schriftmuster/build.py` erzeugt, liest `data/font.toml` und ist weder veröffentlicht noch im Repository, nur ihr Skript.
+
+## Ersatzschrift mit Inters Maßen
+
+Stand 06.11.2026. Auf langsamem Netz sprang die Projektliste kurz um eine Zeile (CLS 0,007). Gemessen wurde die Ursache: Der Browser legt das Layout zuerst mit den Maßen der Ersatzschrift an, und mit Inter bricht danach eine Zeile anders um. Das passierte auch mit der Schrift im HTML, solange sie noch nicht entpackt war.
+
+Deshalb gibt es zwei Ersatzschriften auf Basis von Arial oder Helvetica, die auf Inters Maße angepasst sind, eine für Fließtext und eine für die großen Titel. Arial und Helvetica sind in der Breite identisch, ein Satz Werte passt also für macOS, iOS und Windows. Gemessen wurde die mittlere Breite nach englischer Buchstabenhäufigkeit, für Fließtext mit Inter in Stärke 400 und optischer Größe 14, für Titel in Stärke 500 und optischer Größe 32. Die Werte sind für Fließtext `size-adjust: 107.48%`, `ascent-override: 90.14%`, `descent-override: 22.44%` und für Titel `size-adjust: 100.16%`, `ascent-override: 96.72%`, `descent-override: 24.08%`, jeweils mit `line-gap-override: 0%`. Android hat keine der beiden Schriften und nutzt die unangepasste Systemschrift.
+
+Ergebnis am 06.11.2026 auf langsamem 4G: Der Sprung ist weg, CLS 0.
+
+## Schrift beim ersten Besuch im HTML
+
+Stand 06.11.2026. Max wollte prüfen, ob die Schrift als Base64 direkt im HTML schneller ist, und zwar nur beim ersten Besuch. Danach soll sie aus dem Speicher kommen.
+
+Gemessen am 06.11.2026, je sieben Erstbesuche mit leerem Speicher, Handy-Breite, CPU vierfach gedrosselt, mit einem Testserver, der wie GitHub Pages mit gzip komprimiert. Base64 kostet gezippt kaum mehr Bytes als die Datei selbst, etwa 1 Prozent. Auf langsamem 4G (150 Millisekunden Latenz, 1,6 Megabit pro Sekunde) erscheint der erste Text etwa 65 Millisekunden später, dafür aber gleich in Inter, und Inter ist 140 bis 330 Millisekunden früher da. Auf normalem 4G (40 Millisekunden, 12 Megabit pro Sekunde) erscheint der Text mit Base64 50 bis 70 Millisekunden früher.
+
+Vergleich des fertigen Umbaus mit dem bisherigen Stand: Auf langsamem 4G war Text bisher nach 280 Millisekunden in der Ersatzschrift sichtbar und Inter nach 687 Millisekunden fertig, mit einem Sprung im Layout. Jetzt ist Text nach 356 Millisekunden gleich in Inter sichtbar, Inter ist nach 365 Millisekunden fertig, und nichts springt. Auf normalem 4G erscheint Text jetzt nach 104 statt nach 172 Millisekunden.
+
+So ist es umgesetzt. Hugo baut jede Seite zweimal. `index.html` enthält die aufrechte Schrift als Base64 im CSS, mit `font-display: block`, weil die Daten schon da sind. `lean.html` verweist auf die Schriftdatei und lädt sie vor. Die schlanke Fassung steht auf noindex, und ihre kanonische Adresse ist die normale Seite. Der Service Worker legt beim ersten Besuch die schlanken Fassungen unter den normalen Adressen ab, dazu einmal die Schriftdatei. Jeder spätere Aufruf bekommt die schlanke Seite und die Schrift aus dem Speicher. Nur die allererste Seite eines Besuchs ist also größer, gezippt etwa 38 statt 2,4 KB. Die Vorlage erkennt die schlanke Fassung daran, dass Hugo in ihr die normale Seite als alternative Ausgabe führt.
+
+Damit Chrome nicht die großen Fassungen aller Seiten vorlädt, gibt es kein sofortiges Vorladen mehr. Chrome baut eine Seite weiter fertig auf, wenn der Mauszeiger auf dem Link liegt. Die Regel für Berührung oder Mausdruck bleibt für Safari.
+
+Die Schriftdatei wird im Service Worker nicht mehr bei jedem Seitenwechsel beim Server nachgefragt, weil sie sich nur mit einem Deploy ändert und dann ohnehin neu geholt wird.
+
+Getestet am 06.11.2026 mit einem Testserver, der jede Seite 800 Millisekunden zurückhält. Der Erstbesuch bekam in Chrome, Safari und Firefox die Seite mit Base64, die Schrift war sofort geladen. Danach holte der Service Worker die sieben schlanken Seiten und einmal die Schrift. Nach dem Klick kam die schlanke Seite aus dem Speicher, in Chrome nach 18, in Safari nach 5 und in Firefox nach 86 Millisekunden, die Schrift war geladen, ohne neuen Download. Auch das Update nach einem Deploy funktioniert: Die erste Seite kommt einmal in der alten Fassung, danach holt der neue Service Worker alle schlanken Seiten der neuen Fassung.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
@@ -205,7 +243,9 @@ Design: Das eigentliche Layout im Stil von Müller-Brockmann folgt in einer eige
 
 Stand 06.11.2026, neue offene Punkte:
 
-Optische Größe der Schrift: Display nur bei Überschriften oder überall ist noch nicht entschieden. Max vergleicht die Varianten mit dem lokalen Schalter.
+Optische Größe der Schrift: Display nur bei Überschriften oder überall ist noch nicht entschieden. Max vergleicht die Varianten mit dem lokalen Schalter. Wird die optische Größe auf einen Wert festgelegt, kann die Achse aus der Schrift entfallen. Gemessen am 06.11.2026 wird die Datei dadurch rund ein Drittel kleiner.
+
+CDN-Knoten warm halten: Gemessen am 06.11.2026 war jede Seite am Wiener Knoten von GitHub Pages nach 10 Minuten wieder kalt. Ein Treffer kostet 23 bis 30 Millisekunden, ein Fehltreffer 160 bis 190. Ein Abruf aller Dateien alle 5 Minuten vom Homeserver aus könnte den Knoten warm halten. Unbelegt ist, ob das auch für andere Besucher wirkt. Nicht umgesetzt.
 
 Beschreibung der Startseite: Die Startseite hat keine Meta-Beschreibung für Suchmaschinen, weil ihr Text noch fehlt. Lighthouse meldet das. Der Text kommt mit den übrigen Inhalten.
 

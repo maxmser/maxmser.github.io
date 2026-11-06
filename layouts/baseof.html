@@ -1,16 +1,22 @@
 <!doctype html>
 <html lang="{{ site.Language.Locale }}">
 <head>
+  {{- /* Two renderings per page: index.html with the font inline as base64 for a
+       first visit, and lean.html with the font as a file. The service worker
+       stores the lean pages and serves them for every later visit. In the lean
+       rendering, Hugo lists the normal page as the alternative output format. */}}
+  {{- $lean := .AlternativeOutputFormats.Get "html" }}
+  {{- if not $lean }}{{ partial "font-check.html" . }}{{ end }}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} – {{ site.Title }}{{ end }}</title>
   {{- with .Params.summary }}
   <meta name="description" content="{{ . }}">
   {{- end }}
-  {{- if site.Params.noindex }}
+  {{- if or site.Params.noindex $lean }}
   <meta name="robots" content="noindex">
   {{- end }}
-  <link rel="canonical" href="{{ .Permalink }}">
+  <link rel="canonical" href="{{ (.OutputFormats.Get "html").Permalink }}">
   {{- if .IsTranslated }}
   {{- range .AllTranslations }}
   <link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}">
@@ -18,20 +24,30 @@
   {{- end }}
   {{- /* Empty favicon so the browser does not request /favicon.ico. */}}
   <link rel="icon" href="data:,">
-  <link rel="preload" href="{{ "fonts/inter/InterVariable.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
   {{- /* The stylesheet is inlined: it is small, and the browser can render
-       without waiting for a second request. The source stays assets/css/main.css. */}}
-  {{- with resources.Get "css/main.css" | minify }}
+       without waiting for a second request. The source stays assets/css/main.css.
+       For a first visit the upright font goes inline as base64 (font-display: block,
+       the data is already there). Measured on 2026-11-06, see DECISIONS.md. */}}
+  {{- $css := (resources.Get "css/main.css").Content }}
+  {{- if $lean }}
+  <link rel="preload" href="{{ "fonts/inter/InterVariable.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  {{- else }}
+  {{- $src := `src: url("/fonts/inter/InterVariable.woff2") format("woff2");` }}
+  {{- if not (strings.Contains $css $src) }}{{ errorf "main.css: the src line of the upright font is missing, the font cannot be inlined" }}{{ end }}
+  {{- $data := os.ReadFile "static/fonts/inter/InterVariable.woff2" | base64Encode }}
+  {{- $css = replace $css $src (printf `font-display: block; src: url(data:font/woff2;base64,%s) format("woff2");` $data) }}
+  {{- end }}
+  {{- with resources.FromString (cond (not $lean) "css/main-inline.css" "css/main-lean.css") $css | minify }}
   <style>{{ .Content | safeCSS }}</style>
   {{- end }}
   {{- /* Preloading of internal pages, see DECISIONS.md, "Vorladen von Seiten".
-       Chrome and Edge: prefetch every internal page at once, prerender on hover.
-       The conservative rule (on pointer or touch down) is the subset WebKit has
-       agreed to; Safari can use it once it is switched on there.
+       Chrome and Edge: prerender on hover. No prefetch of every page at once any
+       more: that would fetch the pages with the inline font; the service worker
+       stores the lean ones instead. The conservative rule (on pointer or touch
+       down) is the subset WebKit has agreed to; Safari can use it once it is on.
        All browsers: the service worker (assets/js/sw.js), registered below. */}}
   <script type="speculationrules">
-  {"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"immediate"},
-               {"where":{"href_matches":"/*"},"eagerness":"conservative"}],
+  {"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"conservative"}],
    "prerender":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}
   </script>
 </head>
