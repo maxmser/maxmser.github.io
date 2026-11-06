@@ -583,13 +583,14 @@ a:hover {
    grid systems: top 5.5 px above a grid line, height n * 13.5 + 12 px, then 7 px
    to the next grid line. The caption's first baseline lies one line below the
    image's; the script in baseof.html pads the caption so the text after it is on
-   the grid. White space: 55.5 px above the image; below, 55.5 px from the
-   caption's last baseline (or the image) to the next capitals, 62.25 px after a
-   caption with an even number of lines. See DECISIONS.md, "Bilder im Raster".
+   the grid. White space: 69 px above the image, as before an h3; below, 69 px
+   from the caption's last baseline (or the image) to the next capitals, 75.75 px
+   after a caption with an even number of lines. See DECISIONS.md, "Bilder im Raster"
+   and "Einzelne Abstände".
    --ratio (width / height) comes from the template. Browsers without round()
    or container units show the image at its natural height. */
-.prose > .figure { margin-top: 2rlh; }
-.prose > .figure + * { margin-top: 1.5rlh; }
+.prose > .figure { margin-top: 2.5rlh; }
+.prose > .figure + * { margin-top: 2rlh; }
 
 .figure {
   display: flow-root;

@@ -401,6 +401,8 @@ Stand 06.11.2026. Die offenen Abstandsvorschläge aus der Prüfung werden einzel
 
 Ende der Projektliste: Jede Zeile einer Liste hat oben und unten eine halbe Zeile Innenabstand. Bei der ersten Zeile war der obere entfernt, bei der letzten blieb der untere stehen, sodass nach einer Liste 108 Pixel Weißraum bis zur nächsten Linie lagen statt 94,5 wie nach einem Absatz. Max hat am 06.11.2026 zugestimmt, die letzte Zeile hat jetzt unten keinen Innenabstand mehr.
 
+Abstand um Bilder: Über einem Bild lagen 55,5 Pixel Weißraum, zwischen zwei Absätzen 42. Ein Bild setzte sich damit kaum stärker ab als ein neuer Absatz. Über und unter jeder Abbildung liegt jetzt eine halbe Zeile mehr. Gemessen sind es 69 Pixel über dem Bild, so viel wie vor einer Zwischenüberschrift, und 69 Pixel unter der Unterschrift, nach einer Unterschrift mit gerader Zeilenzahl 75,75. Max hat am 06.11.2026 zugestimmt.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
