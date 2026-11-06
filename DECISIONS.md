@@ -347,6 +347,12 @@ Die Testseite zeigt deshalb drei Fassungen, alle auf Grundlage von Version B in 
 
 Damit alle drei Fassungen genau gleich im Raster stehen, bekommen XCharter und die Nachzeichnung beim Bauen die Höhenmaße der Apple-Charter, 0,98 und −0,24 der Schriftgröße. Charis hatte von Haus aus sehr große Maße, 1,20 und −0,44. Am 06.11.2026 lagen in allen drei Fassungen alle Grundlinien im Raster, auch bei doppelter Textgröße. In Chrome auf dem Mac sehen C und D fast gleich aus, D etwas feiner. E läuft deutlich breiter und kräftiger.
 
+## Entscheidung: Lauftext bleibt Crimson Pro
+
+Stand 06.11.2026. Nach dem Vergleich der Charter-Fassungen hat Max entschieden, bei Crimson Pro als Schrift für Einleitung und Lauftext zu bleiben, weil sie am meisten Charakter hat. Charter in allen drei Fassungen ist damit verworfen. Die Versionen C, D und E der Testseite bleiben vorerst als Vergleich erhalten.
+
+Die Seite, die alle Charter-Fassungen untereinander zeigt (`/projects/charter-compare/`), ist auf Wunsch von Max nicht veröffentlicht, sondern nur gesichert. Sie liegt im lokalen Zweig `archiv/charter-vergleich` (Commit 149531b) und lässt sich mit `git cherry-pick 149531b` zurückholen.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
