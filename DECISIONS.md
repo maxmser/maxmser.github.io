@@ -411,6 +411,16 @@ Abstand oben auf dem Handy: Zwischen Navigation und Titel lagen auf dem Handy 12
 
 Abstand zwischen Absätzen: Zwischen Absätzen, vor Listen, Zitaten und Code stand eine ganze Leerzeile, 42 Pixel Weißraum. Der Text zerfiel in einzelne Blöcke, und Bilder, Zwischenüberschriften und Abschnitte hoben sich davon nur wenig ab. Es ist jetzt eine halbe Leerzeile, gemessen 28,5 Pixel. Vor Zwischenüberschriften (68 Pixel) und um Bilder (69 Pixel) bleibt es wie zuvor, sodass sich diese Stufen jetzt deutlicher absetzen. Max fand diese Fassung besser und hat am 06.11.2026 zugestimmt.
 
+## Überschriften
+
+Stand 06.11.2026. Auf dem Handy stand der Abschnittsname anderthalb Zeilen über seinem Text, die Zwischenüberschrift nur eine Zeile. Beide haben dieselbe Schrift und Größe, deshalb fiel der Unterschied auf. Max fand das unschön. Der Abschnittsname steht jetzt auf dem Handy direkt über seinem Text, so wie die Zwischenüberschrift, von Grundlinie zu Grundlinie gemessen 27 Pixel. Auf breiteren Bildschirmen steht er ohnehin neben dem Text, dort ändert sich nichts.
+
+Mit dem engeren Abstand war Max die Zwischenüberschrift nicht auffällig genug. Abschnittsnamen und Zwischenüberschriften stehen deshalb jetzt in Stärke 600 statt 500. Das hatte die typografische Prüfung schon vorgeschlagen. Verglichen wurden vier Fassungen, nämlich der enge und ein weiterer Abstand, jeweils in Stärke 500 und 600. Max hat sich am 06.11.2026 für den engen Abstand mit Stärke 600 entschieden. Die Überschrift hebt sich damit durch ihre Stärke ab und bleibt durch den Abstand an ihren Text gebunden.
+
+Damit gilt die frühere Regel von nur zwei Stärken nicht mehr. Stärke 600 gibt es nur für diese beiden Überschriften. Inter reicht deshalb jetzt bis Stärke 600, Crimson Pro bleibt bei 500. Die gerade Inter ist dadurch 1.328 Bytes größer (23.588 statt 22.260), die kursive 1.096 Bytes (24.624 statt 23.528). Die gerade Schrift steht beim ersten Besuch im HTML, diese Seiten werden also um rund 1,8 Kilobyte in Base64 größer.
+
+Die Ersatzschrift hat eine dritte Fassung für Stärke 600 bekommen, gemessen wie die anderen beiden: `size-adjust: 102.28%`, `ascent-override: 94.72%`, `descent-override: 23.58%`. Gewichtet wurde nach englischer Buchstabenhäufigkeit, mit Leerzeichen in einem Anteil von 18 zu 100 Buchstaben. Diese Messung ergibt für die Stärken 400 und 500 die bisherigen Werte bis auf 0,01 Prozentpunkte. Mit der Ersatzschrift stehen die Überschriften auf derselben Grundlinie wie mit Inter, und ihre Breite weicht höchstens 0,7 Prozent ab.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
