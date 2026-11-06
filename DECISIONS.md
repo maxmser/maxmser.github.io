@@ -93,7 +93,35 @@ Die Schrift wird selbst gehostet. Es gibt also keine Anfragen an Google Fonts od
 
 Jede der beiden Dateien ist etwa 350 KB groß, weil sie alle Schriftsysteme von Inter enthält, auch Kyrillisch, Griechisch und Vietnamesisch. Man könnte sie später auf lateinische Zeichen kürzen. Das würde die Ladezeit beim ersten Besuch spürbar senken.
 
-Inter ist eine Zwischenlösung. Die endgültige Schriftwahl bleibt offen, siehe unten.
+Inter ist eine Zwischenlösung. Die endgültige Schriftwahl bleibt offen, siehe unten. Nachtrag vom 06.11.2026: Die Dateien von Inter 4.1 wurden durch einen eigenen Build mit dem "a" mit Schweif ersetzt, siehe den nächsten Abschnitt.
+
+## Schrift: Inter mit "a" mit Schweif (cv16)
+
+Stand 06.11.2026. Max will Inter mit dem "a" mit Schweif verwenden, wie es Helvetica hat. Rasmus Andersson hat diese Variante am 17.11.2024 auf X gezeigt, als Character Variant cv16 "Lower-case a with tail". Max hatte sich an den Post erinnert und ihn als Screenshot geschickt. Claude hatte die Variante vorher nicht gefunden, weil sie in keiner veröffentlichten Version von Inter enthalten ist.
+
+Geprüft am 06.11.2026: Die neueste offizielle Version ist Inter 4.1 vom 16.11.2024. Sie enthält cv16 nicht. Auch die Inter-Version auf Google Fonts enthält cv16 nicht. Im Quellcode auf GitHub ist cv16 vorhanden. Der Quellcode trägt die Versionsnummer 4.2, die letzte Änderung ist der Commit 353b61b vom 18.11.2024. Eine Version 4.2 wurde nie veröffentlicht.
+
+Deshalb wurden die beiden Schriftdateien `InterVariable.woff2` und `InterVariable-Italic.woff2` am 06.11.2026 aus diesem Quellcode gebaut, mit den Werkzeugen und Skripten des Inter-Repos (fontmake 3.9). Sie ersetzen die Dateien von Inter 4.1. Gegenüber 4.1 kommen die Varianten cv15 und cv16 dazu. Achsen, Stärken und Familienname sind gleich geblieben. Die Lizenz ist unverändert die SIL Open Font License 1.1.
+
+Im CSS ist cv16 für die ganze Seite eingeschaltet. Die Variante gibt es nur für die aufrechte Schrift. In kursivem Text erscheint weiter das normale "a".
+
+So wurde gebaut, falls die Dateien neu erzeugt werden müssen: Das Repo github.com/rsms/inter auf Commit 353b61b klonen. Eine Python-3.11-Umgebung mit fontmake 3.9, glyphspkg 0.1, skia-pathops 0.8, ufo2ft und defcon anlegen. Dann für Roman und Italic jeweils die Schritte aus dem Makefile des Repos einzeln ausführen: `glyphspkg` wandelt das Glyphs-Paket um, `fontmake -o ufo` erzeugt die Master, danach laufen `misc/tools/postprocess-designspace.py` und `misc/tools/gen-var-designspace.py`, dann `fontmake -o variable` und zum Schluss `misc/tools/bake-vf.py`. Die TTF-Dateien wurden mit fontTools in WOFF2 umgewandelt. Das vollständige Makefile braucht weitere Werkzeuge wie fontbakery und gftools, die für die Web-Schriften nicht nötig sind.
+
+Risiko: Der Quellcode ist ein unveröffentlichter Arbeitsstand. Er kann kleine Fehler enthalten, die vor einem offiziellen Release noch behoben worden wären. Wenn Inter 4.2 offiziell erscheint, sollten die Dateien durch die offiziellen ersetzt werden.
+
+## Design-Grundlagen für den Design-Durchgang
+
+Stand 06.11.2026. Grundlage ist eine Recherche zu Josef Müller-Brockmann und zur Übertragung seines Rastersystems ins Web. Ein statischer Entwurf der Startseite liegt im Ordner `design/entwurf-2026-11-06/`. Max hat ihn als Vorher-Nachher-Bild gesehen. Der Entwurf ist noch nicht in die Hugo-Layouts übernommen.
+
+Die wichtigste Regel: Die Zeilenhöhe der Grundschrift ist die einzige Maßeinheit für alle vertikalen Abstände. Bei Müller-Brockmann entspricht die Höhe eines Rasterfeldes einer Zahl von Textzeilen, und der Abstand zwischen Feldern beträgt eine oder mehrere Zeilen. Im CSS bildet die Einheit `rlh` das ab. Sie ist die Zeilenhöhe des Root-Elements und gilt seit Mai 2026 in allen großen Browsern als breit verfügbar.
+
+Damit `1rlh` wirklich eine Zeile Fließtext ist, müssen Schriftgröße und Zeilenhöhe auf `html` stehen, nicht auf `body`. Im Entwurf sind das `font-size: 1.125rem` und `line-height: 1.5`, also 18 Pixel Schrift und 27 Pixel Zeilenhöhe. Der Recherchebericht hatte in seinem eigenen CSS-Beispiel genau diesen Fehler.
+
+Weitere Regeln aus der Recherche, die der Entwurf umsetzt: Alle vertikalen Abstände sind ganze oder halbe Vielfache von `1rlh`. Überschriften bekommen eine Zeilenhöhe, die ein Vielfaches von `1rlh` ist. Fließtext ist auf etwa 62 bis 65 Zeichen Breite begrenzt. Das Raster hat 4 Spalten auf kleinen Bildschirmen, 8 ab 40em und 12 ab 64em. Der Spaltenabstand ist `1rlh`. Es gibt nur vier Schriftgrößen und zwei Stärken. Hierarchie entsteht zuerst über Position und Abstand. Text steht linksbündig im Flattersatz, und auf breiten Bildschirmen bleiben Spalten bewusst frei.
+
+Trennlinien werden als Hintergrund gezeichnet und nicht als Rahmen, damit sie den Zeilenrhythmus nicht um ein Pixel verschieben. Schriftgrößen stehen in `rem`, Medienabfragen in `em`, damit Zoom und Nutzereinstellungen das ganze System mitskalieren.
+
+Offen ist, ob Inter Display auch für den Fließtext gelten soll oder nur für Überschriften. Max hat am 06.11.2026 gesagt, dass er Inter in der Display-Variante verwenden will. Im Fließtext mit 18 Pixel ist Display etwas enger gesetzt als die Textvariante. Der Vergleich liegt als `schrift-vergleich.png` im Entwurfsordner.
 
 ## Offene Punkte
 
@@ -107,4 +135,4 @@ Inhalte der Projektseiten: Alle Texte sind noch Platzhalter. Max erarbeitet sie 
 
 Impressum: Name und Kontakt sind noch einzutragen, und die Pflichtangaben sind vor dem Livegang zu prüfen.
 
-Design: Das eigentliche Layout im Stil von Müller-Brockmann folgt in einer eigenen Runde.
+Design: Das eigentliche Layout im Stil von Müller-Brockmann folgt in einer eigenen Runde. Seit dem 06.11.2026 gibt es dafür einen Entwurf, siehe Abschnitt "Design-Grundlagen für den Design-Durchgang".

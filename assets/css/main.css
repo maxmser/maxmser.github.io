@@ -7,8 +7,10 @@
 /* ---------- Fonts ---------- */
 
 /*
-  Inter 4.1 (variable font), self-hosted, SIL Open Font License 1.1.
-  Files and license: static/fonts/inter/. Interim choice, see DECISIONS.md.
+  Inter (variable font), self-hosted, SIL Open Font License 1.1.
+  Built from the Inter source code (version 4.2 in development, commit 353b61b),
+  because only that version contains cv16, the lower-case a with tail.
+  Files and license: static/fonts/inter/. See DECISIONS.md.
 */
 @font-face {
   font-family: "InterVariable";
@@ -74,6 +76,8 @@
 html {
   font-family: var(--font-body);
   font-optical-sizing: auto;
+  /* cv16: lower-case a with tail (upright only; the italic has no such variant) */
+  font-feature-settings: "cv16";
   font-size: 100%;
   line-height: var(--leading-base);
   color: var(--color-text);
