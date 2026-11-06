@@ -7,8 +7,15 @@
   that space may only be text and the inline tags listed; a space inside a tag
   can never match, because the bare ">" that closes the tag is not allowed.
   Code, nested lists and other tags at the end stop the match: nothing is bound.
+  The last word is then wrapped in span.last-word, so it is not hyphenated.
   Test page only for now (front matter "variants: true").
 */ -}}
 {{- $inline := `</?(?:a|em|strong|i|b|sup|sub|abbr|span|q|small|mark)\b[^>]*>` }}
 {{- $re := printf `\s((?:[^\s<>]|%s)+</(?:p|li)>)` $inline }}
-{{- return replaceRE $re "&nbsp;${1}" (string .) }}
+{{- $s := replaceRE $re "&nbsp;${1}" (string .) }}
+{{- /* The last word itself is never hyphenated (class last-word, see main.css or
+     the test switch): a lone word fragment in the last line is worse than a
+     short line. Only a plain word, optionally inside closing inline tags. */}}
+{{- $close := `(?:</(?:a|em|strong|i|b|sup|sub|abbr|span|q|small|mark)>)*` }}
+{{- $re2 := printf `&nbsp;((?:[^\s<>&]|&[#a-zA-Z0-9]+;)+)(%s</(?:p|li)>)` $close }}
+{{- return replaceRE $re2 `&nbsp;<span class="last-word">${1}</span>${2}` $s }}
