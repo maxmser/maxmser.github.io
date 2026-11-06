@@ -2,9 +2,9 @@
 {{- with site.GetPage "/projects" }}
 {{- $items := where .Params.more_projects "hidden" "!=" true }}
 {{- with $items }}
-<section class="more-projects" aria-labelledby="more-projects-heading">
-  <h2 id="more-projects-heading">{{ T "moreProjects" }}</h2>
-  <ul>
+<section class="block" aria-labelledby="more-projects-heading">
+  <h2 id="more-projects-heading" class="block-label">{{ T "moreProjects" }}</h2>
+  <ul class="list list-plain block-body">
     {{- range . }}
     <li>{{ .name }}</li>
     {{- end }}

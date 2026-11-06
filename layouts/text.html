@@ -1,7 +1,9 @@
 {{- /* Simple text page, used with "layout: text" in the front matter (for example the imprint). */}}
 {{ define "main" }}
-<article class="text">
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
+<article class="article">
+  <header class="intro">
+    <h1 class="display">{{ .Title }}</h1>
+  </header>
+  {{ partial "sections.html" .Content }}
 </article>
 {{ end }}

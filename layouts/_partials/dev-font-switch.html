@@ -1,0 +1,41 @@
+{{- /*
+  Font switch for choosing the optical size of Inter in the browser.
+  Only rendered by "hugo server" (see baseof.html), never in the published site.
+  Works without JavaScript: radio buttons plus :has() in CSS.
+  The choice resets on every page load, because nothing is stored.
+  Delete this file and its line in baseof.html once the decision is made.
+*/ -}}
+<form class="dev-switch" aria-label="Schriftschalter (nur lokal)">
+  <fieldset>
+    <legend>Inter, optische Größe (nur lokal)</legend>
+    <label><input type="radio" name="dev-opsz" id="dev-opsz-headings" checked> Display nur Überschriften (jetzt)</label>
+    <label><input type="radio" name="dev-opsz" id="dev-opsz-all"> Display überall</label>
+    <label><input type="radio" name="dev-opsz" id="dev-opsz-text"> Text überall</label>
+    <label><input type="radio" name="dev-opsz" id="dev-opsz-auto"> Automatisch nach Größe</label>
+  </fieldset>
+</form>
+<style>
+  /* Display everywhere: the text size also uses optical size 32. */
+  html:has(#dev-opsz-all:checked) { --opsz-text: var(--opsz-display); }
+  /* Text everywhere: the headings also use optical size 14. */
+  html:has(#dev-opsz-text:checked) { --opsz-display: var(--opsz-text); }
+  /* Automatic: the browser picks the optical size from the font size. */
+  html:has(#dev-opsz-auto:checked),
+  html:has(#dev-opsz-auto:checked) .display {
+    font-variation-settings: normal;
+    font-optical-sizing: auto;
+  }
+  .dev-switch {
+    position: fixed;
+    right: 0.5rlh;
+    bottom: 0.5rlh;
+    z-index: 10;
+    padding: 0.5rlh;
+    background: var(--paper);
+    box-shadow: 0 0 0 1px var(--ink);
+    font-size: var(--step--1);
+  }
+  .dev-switch fieldset { margin: 0; padding: 0; border: 0; }
+  .dev-switch legend { padding: 0; font-weight: var(--weight-medium); }
+  .dev-switch label { display: block; cursor: pointer; }
+</style>

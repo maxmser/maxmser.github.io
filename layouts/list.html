@@ -1,8 +1,13 @@
 {{ define "main" }}
-<section class="list">
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  {{ partial "project-list.html" .RegularPages }}
+<section class="intro">
+  <h1 class="display">{{ .Title }}</h1>
+  {{- with .Content }}
+  <div class="intro-text prose">{{ . }}</div>
+  {{- end }}
 </section>
+{{- /* No label here: the page title already says "Projects". The left column stays empty on purpose. */}}
+<div class="block">
+  {{ partial "project-list.html" .RegularPages }}
+</div>
 {{ partial "more-projects.html" . }}
 {{ end }}

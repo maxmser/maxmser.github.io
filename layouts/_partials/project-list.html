@@ -1,10 +1,11 @@
-{{- /* Expects a page collection of projects. */}}
-<ul class="project-list">
-  {{- range .ByWeight }}
+{{- /* Expects a page collection of projects. The number is decorative, the order is already given by the list. */}}
+<ul class="list block-body">
+  {{- range $i, $p := .ByWeight }}
   <li>
-    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-    {{- with .Params.summary }}
-    <p>{{ . }}</p>
+    <span class="num" aria-hidden="true">{{ printf "%02d" (add $i 1) }}</span>
+    <a class="title" href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+    {{- with $p.Params.summary }}
+    <p class="summary">{{ . }}</p>
     {{- end }}
   </li>
   {{- end }}

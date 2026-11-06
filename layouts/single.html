@@ -1,21 +1,29 @@
 {{ define "main" }}
-<article class="project">
-  <header class="project-header">
-    <h1>{{ .Title }}</h1>
+<article class="article">
+  <header class="intro">
+    <h1 class="display">{{ .Title }}</h1>
     {{- with .Params.summary }}
-    <p class="summary">{{ . }}</p>
+    <p class="intro-text">{{ . }}</p>
     {{- end }}
+    {{- if or .Params.status .Params.stack }}
     <dl class="project-meta">
       {{- with .Params.status }}
-      <dt>{{ T "status" }}</dt>
-      <dd>{{ . }}</dd>
+      <div>
+        <dt>{{ T "status" }}</dt>
+        <dd>{{ . }}</dd>
+      </div>
       {{- end }}
       {{- with .Params.stack }}
-      <dt>{{ T "stack" }}</dt>
-      <dd>{{ delimit . ", " }}</dd>
+      <div>
+        <dt>{{ T "stack" }}</dt>
+        {{- range . }}
+        <dd>{{ . }}</dd>
+        {{- end }}
+      </div>
       {{- end }}
     </dl>
+    {{- end }}
   </header>
-  {{ .Content }}
+  {{ partial "sections.html" .Content }}
 </article>
 {{ end }}

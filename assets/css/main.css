@@ -1,6 +1,11 @@
 /*
-  Neutral base stylesheet. The actual design follows later in its own round
-  (direction: Swiss grid design, Josef Müller-Brockmann).
+  The only stylesheet of the site. Swiss grid design after Josef Müller-Brockmann.
+  Rules (see DECISIONS.md, "Design-Grundlagen"):
+  - Font size and line height are set on html, so 1rlh is exactly one line of body text.
+  - Every vertical distance is a whole or half multiple of 1rlh.
+  - Grid: 4 columns, 8 from 40em, 12 from 64em. Gutter is 1rlh.
+  - Rules (hairlines) are drawn as backgrounds, not borders, so they do not shift the rhythm.
+  - Font sizes in rem, media queries in em, so zoom and user settings scale everything.
   Everything adjustable is a variable in :root.
 */
 
@@ -10,12 +15,13 @@
   Inter (variable font), self-hosted, SIL Open Font License 1.1.
   Built from the Inter source code (version 4.2 in development, commit 353b61b),
   because only that version contains cv16, the lower-case a with tail.
-  Files and license: static/fonts/inter/. See DECISIONS.md.
+  Subset to Latin characters and to the weights 400 to 500, the only ones the
+  site uses. Files and license: static/fonts/inter/. See DECISIONS.md.
 */
 @font-face {
   font-family: "InterVariable";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400 500;
   font-display: swap;
   src: url("/fonts/inter/InterVariable.woff2") format("woff2");
 }
@@ -23,7 +29,7 @@
 @font-face {
   font-family: "InterVariable";
   font-style: italic;
-  font-weight: 100 900;
+  font-weight: 400 500;
   font-display: swap;
   src: url("/fonts/inter/InterVariable-Italic.woff2") format("woff2");
 }
@@ -35,34 +41,56 @@
   --font-body: "InterVariable", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* Type scale */
-  --size-small: 0.875rem;
-  --size-base: 1rem;
-  --size-medium: 1.25rem;
-  --size-large: 1.75rem;
-  --size-xlarge: 2.5rem;
+  /* Optical size of Inter: 14 is the text design, 32 is Inter Display.
+     Display is used for the large headings only (decision of 2026-11-06). */
+  --opsz-text: 14;
+  --opsz-display: 32;
 
-  /* Line heights */
-  --leading-tight: 1.15;
-  --leading-base: 1.5;
+  /* Base: 18 px text on 27 px lines. 1rem = 18 px from here on. */
+  --root-size: 1.125rem;
+  --root-leading: 1.5;
 
-  /* Baseline unit and spacing scale */
-  --unit: 0.75rem;
-  --space-1: var(--unit);
-  --space-2: calc(var(--unit) * 2);
-  --space-3: calc(var(--unit) * 3);
-  --space-4: calc(var(--unit) * 4);
-  --space-6: calc(var(--unit) * 6);
+  /* Type scale: small, base and the display size of the page title.
+     The display size grows with the grid (see media queries). */
+  --step--1: 0.8125rem; /* 14.6 px */
+  --step-0: 1rem;       /* 18 px */
+  --display-size: 2.5rem;
+  --display-leading: 2rlh;
+  --display-tracking: -0.02em;
+
+  /* Two weights only. */
+  --weight-regular: 400;
+  --weight-medium: 500;
 
   /* Grid */
-  --grid-columns: 12;
-  --grid-gap: var(--space-2);
-  --grid-max-width: 75rem;
-  --page-margin: var(--space-2);
+  --cols: 4;
+  --gutter: 1rlh;
+  --margin: clamp(1rlh, 5vw, 4rlh);
+  --max-width: 96rem;
+  --measure: 62ch;
 
-  /* Colors */
-  --color-text: #000;
-  --color-background: #fff;
+  /* Colours */
+  --ink: #000;
+  --paper: #fff;
+  --muted: #6b6b6b;   /* 5.3:1 on white */
+  --rule: #c8c8c8;    /* decorative only */
+}
+
+@media (min-width: 40em) {
+  :root {
+    --cols: 8;
+    --display-size: 3.25rem;
+    --display-leading: 3rlh;
+  }
+}
+
+@media (min-width: 64em) {
+  :root {
+    --cols: 12;
+    --display-size: 4rem;
+    --display-leading: 3rlh;
+    --display-tracking: -0.025em;
+  }
 }
 
 /* ---------- Base ---------- */
@@ -75,93 +103,294 @@
 
 html {
   font-family: var(--font-body);
-  font-optical-sizing: auto;
+  font-size: var(--root-size);
+  line-height: var(--root-leading);
+  font-weight: var(--weight-regular);
+  font-variation-settings: "opsz" var(--opsz-text);
   /* cv16: lower-case a with tail (upright only; the italic has no such variant) */
   font-feature-settings: "cv16";
-  font-size: 100%;
-  line-height: var(--leading-base);
-  color: var(--color-text);
-  background: var(--color-background);
+  color: var(--ink);
+  background: var(--paper);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
+  /* A length, not a factor: every element inherits exactly one root line,
+     also text in the small size. */
+  line-height: 1rlh;
+  overflow-wrap: break-word;
 }
 
-h1,
-h2,
-h3 {
-  line-height: var(--leading-tight);
-  margin: 0 0 var(--space-2);
+h1, h2, h3, h4, p, ul, ol, dl, dd, figure, blockquote, pre {
+  margin: 0;
 }
 
-h1 { font-size: var(--size-xlarge); }
-h2 { font-size: var(--size-large); }
-h3 { font-size: var(--size-medium); }
-
-p,
-ul,
-ol,
-dl {
-  margin: 0 0 var(--space-2);
+h1, h2, h3, h4 {
+  font-size: inherit;
+  font-weight: var(--weight-medium);
 }
 
-code,
-pre {
-  font-family: var(--font-mono);
+/* The font only contains the weights 400 to 500. Bold text uses 500,
+   so the browser never draws a synthetic bold. */
+strong, b {
+  font-weight: var(--weight-medium);
 }
 
 a {
   color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 /* ---------- Grid ---------- */
 
-.grid {
+.page {
   display: grid;
-  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
-  column-gap: var(--grid-gap);
-  max-width: var(--grid-max-width);
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gutter);
+  max-width: var(--max-width);
   margin-inline: auto;
-  padding-inline: var(--page-margin);
+  padding: 2rlh var(--margin) 3rlh;
 }
 
-/* By default every direct child spans the full width. */
-.grid > * {
+/* Containers pass the page grid on to their children. */
+.site-header,
+.site-header nav,
+.site-header ul,
+.site-main,
+.site-footer,
+.article,
+.intro,
+.block,
+.list,
+.list li {
+  display: grid;
+  grid-template-columns: subgrid;
   grid-column: 1 / -1;
 }
 
-/* ---------- Page regions ---------- */
+/* By default every child spans the full width. */
+.page > *,
+.site-main > *,
+.article > *,
+.intro > *,
+.block > * {
+  grid-column: 1 / -1;
+}
 
-.site-header,
-.site-main,
-.site-footer {
-  padding-block: var(--space-3);
+/* ---------- Header ---------- */
+
+.site-header {
+  margin-bottom: 4rlh;
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
 }
 
 .site-header ul {
   list-style: none;
-  margin: 0;
   padding: 0;
-  display: flex;
-  gap: var(--space-2);
 }
 
-section,
-article {
-  margin-bottom: var(--space-4);
+.site-header li:nth-child(1) { grid-column: 1 / 3; }
+.site-header li:nth-child(2) { grid-column: 3 / 5; }
+
+/* ---------- Page title and introduction ---------- */
+
+.intro {
+  margin-bottom: 4rlh;
+}
+
+.display {
+  font-size: var(--display-size);
+  line-height: var(--display-leading);
+  letter-spacing: var(--display-tracking);
+  font-variation-settings: "opsz" var(--opsz-display);
+}
+
+.intro-text {
+  margin-top: 2rlh;
+  max-width: var(--measure);
+}
+
+.project-meta {
+  margin-top: 1rlh;
+  font-size: var(--step--1);
+}
+
+.project-meta > div + div {
+  margin-top: 1rlh;
+}
+
+.project-meta dt {
+  font-weight: var(--weight-medium);
+}
+
+/* ---------- Blocks: label on the left, content on the right ---------- */
+
+.block {
+  padding-top: 0.5rlh;
+  margin-bottom: 3rlh;
+  background: linear-gradient(var(--ink), var(--ink)) top / 100% 1px no-repeat;
+}
+
+.block-label {
+  font-size: var(--step--1);
+  margin-bottom: 1rlh;
+}
+
+/* ---------- Lists of projects ---------- */
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.list li {
+  align-items: baseline;
+  padding-block: 0.5rlh;
+  background: linear-gradient(var(--rule), var(--rule)) top / 100% 1px no-repeat;
+}
+
+.list li:first-child {
+  padding-top: 0;
+  background: none;
+}
+
+.num {
+  grid-column: 1 / 2;
+  font-size: var(--step--1);
+  /* Lower than one grid line, so aligning it to the baseline of the title
+     cannot make the row taller than the grid. */
+  line-height: 1;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  grid-column: 2 / -1;
+  font-weight: var(--weight-medium);
+}
+
+.summary {
+  grid-column: 2 / -1;
+  color: var(--muted);
+}
+
+.list-plain li {
+  display: block;
+}
+
+/* ---------- Running text ---------- */
+
+.prose {
+  max-width: var(--measure);
+}
+
+.prose > * + * {
+  margin-top: 1rlh;
+}
+
+.prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.25em;
+}
+
+.prose code,
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+.prose pre {
+  overflow-x: auto;
+}
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Text before the first section heading on a page. */
+.lead-text {
+  margin-bottom: 3rlh;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  font-size: var(--step--1);
+  padding-top: 0.5rlh;
+  background: linear-gradient(var(--ink), var(--ink)) top / 100% 1px no-repeat;
+}
+
+/* ---------- 8 columns ---------- */
+
+@media (min-width: 40em) {
+  .display { grid-column: 1 / 8; }
+
+  .intro-text,
+  .project-meta {
+    grid-row: 2;
+  }
+  .intro-text { grid-column: 3 / 8; }
+  .project-meta {
+    grid-column: 1 / 3;
+    margin-top: 2rlh;
+  }
+
+  .block-label {
+    grid-column: 1 / 3;
+    margin-bottom: 0;
+  }
+  .block-body { grid-column: 3 / -1; }
+
+  .title { grid-column: 2 / 4; }
+  .summary { grid-column: 4 / -1; }
+}
+
+/* ---------- 12 columns ---------- */
+
+@media (min-width: 64em) {
+  .site-header li:nth-child(1) { grid-column: 1 / 4; }
+  .site-header li:nth-child(2) { grid-column: 4 / 7; }
+
+  .display { grid-column: 1 / 10; }
+  .intro-text { grid-column: 4 / 10; }
+  .project-meta { grid-column: 1 / 4; }
+
+  .block-label { grid-column: 1 / 4; }
+  .block-body { grid-column: 4 / -1; }
+  .prose.block-body { grid-column: 4 / 10; }
+
+  .title { grid-column: 2 / 5; }
+  .summary { grid-column: 5 / -1; }
 }
 
 /* ---------- Accessibility ---------- */
 
 .skip-link {
   position: absolute;
-  left: var(--space-1);
-  top: -100%;
+  left: var(--margin);
+  top: -100rlh;
+  padding: 0 0.5rlh;
+  background: var(--paper);
+  font-size: var(--step--1);
 }
 
 .skip-link:focus {
-  top: var(--space-1);
+  top: 1rlh;
 }

@@ -20,6 +20,8 @@ Der Titelsatz der Seite lautet: "Product leader who builds things to understand 
 
 Version 1 enthält kein JavaScript, keine externen Anfragen, keine Cookies und kein Analytics. Schriften werden selbst gehostet. Bis zum 05.11.2026 verwendete die Seite den System-Schriftstapel des jeweiligen Geräts, seitdem vorerst Inter (siehe Abschnitt "Schrift: vorerst Inter"). Damit der Browser nicht nach einer Datei `favicon.ico` fragt, ist ein leeres Favicon eingetragen. Auch der automatische Hugo-Generator-Hinweis im Seitenkopf ist abgeschaltet.
 
+Geändert am 06.11.2026: Die Regel "kein JavaScript" gilt nicht mehr. Max hat entschieden, dass reines JavaScript ohne Framework erlaubt ist, solange es klein bleibt. Keine externen Anfragen, keine Cookies und kein Analytics gelten weiter. Was eingebaut ist, steht im Abschnitt "Geschwindigkeit: Vorladen und Service Worker".
+
 Es gibt noch keine eigene Domain. Die Seite läuft vorerst unter https://maxmser.github.io/.
 
 ## Umzug auf eine eigene Domain
@@ -35,6 +37,8 @@ Quellen: GitHub Docs, "Troubleshooting custom domains and GitHub Pages" und "Man
 Stand 05.11.2026. Die Seite hat vier Arten von Seiten. Die Startseite zeigt den Titelsatz, einen kurzen Einleitungsabsatz und die Liste der Projekte. Die Projektübersicht unter `/projects/` listet alle Projekte. Jedes Projekt hat eine eigene Seite. Dazu kommt das Impressum unter `/imprint/`.
 
 Die Layouts sind `baseof.html` als Grundgerüst, `home.html` für die Startseite, `list.html` für die Projektübersicht, `single.html` für Projektseiten und `text.html` für einfache Textseiten wie das Impressum. Dazu kommen drei kleine Teilvorlagen für die Navigation, die Projektliste und die Liste "More projects". Taxonomien und der RSS-Feed sind abgeschaltet, weil es keinen Blog gibt. Die Sitemap bleibt, weil sie Suchmaschinen hilft und keine externen Anfragen auslöst.
+
+Nachtrag vom 06.11.2026: Dazu kommen zwei Teilvorlagen. `sections.html` teilt den Text einer Seite an jeder Überschrift zweiter Ordnung in Abschnitte auf, damit die Überschrift links und der Text rechts stehen kann. `dev-font-switch.html` ist der lokale Schriftschalter, siehe Abschnitt "Design-Umsetzung vom 06.11.2026".
 
 Das englische Wort für Impressum auf der Seite ist "Imprint". Diese Wahl ist vorläufig und kann geändert werden.
 
@@ -61,6 +65,8 @@ Stand 05.11.2026. Das Design macht Max später selbst in einer eigenen Runde. Di
 
 Das HTML ist semantisch aufgebaut, mit header, nav, main, article, section und footer. Es gibt genau eine CSS-Datei, `assets/css/main.css`. Sie definiert ein 12-spaltiges CSS-Grid, in dem jedes Element vorerst die volle Breite einnimmt. Schriftgrößen, Zeilenhöhen, Abstände, Rasterbreite und Farben sind als CSS-Variablen am Anfang der Datei gesammelt. Hugo verkleinert die Datei beim Build und hängt eine Prüfsumme an den Dateinamen, damit Browser nach Änderungen keine veraltete Version verwenden.
 
+Nachtrag vom 06.11.2026: Das Layout ist inzwischen umgesetzt, siehe Abschnitt "Design-Umsetzung vom 06.11.2026". Die CSS-Datei wird nicht mehr als eigene Datei ausgeliefert, sondern beim Build verkleinert und direkt in jede Seite geschrieben. Die Quelle bleibt die eine Datei `assets/css/main.css`. Die Prüfsumme im Dateinamen entfällt damit.
+
 ## Impressum
 
 Stand 05.11.2026. Das Impressum ist ein Platzhalter mit den Feldern Name, Wohnort und Kontakt. Als Wohnort ist Wien eingetragen. Grundlage ist die Offenlegungspflicht nach § 25 Mediengesetz. Für kleine Websites, die nur ihren Inhaber vorstellen und nicht geeignet sind, die öffentliche Meinung zu beeinflussen, reicht eine verkürzte Offenlegung. Das Unternehmensserviceportal des Bundes (usp.gv.at) nennt dafür den Namen, den Wohnort und bei Unternehmen den Unternehmensgegenstand. Die genauen Pflichtangaben für eine private Person sollten vor dem Livegang noch einmal geprüft werden.
@@ -74,6 +80,8 @@ Stand 05.11.2026. Max hat die Veröffentlichung am 05.11.2026 freigegeben und se
 Für Commits ist als Autor "Max Moser" mit der anonymen GitHub-Adresse 275640851+maxmser@users.noreply.github.com eingetragen. Grund: Das Repository ist öffentlich, und die E-Mail-Adresse steht in jedem Commit für alle sichtbar. Die Einstellung gilt global für Git auf Max' Mac.
 
 Die lokalen Git-Schritte führt Max selbst im Terminal aus. Claude arbeitet in einer Linux-VM, die zwar den Ordner sieht, aber nicht ins Terminal des Macs tippen kann und keine GitHub-Anmeldung hat.
+
+Geändert am 06.11.2026: Claude arbeitet seit diesem Tag direkt auf Max' Mac und führt die Git-Schritte selbst aus. Committet wird, wenn Max es verlangt. Gepusht und damit veröffentlicht wird nur nach seiner ausdrücklichen Freigabe. Nach jedem Push prüft Claude mit `gh run watch`, ob der Build durchläuft.
 
 ## Vorerst nicht in Suchmaschinen
 
@@ -93,6 +101,8 @@ Die Schrift wird selbst gehostet. Es gibt also keine Anfragen an Google Fonts od
 
 Jede der beiden Dateien ist etwa 350 KB groß, weil sie alle Schriftsysteme von Inter enthält, auch Kyrillisch, Griechisch und Vietnamesisch. Man könnte sie später auf lateinische Zeichen kürzen. Das würde die Ladezeit beim ersten Besuch spürbar senken.
 
+Nachtrag vom 06.11.2026: Die Dateien sind gekürzt, siehe Abschnitt "Schrift gekürzt".
+
 Inter ist eine Zwischenlösung. Die endgültige Schriftwahl bleibt offen, siehe unten. Nachtrag vom 06.11.2026: Die Dateien von Inter 4.1 wurden durch einen eigenen Build mit dem "a" mit Schweif ersetzt, siehe den nächsten Abschnitt.
 
 ## Schrift: Inter mit "a" mit Schweif (cv16)
@@ -111,7 +121,7 @@ Risiko: Der Quellcode ist ein unveröffentlichter Arbeitsstand. Er kann kleine F
 
 ## Design-Grundlagen für den Design-Durchgang
 
-Stand 06.11.2026. Grundlage ist eine Recherche zu Josef Müller-Brockmann und zur Übertragung seines Rastersystems ins Web. Ein statischer Entwurf der Startseite liegt im Ordner `design/entwurf-2026-11-06/`. Max hat ihn als Vorher-Nachher-Bild gesehen. Der Entwurf ist noch nicht in die Hugo-Layouts übernommen.
+Stand 06.11.2026. Grundlage ist eine Recherche zu Josef Müller-Brockmann und zur Übertragung seines Rastersystems ins Web. Ein statischer Entwurf der Startseite liegt im Ordner `design/entwurf-2026-11-06/`. Max hat ihn als Vorher-Nachher-Bild gesehen. Der Entwurf ist noch nicht in die Hugo-Layouts übernommen. Nachtrag vom 06.11.2026: Er ist inzwischen übernommen, siehe Abschnitt "Design-Umsetzung vom 06.11.2026".
 
 Die wichtigste Regel: Die Zeilenhöhe der Grundschrift ist die einzige Maßeinheit für alle vertikalen Abstände. Bei Müller-Brockmann entspricht die Höhe eines Rasterfeldes einer Zahl von Textzeilen, und der Abstand zwischen Feldern beträgt eine oder mehrere Zeilen. Im CSS bildet die Einheit `rlh` das ab. Sie ist die Zeilenhöhe des Root-Elements und gilt seit Mai 2026 in allen großen Browsern als breit verfügbar.
 
@@ -122,6 +132,62 @@ Weitere Regeln aus der Recherche, die der Entwurf umsetzt: Alle vertikalen Abst�
 Trennlinien werden als Hintergrund gezeichnet und nicht als Rahmen, damit sie den Zeilenrhythmus nicht um ein Pixel verschieben. Schriftgrößen stehen in `rem`, Medienabfragen in `em`, damit Zoom und Nutzereinstellungen das ganze System mitskalieren.
 
 Offen ist, ob Inter Display auch für den Fließtext gelten soll oder nur für Überschriften. Max hat am 06.11.2026 gesagt, dass er Inter in der Display-Variante verwenden will. Im Fließtext mit 18 Pixel ist Display etwas enger gesetzt als die Textvariante. Der Vergleich liegt als `schrift-vergleich.png` im Entwurfsordner.
+
+Nachtrag vom 06.11.2026: Max hat sich zunächst für Display nur bei den großen Überschriften entschieden. So ist die Seite jetzt eingestellt: Seitentitel mit optischer Größe 32, alle anderen Texte mit optischer Größe 14. Danach wollte Max die Varianten lieber im Browser vergleichen. Die Entscheidung ist deshalb wieder offen, siehe Abschnitt "Design-Umsetzung vom 06.11.2026" zum Schriftschalter.
+
+## Design-Umsetzung vom 06.11.2026
+
+Stand 06.11.2026. Der Entwurf ist in die Hugo-Layouts übernommen, und zwar für die Startseite, die Projektübersicht, die Projektseiten, das Impressum und die Fußzeile. Alle Seiten nutzen dasselbe Raster mit 4, 8 und 12 Spalten. Links steht jeweils der Name eines Abschnitts, rechts der Inhalt. Auf Projektseiten stehen Status und Stack links neben der Kurzbeschreibung.
+
+Geprüft wurde in Chrome bei 320, 375, 768 und 1440 Pixel Breite, mit 200 Prozent Browser-Zoom und mit 200 Prozent reinem Text-Zoom. Ein Skript hat dabei gemessen, dass jede Textzeile auf dem Zeilenraster von 27 Pixel liegt und dass keine Seite horizontal scrollt. In Safari und auf dem iPhone ist das Layout bisher nur von Hand anzusehen.
+
+Die Unterstützung von `rlh` und `subgrid` wurde am 06.11.2026 an den Baseline-Daten des W3C-Projekts web-features geprüft (Version 3.45.0). Beides gilt als breit verfügbar, `rlh` seit dem 21.05.2026 und `subgrid` seit dem 15.03.2026. Der Schriftschalter nutzt `:has()`, das seit 2023 breit verfügbar ist.
+
+Folgende Entscheidungen hat Claude ohne Rückfrage getroffen. Max hat sie mit der Freigabe zum Veröffentlichen akzeptiert, sie lassen sich aber jederzeit ändern. Erstens sind die Abschnittsnamen halbfett mit Stärke 500 statt fett mit 600 wie im Entwurf, weil die Regel nur zwei Stärken erlaubt. Der Entwurf hatte drei. Zweitens haben alle Seitentitel die große Display-Größe, auch "Imprint" und die Projekttitel. Drittens hat die Projektliste in der Übersicht links keinen Namen, weil der Seitentitel schon "Projects" heißt. Viertens steht jede Technik im Stack in einer eigenen Zeile. Fünftens sind Links im Fließtext unterstrichen, Navigation und Projektlisten nur beim Darüberfahren.
+
+Ein Fehler wurde während der Umsetzung gefunden und behoben. Die Zeilenhöhe steht als feste Länge `1rlh` auf `body`, damit jeder Text genau eine Rasterzeile hoch ist. Dadurch wurde die kleine Nummer in der Projektliste bei der Ausrichtung an der Grundlinie des Titels nach unten geschoben, und jede Zeile war 2 Pixel zu hoch. Die Nummer hat jetzt die Zeilenhöhe 1, und das Raster stimmt wieder.
+
+Die Abschnitte der Projektseiten entstehen, indem `sections.html` den fertigen Text an jedem `<h2` aufteilt. Mit dem Archetyp funktioniert das sicher. Bei ungewöhnlichem Markdown, zum Beispiel rohem HTML mit `<h2` im Text, ist es nicht getestet.
+
+Zum Vergleichen der Schriftvarianten gibt es einen Schalter mit vier Stellungen: Display nur bei Überschriften, Display überall, Text überall und automatisch nach Größe. Er erscheint nur unter `hugo server` und ist im veröffentlichten Build nicht enthalten. Er braucht kein JavaScript, merkt sich die Wahl aber nicht über einen Seitenwechsel hinaus. Nach der Entscheidung werden die Datei `layouts/_partials/dev-font-switch.html` und ihre Zeile in `baseof.html` gelöscht.
+
+## Schrift gekürzt
+
+Stand 06.11.2026. Die Schrift war mit Abstand der größte Teil jeder Seite. HTML und CSS zusammen sind gezippt etwa 2,5 KB groß, die Schriftdatei hatte 356 KB. Max hat das Kürzen freigegeben.
+
+Beide Dateien enthalten jetzt nur noch lateinische Zeichen und die Stärken 400 bis 500, die die Seite benutzt. Die normale Datei ist von 356 KB auf 72 KB geschrumpft, die kursive von 387 KB auf 77 KB. Erhalten sind beide Achsen, also Stärke und optische Größe, alle OpenType-Funktionen einschließlich cv16 und alle Namenseinträge. Umlaute, ß, deutsche Anführungszeichen, Gedankenstrich und Eurozeichen sind enthalten. Deutsch und Englisch sind damit vollständig abgedeckt.
+
+Weil die Schrift nur noch bis Stärke 500 reicht, ist fett markierter Text auf 500 gesetzt. Sonst würde der Browser bei Fett eine künstlich verdickte Schrift erzeugen. Eine dritte Stärke wäre später ein neuer Build.
+
+Gegenprobe: Bei Stärke 400 sind die gemessenen Textbreiten exakt gleich wie vorher. Bei 500 weicht eine Zeile in 100 Pixel großer Schrift um 0,1 Pixel ab, eine Rundung beim Kürzen der Achse, die man nicht sieht.
+
+Die Lizenz erlaubt das. Inter nennt nach dem Copyright-Hinweis keinen geschützten Schriftnamen ("Reserved Font Name"), deshalb dürfen gekürzte Dateien den Namen behalten. Die Lizenzdatei bleibt neben den Schriftdateien.
+
+So wurde gekürzt, mit fontTools: Zuerst begrenzt `fontTools.varLib.instancer` die Stärken-Achse mit `wght=400:500`. Dann behält `fontTools.subset` den lateinischen Zeichenbereich `U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD`, mit den Optionen `--layout-features='*' --name-IDs='*' --name-languages='*' --notdef-outline --flavor=woff2`. Ausgangspunkt sind die ungekürzten Dateien aus Commit 2eba55d. Das Werkzeug glyphhanger wurde nicht verwendet. Es ruft intern dasselbe fontTools auf, sucht die Zeichen aber aus den Seiten heraus, und die Texte sind noch Platzhalter.
+
+## Geschwindigkeit: Vorladen und Service Worker
+
+Stand 06.11.2026. Max will, dass die Seite sehr schnell lädt, und zwar vor allem die Zeit bis zur ersten Antwort des Servers bei jedem Klick. Gemessen am 06.11.2026: Hat der Zwischenspeicher von GitHub Pages die Seite vorrätig, antwortet er nach etwa 10 bis 25 Millisekunden. Hat er sie nicht, dauert es etwa 170 bis 190 Millisekunden. Bei einer Seite mit wenigen Besuchern dürfte der zweite Fall häufig sein.
+
+Das CSS steht direkt im HTML. Beim ersten Aufruf fällt damit eine Anfrage weg, auf die der Browser vor dem Anzeigen warten müsste. Beim ersten Besuch lädt der Browser nur noch HTML und Schrift.
+
+Für Chrome und Edge stehen im Seitenkopf Speculation Rules. Sie laden alle internen Seiten sofort vor und bauen eine Seite schon fertig auf, wenn der Mauszeiger 200 Millisekunden auf dem Link liegt. Dazu kommt eine Regel mit der Stufe "conservative", die erst bei Berührung oder Mausdruck vorlädt. Das ist genau der Teil, dem das WebKit-Team im Juni 2025 zugestimmt hat. Safari kann ihn nutzen, sobald Apple ihn einschaltet. Gemessen in Chrome: Nach dem Klick kam keine neue Anfrage an den Server, die Wartezeit auf den Server war 0 Millisekunden. Das fertige Aufbauen beim Hover wurde im Test ohne Bildschirm nicht beobachtet.
+
+Safari kann bisher weder Speculation Rules noch `<link rel="prefetch">`. Laut den Baseline-Daten unterstützen das nur Chrome und Edge beziehungsweise Chrome und Firefox. Safari 27.2 meldet zwar, Speculation Rules zu kennen, lädt aber mit keiner Regelart etwas vor. Das wurde am 06.11.2026 getestet. Auch instant.page hilft dort nicht. Laut seinem Quellcode in Version 5.2.0 beendet es sich sofort, wenn der Browser kein `link rel="prefetch"` kann. FastClick ist überflüssig. Laut eigener Dokumentation haben Chrome und Safari die Verzögerung von 300 Millisekunden beim Tippen seit Ende 2015 nicht mehr.
+
+Getestet und verworfen für Safari: Seiten mit `fetch()` vorzuladen. Safari fragt beim Klick trotzdem noch einmal beim Server. Ein unsichtbarer iframe funktionierte zwar, Max fand das aber zu sehr einen Trick.
+
+Deshalb gibt es einen Service Worker in reinem JavaScript, die Datei `assets/js/sw.js`. Der Browser installiert ihn beim ersten Besuch. Er legt alle Seiten und die Schrift in einem eigenen Speicher im Browser ab und beantwortet Klicks von dort. Service Worker sind laut Baseline-Daten seit 2020 in allen großen Browsern breit verfügbar, in Safari seit Version 11.1. Gemessen am 06.11.2026 mit einem Testserver, der jede Seite 800 Millisekunden zurückhält: Die erste Seite kam nach etwa 830 Millisekunden, die Seite nach dem Klick in Chrome nach 14, in Safari nach 3 und in Firefox nach 60 Millisekunden.
+
+So bleiben die Seiten aktuell. Die Datei bekommt bei jedem Build eine neue Versionsnummer. Laut MDN holt der Browser diese Datei bei Updates immer vom Server und umgeht dabei den Zwischenspeicher von GitHub Pages, der 10 Minuten gilt. Die neue Version holt alle Seiten frisch vom Server und löscht den alten Speicher. Außerdem fragt der Service Worker bei jeder Seite im Hintergrund beim Server nach, ob sie sich geändert hat. Nach einem Deploy sieht ein wiederkehrender Besucher deshalb genau eine Seite in der alten Fassung. Wer zum ersten Mal kommt, ist nie betroffen. Max hat das am 06.11.2026 als akzeptabel eingestuft. Den einen veralteten Aufruf kann man nicht vermeiden, ohne vor jeder Seite beim Server nachzufragen, und genau diese Wartezeit soll wegfallen.
+
+Zwei Fehler im ersten Entwurf wurden beim Testen gefunden und behoben. Die neue Version hätte alte Seiten aus dem Zwischenspeicher von GitHub Pages geholt, dann wäre der Versionswechsel wirkungslos gewesen. Und die Schrift wäre beim ersten Besuch doppelt geladen worden.
+
+Der Service Worker ist nur im veröffentlichten Build aktiv, nicht unter `hugo server`, weil er beim Bearbeiten alte Fassungen festhalten würde. Er liegt unter `/sw.js` ohne Prüfsumme im Namen, weil sich sein Name nie ändern darf. Er wird nicht verkleinert, weil Hugo ihn dabei umbenennt. Er lädt erst nach der Seite und bremst sie nicht.
+
+Notausschalter, falls der Service Worker einmal Probleme macht: Den Inhalt von `assets/js/sw.js` durch einen ersetzen, der beim Installieren alle Speicher löscht und `self.registration.unregister()` aufruft, und veröffentlichen. Ein bloßes Entfernen der Datei reicht nicht, weil installierte Service Worker in den Browsern der Besucher weiterlaufen.
+
+Rechtlich gilt nach den Leitlinien 2/2023 des Europäischen Datenschutzausschusses jedes Ablegen von Daten auf dem Gerät als Speichern im Sinne der ePrivacy-Regel. Ob dafür eine Einwilligung nötig ist oder eine Ausnahme greift, lassen die Leitlinien ausdrücklich offen. Streng gelesen betrifft das auch das Vorladen in den normalen Zwischenspeicher des Browsers. Max hat das am 06.11.2026 als vernachlässigbar eingestuft. Gespeichert werden nur die öffentlichen Seiten der Website selbst, keine Daten über Besucher.
 
 ## Offene Punkte
 
@@ -135,4 +201,12 @@ Inhalte der Projektseiten: Alle Texte sind noch Platzhalter. Max erarbeitet sie 
 
 Impressum: Name und Kontakt sind noch einzutragen, und die Pflichtangaben sind vor dem Livegang zu prüfen.
 
-Design: Das eigentliche Layout im Stil von Müller-Brockmann folgt in einer eigenen Runde. Seit dem 06.11.2026 gibt es dafür einen Entwurf, siehe Abschnitt "Design-Grundlagen für den Design-Durchgang".
+Design: Das eigentliche Layout im Stil von Müller-Brockmann folgt in einer eigenen Runde. Seit dem 06.11.2026 gibt es dafür einen Entwurf, siehe Abschnitt "Design-Grundlagen für den Design-Durchgang". Nachtrag vom 06.11.2026: Das Layout ist umgesetzt und veröffentlicht.
+
+Stand 06.11.2026, neue offene Punkte:
+
+Optische Größe der Schrift: Display nur bei Überschriften oder überall ist noch nicht entschieden. Max vergleicht die Varianten mit dem lokalen Schalter.
+
+Beschreibung der Startseite: Die Startseite hat keine Meta-Beschreibung für Suchmaschinen, weil ihr Text noch fehlt. Lighthouse meldet das. Der Text kommt mit den übrigen Inhalten.
+
+Prüfung nach der Veröffentlichung: Service Worker auf der echten Seite, Test auf dem iPhone und eine Lighthouse-Messung gegen https://maxmser.github.io/. Eine Messung gegen `hugo server` taugt dafür nicht, weil der lokale Server ein Skript für das automatische Neuladen einbaut, nicht komprimiert und keine Cache-Angaben sendet.

@@ -19,13 +19,25 @@
   {{- /* Empty favicon so the browser does not request /favicon.ico. */}}
   <link rel="icon" href="data:,">
   <link rel="preload" href="{{ "fonts/inter/InterVariable.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
-  {{- with resources.Get "css/main.css" | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+  {{- /* The stylesheet is inlined: it is small, and the browser can render
+       without waiting for a second request. The source stays assets/css/main.css. */}}
+  {{- with resources.Get "css/main.css" | minify }}
+  <style>{{ .Content | safeCSS }}</style>
   {{- end }}
+  {{- /* Preloading of internal pages, see DECISIONS.md, "Vorladen von Seiten".
+       Chrome and Edge: prefetch every internal page at once, prerender on hover.
+       The conservative rule (on pointer or touch down) is the subset WebKit has
+       agreed to; Safari can use it once it is switched on there.
+       All browsers: the service worker (assets/js/sw.js), registered below. */}}
+  <script type="speculationrules">
+  {"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"immediate"},
+               {"where":{"href_matches":"/*"},"eagerness":"conservative"}],
+   "prerender":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">{{ T "skipToContent" }}</a>
-  <div class="page grid">
+  <div class="page">
     <header class="site-header">
       {{ partial "nav.html" . }}
     </header>
@@ -33,8 +45,21 @@
       {{ block "main" . }}{{ end }}
     </main>
     <footer class="site-footer">
-      {{ with site.GetPage "/imprint" }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
+      {{ with site.GetPage "/imprint" }}<a href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a>{{ end }}
     </footer>
   </div>
+  {{- /* Service worker, only in the published site: under "hugo server" it would
+       keep old copies of pages while editing. It must live at the root (/sw.js),
+       so it has no fingerprint in its name; its version is inside the file.
+       Not minified: minify renames the file, and it loads after the page anyway. */}}
+  {{- if hugo.IsProduction }}
+  {{- with resources.Get "js/sw.js" | resources.ExecuteAsTemplate "sw.js" site.Home }}
+  <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("{{ .RelPermalink }}"));</script>
+  {{- end }}
+  {{- end }}
+  {{- /* Local tool for the font decision. Only under "hugo server", never published. */}}
+  {{- if hugo.IsServer }}
+  {{ partial "dev-font-switch.html" . }}
+  {{- end }}
 </body>
 </html>

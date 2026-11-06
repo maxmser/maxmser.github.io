@@ -1,11 +1,13 @@
 {{ define "main" }}
 <section class="intro">
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
+  <h1 class="display">{{ .Title }}</h1>
+  {{- with .Content }}
+  <div class="intro-text prose">{{ . }}</div>
+  {{- end }}
 </section>
 {{- with site.GetPage "/projects" }}
-<section class="projects" aria-labelledby="projects-heading">
-  <h2 id="projects-heading">{{ T "projects" }}</h2>
+<section class="block" aria-labelledby="projects-heading">
+  <h2 id="projects-heading" class="block-label">{{ T "projects" }}</h2>
   {{ partial "project-list.html" .RegularPages }}
 </section>
 {{- end }}
