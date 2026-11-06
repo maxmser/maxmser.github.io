@@ -9,7 +9,8 @@
     baseline is on the grid, and a small script in baseof.html pads the block to
     whole half lines, so the text below lands on the grid again.
   - Grid: 4 columns, 8 from 40em, 12 from 64em. Gutter is 1rlh.
-  - Rules (hairlines) are drawn as backgrounds, not borders, so they do not shift the rhythm.
+  - Rules (hairlines) are drawn as backgrounds, not borders, so they do not shift the rhythm,
+    and they sit on lines of the baseline grid (--rule-offset).
   - Font sizes in rem, media queries in em, so zoom and user settings scale everything.
   Everything adjustable is a variable in :root.
 */
@@ -157,6 +158,7 @@
      Change a font size and these must be measured again. */
   --baseline-grid: 0.5rlh;    /* 13.5 px; tools/raster-check.mjs reads it */
   --snap-small: 0.0741rlh;    /* 2 px: Inter 14.6 px on 27 px lines */
+  --rule-offset: calc(6.5rlh / 27); /* rules: 6.5 px below the box top = on a baseline grid line */
   --snap-small-tight: 0.1852rlh; /* 5 px: Inter 14.6 px on 20.25 px lines */
   --snap-standfirst: -2px;    /* Crimson 24 px; px, not rlh: measured, see DECISIONS.md */
   --snap-mono: 0.03704rlh;      /* 1 px: code blocks, SF Mono at 0.75em (other systems' monospace fonts may differ) */
@@ -439,10 +441,13 @@ a:hover {
 
 /* ---------- Blocks: label on the left, content on the right ---------- */
 
+/* The rule above a section sits on a grid line; the section name hangs one and a
+   half lines below it, so the rule belongs to its own section, not to the text
+   before it (see DECISIONS.md, "Linien auf dem Raster"). */
 .block {
-  padding-top: 0.5rlh;
+  padding-top: 1rlh;
   margin-bottom: 3rlh;
-  background: linear-gradient(var(--ink), var(--ink)) top / 100% 1px no-repeat;
+  background: linear-gradient(var(--ink), var(--ink)) 0 var(--rule-offset) / 100% 1px no-repeat;
 }
 
 /* Section names in the size of the h3 inside the text (18 px), so a section
@@ -462,7 +467,7 @@ a:hover {
 .list li {
   align-items: baseline;
   padding-block: 0.5rlh;
-  background: linear-gradient(var(--rule), var(--rule)) top / 100% 1px no-repeat;
+  background: linear-gradient(var(--rule), var(--rule)) 0 var(--rule-offset) / 100% 1px no-repeat; /* on the grid line midway between two entries */
 }
 
 .list li:first-child {
@@ -623,9 +628,10 @@ sub {
 
 /* ---------- Baseline snap ---------- */
 
-/* Inter 14.6 px elements, moved onto the baseline grid (see --snap-small). */
+/* Inter 14.6 px elements, moved onto the baseline grid (see --snap-small). In the
+   footer only the link moves, so the footer's rule stays where --rule-offset puts it. */
 .site-header,
-.site-footer {
+.site-footer a {
   position: relative;
   top: var(--snap-small);
 }
@@ -643,7 +649,7 @@ sub {
 .site-footer {
   font-size: var(--step--1);
   padding-top: 0.5rlh;
-  background: linear-gradient(var(--rule), var(--rule)) top / 100% 1px no-repeat;
+  background: linear-gradient(var(--rule), var(--rule)) 0 var(--rule-offset) / 100% 1px no-repeat;
 }
 
 /* ---------- 8 columns ---------- */

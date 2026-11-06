@@ -387,6 +387,14 @@ Max wollte den Zeilenabstand der Bildunterschriften von 138 Prozent behalten und
 
 Die Prüfung `tools/raster-check.mjs` prüft wieder auf halbe Zeilen. Bei kleiner Schrift auf 20,25 Pixel prüft sie nur die erste Grundlinie eines Blocks, dessen Höhe aber streng. Am 06.11.2026 lagen auf acht Seiten in fünf Ansichten alle geprüften Grundlinien auf dem Raster, und eine eigene Messung bestätigte, dass auf Desktop, Tablet und Handy der Text nach jeder Unterschrift wieder auf einer Linie steht.
 
+## Linien auf dem Raster
+
+Stand 06.11.2026. Mit eingezeichnetem Raster fragte Max, ob nicht auch die Linien auf dem Raster liegen müssten. Gemessen lagen die Linien über den Abschnitten und zwischen den Einträgen der Projektliste 7 Pixel unter einer Rasterlinie, also fast genau zwischen zwei Linien, und die Linie über der Fußzeile 9 Pixel, weil sie mit dem Text der Fußzeile um 2 Pixel verschoben wurde. Die Abstände der Kästen stimmten, nur die Linien selbst waren nicht ausgerichtet.
+
+Max hat sich für die Variante entschieden, bei der die Linie über einem Abschnitt auf die Rasterlinie darunter rückt und der Abschnittsname anderthalb Zeilen unter ihr hängt. Die Linie gehört so sichtbar zum neuen Abschnitt: Vom Text davor sind es 94,5 Pixel Weißraum, zum eigenen Namen etwa 27. Jeder Wechsel zwischen Abschnitten wird dadurch eine halbe Zeile höher. Die Alternative, die Linie auf die Rasterlinie darüber zu setzen, hätte den Gesamtabstand gleich gelassen, die Linie aber näher an den vorigen Text gerückt. Die Trennlinien der Projektliste liegen jetzt auf der Rasterlinie genau in der Mitte zwischen zwei Einträgen, eine Zeile von der Grundlinie darüber und eine von der darunter. Die Linie über der Fußzeile liegt ebenfalls auf dem Raster. Verschoben wird dort nur noch der Link, nicht mehr die ganze Fußzeile.
+
+Alle Linien nutzen denselben Versatz, `--rule-offset`, 6,5 Pixel unter der Oberkante ihres Kastens. Die Prüfung `tools/raster-check.mjs` prüft jetzt auch die Linien. Eine Gegenprobe mit dem alten Stylesheet hat gezeigt, dass sie verrutschte Linien findet. Am 06.11.2026 lagen alle Grundlinien und alle Linien auf acht Seiten in fünf Ansichten auf dem Raster.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

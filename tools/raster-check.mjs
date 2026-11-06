@@ -18,6 +18,8 @@
 //    whole number of half lines tall, so nothing below it leaves the grid (an inline
 //    element in another font or a superscript can stretch a line). Elements with a
 //    smaller line height on purpose (the numbers in project lists) are skipped.
+// 2b. Rules: every hairline drawn as a background (section rules, list separators,
+//    the footer rule) lies on a line of the grid, at the same height as the baselines.
 // 3. Blocks in running text (figures, lists, quotations, code) are a whole number of
 //    half lines tall, so an image cannot push the text below it off the grid.
 // 4. No horizontal scrolling.
@@ -113,8 +115,12 @@ const MEASURE = `(() => {
     items.push({ el: name(el), font: cs.fontFamily.split(',')[0].replace(/"/g, ''), size: parseFloat(cs.fontSize),
       phase: ((baseline % G) + G) % G, height: block ? r.height : null, prose: !!el.closest('.prose') && el.tagName === 'P' });
   }
+  const rules = [...document.querySelectorAll('.block, .list li:not(:first-child), .site-footer')].map((el) => {
+    const y = el.getBoundingClientRect().top - top0 + parseFloat(getComputedStyle(el).backgroundPositionY);
+    return { el: name(el), phase: ((y % G) + G) % G };
+  });
   const blocks = [...document.querySelectorAll('.prose > *')].map((el) => ({ el: name(el), height: el.getBoundingClientRect().height }));
-  return { L, G, items, blocks, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+  return { L, G, items, blocks, rules, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
 })()`;
 
 // Collect pages: everything on the same site linked from the home page and from those pages.
@@ -142,6 +148,10 @@ for (const view of VIEWS) {
         const rest = i.height % m.G;
         if (Math.min(rest, m.G - rest) > 0.01) fail(`${where}: ${i.el} is ${i.height.toFixed(2)}px tall, not a multiple of ${m.G}px`);
       }
+    }
+    for (const r of m.rules) {
+      let d = Math.abs(r.phase - ref.phase); d = Math.min(d, m.G - d);
+      if (d > (view.tolerance || 0.25) + 1e-6) fail(`${where}: rule of ${r.el} is ${(r.phase - ref.phase).toFixed(2)}px off the grid`);
     }
     for (const b of m.blocks) {
       const rest = b.height % m.G;
