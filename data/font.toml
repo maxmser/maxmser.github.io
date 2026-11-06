@@ -32,3 +32,21 @@ weight_max = 500
 # Optical size, fixed: 32 is Inter Display, used for all text since 2026-11-06.
 # Fixing it removes the axis from the file. Delete this line to keep the axis.
 optical_size = 32
+
+# Text font for introductions and running text (.intro-text, .prose), since 2026-11-06.
+# Crimson Pro 1.003 from google/fonts (commit 5c70a79), SIL Open Font License.
+# Sources in tools/fonts-src/crimson/, output in static/fonts/crimson/.
+# Its character set is the list above minus the characters Crimson Pro does not have:
+# U+2011 (non-breaking hyphen) and the arrows U+2190 to U+2193. The build stops if
+# this list asks for a character the source lacks; font-check.html checks
+# running text against it.
+[serif]
+unicodes = [
+  "0020-007E", "00A0", "00A7", "00A9", "00AE", "00B0", "00B7", "00D7",
+  "00C4", "00D6", "00DC", "00DF", "00E4", "00F6", "00FC", "00E9",
+  "2013", "2014", "2018", "2019", "201A", "201C", "201D", "201E",
+  "2022", "2026", "2032", "2033", "20AC", "2122", "2212",
+]
+features = ["tnum"]
+weight_min = 400
+weight_max = 500

@@ -26,16 +26,19 @@
   <link rel="icon" href="data:,">
   {{- /* The stylesheet is inlined: it is small, and the browser can render
        without waiting for a second request. The source stays assets/css/main.css.
-       For a first visit the upright font goes inline as base64 (font-display: block,
-       the data is already there). Measured on 2026-11-06, see DECISIONS.md. */}}
+       For a first visit the upright fonts (Inter and Crimson Pro) go inline as
+       base64 (font-display: block, the data is already there). Measured on
+       2026-11-06, see DECISIONS.md. The italics always come as files. */}}
   {{- $css := (resources.Get "css/main.css").Content }}
+  {{- range slice "fonts/inter/InterVariable.woff2" "fonts/crimson/CrimsonPro.woff2" }}
   {{- if $lean }}
-  <link rel="preload" href="{{ "fonts/inter/InterVariable.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ . | relURL }}" as="font" type="font/woff2" crossorigin>
   {{- else }}
-  {{- $src := `src: url("/fonts/inter/InterVariable.woff2") format("woff2");` }}
-  {{- if not (strings.Contains $css $src) }}{{ errorf "main.css: the src line of the upright font is missing, the font cannot be inlined" }}{{ end }}
-  {{- $data := os.ReadFile "static/fonts/inter/InterVariable.woff2" | base64Encode }}
+  {{- $src := printf `src: url("/%s") format("woff2");` . }}
+  {{- if not (strings.Contains $css $src) }}{{ errorf "main.css: the src line %q is missing, the font cannot be inlined" $src }}{{ end }}
+  {{- $data := os.ReadFile (printf "static/%s" .) | base64Encode }}
   {{- $css = replace $css $src (printf `font-display: block; src: url(data:font/woff2;base64,%s) format("woff2");` $data) }}
+  {{- end }}
   {{- end }}
   {{- with resources.FromString (cond (not $lean) "css/main-inline.css" "css/main-lean.css") $css | minify }}
   <style>{{ .Content | safeCSS }}</style>

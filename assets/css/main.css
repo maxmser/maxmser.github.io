@@ -3,6 +3,8 @@
   Rules (see DECISIONS.md, "Design-Grundlagen"):
   - Font size and line height are set on html, so 1rlh is exactly one line of body text.
   - Every vertical distance is a whole or half multiple of 1rlh.
+  - Every baseline sits at the same height in a grid of half lines (13.5 px),
+    whatever the font: see --snap-* and tools/raster-check.mjs.
   - Grid: 4 columns, 8 from 40em, 12 from 64em. Gutter is 1rlh.
   - Rules (hairlines) are drawn as backgrounds, not borders, so they do not shift the rhythm.
   - Font sizes in rem, media queries in em, so zoom and user settings scale everything.
@@ -41,6 +43,30 @@
 }
 
 /*
+  Crimson Pro (variable font) for introductions and running text, since
+  2026-11-06. Version 1.003 from google/fonts, SIL Open Font License 1.1.
+  Subset like Inter (data/font.toml, table [serif]), files and license in
+  static/fonts/crimson/. See DECISIONS.md, "Lauftext in Crimson Pro".
+  The upright face is rewritten by baseof.html like Inter's: keep its src line
+  exactly as it is.
+*/
+@font-face {
+  font-family: "CrimsonPro";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/crimson/CrimsonPro.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "CrimsonPro";
+  font-style: italic;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/crimson/CrimsonPro-Italic.woff2") format("woff2");
+}
+
+/*
   Fallback faces with Inter's proportions, so the layout does not jump when
   Inter replaces them. Arial and Helvetica have the same widths, so one set of
   values fits macOS, iOS and Windows. Values measured on 2026-11-06 against
@@ -69,12 +95,30 @@
   line-gap-override: 0%;
 }
 
+/*
+  Fallback for Crimson Pro: Georgia (macOS, iOS, Windows) with Crimson's
+  average width and vertical metrics, measured on 2026-11-06 with the same
+  method as InterFallback (English letter frequency, weight 400). The vertical
+  metrics matter most here: they keep the baselines on the grid while the font
+  loads. One face for both weights; italic is synthesised until Crimson arrives.
+*/
+@font-face {
+  font-family: "CrimsonFallback";
+  font-weight: 400 500;
+  src: local("Georgia");
+  size-adjust: 90.68%;
+  ascent-override: 98.86%;
+  descent-override: 23.69%;
+  line-gap-override: 0%;
+}
+
 /* ---------- Variables ---------- */
 
 :root {
   /* Fonts: Inter first, system stack as fallback. */
   --font-body: "InterVariable", "InterFallback", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-display: "InterVariable", "InterFallback", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: "CrimsonPro", "CrimsonFallback", Georgia, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* All text is Inter Display (optical size 32, fixed in the font file,
@@ -89,13 +133,25 @@
   --root-size: 1.125rem;
   --root-leading: 1.5;
 
-  /* Type scale: small, base and the display size of the page title.
-     The display size grows with the grid (see media queries). */
-  --step--1: 0.8125rem; /* 14.6 px */
-  --step-0: 1rem;       /* 18 px */
-  --display-size: 2.5rem;
-  --display-leading: 2rlh;
+  /* Type scale: small, base, running text and the display size of the page
+     title. The display size grows with the grid (see media queries) and follows
+     the classic scale 48, 60, 72 px. Every line height is a multiple of half a
+     line (0.5rlh = 13.5 px), the baseline grid. */
+  --step--1: 0.8125rem;   /* 14.6 px, Inter */
+  --step-0: 1rem;         /* 18 px, Inter */
+  --step-text: 1.16667rem; /* 21 px, Crimson Pro on 27 px lines (129 %) */
+  --display-size: 2.66667rem; /* 48 px */
+  --display-leading: 2rlh;    /* 54 px */
   --display-tracking: -0.02em;
+
+  /* Baseline snap: every baseline sits at the same height in the 13.5 px grid,
+     whatever its font and size. Crimson 21 px and Inter 18 px land there by
+     themselves; the other styles are moved by these amounts (position: relative,
+     so nothing else moves). Measured values, checked by tools/raster-check.mjs.
+     In rlh, not px, so they grow with the reader's text size setting.
+     Change a font size and these must be measured again. */
+  --snap-small: 0.0741rlh;    /* 2 px: Inter 14.6 px */
+  --snap-display: 0.1111rlh;  /* 3 px: page title, 48 px */
 
   /* Two weights only. */
   --weight-regular: 400;
@@ -118,16 +174,18 @@
 @media (min-width: 40em) {
   :root {
     --cols: 8;
-    --display-size: 3.25rem;
-    --display-leading: 3rlh;
+    --display-size: 3.33333rem; /* 60 px */
+    --display-leading: 2.5rlh;  /* 67.5 px */
+    --snap-display: 0.2037rlh;  /* 5.5 px */
   }
 }
 
 @media (min-width: 64em) {
   :root {
     --cols: 12;
-    --display-size: 4rem;
-    --display-leading: 3rlh;
+    --display-size: 4rem;     /* 72 px */
+    --display-leading: 3rlh;  /* 81 px */
+    --snap-display: -0.2407rlh; /* -6.5 px */
     --display-tracking: -0.025em;
   }
 }
@@ -268,6 +326,8 @@ a:hover {
 }
 
 .display {
+  position: relative;
+  top: var(--snap-display);
   font-family: var(--font-display);
   font-size: var(--display-size);
   line-height: var(--display-leading);
@@ -277,6 +337,16 @@ a:hover {
 .intro-text {
   margin-top: 2rlh;
   max-width: var(--measure);
+}
+
+/* Introductions and running text are set in Crimson Pro, everything that
+   structures the page in Inter (see DECISIONS.md, "Lauftext in Crimson Pro").
+   Crimson has its own spacing, so Inter's extra tracking does not apply. */
+.intro-text,
+.prose {
+  font-family: var(--font-text);
+  font-size: var(--step-text);
+  letter-spacing: 0;
 }
 
 .project-meta {
@@ -390,6 +460,25 @@ a:hover {
 /* Text before the first section heading on a page. */
 .lead-text {
   margin-bottom: 3rlh;
+}
+
+/* Inline elements in another font or position must not make a line taller
+   than the grid: with line-height 0 they never stretch the line box. */
+.prose :not(pre) > code,
+sup,
+sub {
+  line-height: 0;
+}
+
+/* ---------- Baseline snap ---------- */
+
+/* Inter 14.6 px elements, moved onto the baseline grid (see --snap-small). */
+.site-header,
+.block-label,
+.project-meta,
+.site-footer {
+  position: relative;
+  top: var(--snap-small);
 }
 
 /* ---------- Footer ---------- */

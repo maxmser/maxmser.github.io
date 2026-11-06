@@ -1,18 +1,29 @@
 {{- /*
-  Stops the build if a page uses a character that the web font does not contain.
+  Stops the build if a page uses a character that its web font does not contain.
   Without this check such a character would silently appear in another font.
-  The allowed characters come from data/font.toml, the same list that
-  tools/build-fonts.py uses to build the font. To allow a character, add it
-  there and rebuild the font.
+  The allowed characters come from data/font.toml, the same lists that
+  tools/build-fonts.py uses to build the fonts:
+  - running text (.Content) and the summary are set in Crimson Pro (list [serif]),
+    the summary also appears in Inter in project lists; the Crimson list is the
+    stricter one, so it covers both;
+  - titles, status, stack and other names are set in Inter (top-level list).
+  To allow a character, add it there and rebuild the fonts.
 */ -}}
-{{- $class := "" }}
-{{- range hugo.Data.font.unicodes }}
-  {{- $parts := split . "-" }}
-  {{- $class = printf `%s\x{%s}` $class (index $parts 0) }}
-  {{- if gt (len $parts) 1 }}{{ $class = printf `%s-\x{%s}` $class (index $parts 1) }}{{ end }}
+{{- $classes := dict }}
+{{- range $name, $list := dict "Inter" hugo.Data.font.unicodes "Crimson Pro" hugo.Data.font.serif.unicodes }}
+  {{- $class := "" }}
+  {{- range $list }}
+    {{- $parts := split . "-" }}
+    {{- $class = printf `%s\x{%s}` $class (index $parts 0) }}
+    {{- if gt (len $parts) 1 }}{{ $class = printf `%s-\x{%s}` $class (index $parts 1) }}{{ end }}
+  {{- end }}
+  {{- $classes = merge $classes (dict $name $class) }}
 {{- end }}
-{{- $texts := slice site.Title .Title (.Params.summary | default "") (.Params.status | default "") (delimit (.Params.stack | default slice) " ") (.Content | plainify | htmlUnescape) }}
-{{- range .Params.more_projects }}{{ $texts = $texts | append .name }}{{ end }}
-{{- with findRE (printf `[^%s\s]` $class) (delimit $texts " ") | uniq }}
-  {{- errorf "%s: characters not in the web font: %s (add them to data/font.toml and run tools/build-fonts.py)" $.Path (delimit . " ") }}
+{{- $inter := slice site.Title .Title (.Params.status | default "") (delimit (.Params.stack | default slice) " ") }}
+{{- range .Params.more_projects }}{{ $inter = $inter | append .name }}{{ end }}
+{{- $serif := slice (.Params.summary | default "") (.Content | plainify | htmlUnescape) }}
+{{- range $name, $texts := dict "Inter" $inter "Crimson Pro" $serif }}
+  {{- with findRE (printf `[^%s\s]` (index $classes $name)) (delimit $texts " ") | uniq }}
+    {{- errorf "%s: characters not in the web font %s: %s (see data/font.toml and tools/build-fonts.py)" $.Path $name (delimit . " ") }}
+  {{- end }}
 {{- end }}

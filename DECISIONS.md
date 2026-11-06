@@ -259,6 +259,34 @@ Ehrliche Einschränkung, gemessen am 06.11.2026: Eine Ersatzschrift kann den Spr
 
 Gemessen am 06.11.2026 gegen den Stand von Commit 1c945ed, je sieben Erstbesuche: Auf langsamem 4G erscheint Text nach 292 statt nach 348 Millisekunden, auf normalem 4G nach 100 statt nach 108 Millisekunden.
 
+## Lauftext in Crimson Pro
+
+Stand 06.11.2026. Max wollte zu Inter eine Serifenschrift als Ergänzung, ähnlich gut wie Signifier von Klim. Verglichen wurden freie Schriften unter der SIL Open Font License, nämlich Newsreader, Source Serif 4, Literata, Junicode, Libre Caslon Text, Spectral, Crimson Pro, EB Garamond, Playfair, Instrument Serif und Hedvig Letters Serif, dazu die kommerzielle Fabric Serif von Monokrom als Testschrift. Geprüft wurde nach der Methode von Tim Brown ("Combining Typefaces", 2013): x-Höhe, Ober- und Unterlängen, Breite, Öffnung, Strichkontrast und der Grauwert im Satz. Fabric Serif passt in den Proportionen am besten zu Inter, ist aber kommerziell, und ihre Lizenz verbietet Veränderungen an der Schrift, was das Kürzen der Schrift betreffen könnte. Das ist nicht geklärt. Max hat sich am 06.11.2026 für Crimson Pro entschieden, und zwar als Schrift für den Lauftext, nicht für Überschriften.
+
+Die Rollen sind getrennt: Crimson Pro setzt die Einleitung und den Lauftext (`.intro-text`, `.prose`), Inter alles, was die Seite gliedert, also Titel, Navigation, Abschnittsnamen, Angaben zum Projekt und die Projektlisten. Butterick empfiehlt, jeder Schrift eine feste Rolle zu geben.
+
+Crimson Pro steht in 21 Pixel auf 27 Pixel Zeilenabstand. Das sind 129 Prozent und damit innerhalb der 120 bis 145 Prozent aus den Typografie-Regeln, und 21 ist eine Stufe der klassischen Reihe. Crimson Pro hat bei gleicher Schriftgröße eine deutlich kleinere x-Höhe als Inter (0,42 gegenüber 0,516 der Schriftgröße), deshalb steht sie größer als Inter mit 18 Pixel. Gemessen am 06.11.2026 hat eine Zeile im Mittel 73 Zeichen auf dem Desktop, 57 auf dem Tablet und 35 auf dem Handy. Mit Inter waren es 77, 60 und 36. Der Desktop liegt damit wieder unter der Grenze von 75 Zeichen, das Handy bleibt wie zuvor unter 45.
+
+Die Schrift ist gekürzt wie Inter, auf Stärke 400 bis 500 und auf den Zeichensatz der Seite ohne die Zeichen, die Crimson Pro nicht hat, nämlich den geschützten Bindestrich und die vier Pfeile. Die Einstellungen stehen in `data/font.toml` unter `[serif]`. Die gerade Datei wiegt 19,6 Kilobyte, die kursive 20,4 Kilobyte. Die Prüfung der Zeichen beim Build prüft Lauftext und Kurzbeschreibung jetzt gegen den Zeichensatz von Crimson Pro.
+
+Beim ersten Besuch steht die gerade Crimson Pro wie Inter direkt im HTML. Gemessen am 06.11.2026 mit je sieben Erstbesuchen kostet das auf langsamem 4G etwa 100 Millisekunden, bis Text erscheint (392 statt 292 Millisekunden), auf normalem 4G nichts (100 Millisekunden wie zuvor). Spätere Besuche bekommen die schlanken Seiten aus dem Service Worker. Die Ersatzschrift für Crimson Pro ist Georgia mit Crimsons Maßen, gemessen wie bei Inter: `size-adjust: 90.68%`, `ascent-override: 98.86%`, `descent-override: 23.69%`.
+
+Nebenbei behoben: Das Werkzeug `tools/build-fonts.py` schrieb bei jedem Lauf die aktuelle Zeit in die Schrift, sodass gleiche Einstellungen verschiedene Dateien ergaben. Jetzt bleibt das Datum der Quelle erhalten, und zwei Läufe ergeben dieselben Dateien.
+
+## Grundlinienraster
+
+Stand 06.11.2026. Max wünscht einen streng senkrechten Rhythmus: Alles soll auf einem gedachten Raster einrasten. Bisher lagen nur die Zeilen im Raster, die Grundlinien nicht. Jede Schriftgröße setzt ihre Grundlinie an eine andere Stelle innerhalb der Zeile. Gemessen am 06.11.2026 lagen die Grundlinien bis zu 8,5 Pixel auseinander, und ein Abschnittsname stand 2 Pixel neben der ersten Zeile des Textes daneben.
+
+Jetzt liegt jede Grundlinie an derselben Stelle in einem Raster aus halben Zeilen, also alle 13,5 Pixel. Crimson Pro in 21 Pixel und Inter in 18 Pixel landen dort von selbst. Die kleinen Texte in Inter mit 14,6 Pixel und der Seitentitel werden um gemessene Beträge verschoben, mit `position: relative`, sodass sich sonst nichts bewegt. Die Beträge stehen in `--snap-small` und `--snap-display` und sind in Zeilen angegeben, nicht in Pixel, damit sie mit einer größeren Schrifteinstellung des Lesers mitwachsen. `text-box-trim` wäre der neuere Weg, ist laut MDN aber nicht in Firefox verfügbar.
+
+Beide Schriften haben gleiche Werte in den Tabellen für die Höhenmaße, die verschiedene Browser verschieden lesen, und das Kennzeichen für die einheitliche Nutzung ist gesetzt. Daraus folgt, dass Safari, Firefox und Chrome die Grundlinie gleich setzen sollten. Gemessen ist nur Chrome. Chrome rundet die Höhenmaße auf ganze Pixel. Ein Rest von unter einem Pixel lässt sich deshalb nicht vermeiden, bei doppelter Textgröße liegt Inter in 18 Pixel einen Pixel neben Crimson Pro.
+
+Elemente in einer anderen Schrift oder hoch- und tiefgestellte Zeichen im Lauftext haben die Zeilenhöhe 0, damit sie eine Zeile nicht höher machen. Bilder im Lauftext haben noch keine Höhe im Raster. Sobald es Bilder gibt, muss das gelöst werden.
+
+Geprüft wird das mit `node tools/raster-check.mjs` gegen `hugo server`. Das Skript öffnet alle Seiten in Chrome in vier Breiten und bei doppelter Textgröße. Es meldet jede Grundlinie außerhalb des Rasters, jeden Textblock, dessen Höhe nicht im Raster liegt, und seitliches Scrollen. Am 06.11.2026 lagen alle Grundlinien auf sieben Seiten in allen fünf Ansichten im Raster. Gegenproben haben gezeigt, dass das Skript eine fehlende Verschiebung und eine zu hohe Zeile findet. Nach jeder Änderung an Schriftgrößen oder Schriften müssen die Beträge neu gemessen werden.
+
+Zugleich wurde die Größenreihe der Seitentitel an die klassische Reihe angeglichen: 48 Pixel auf 54 Pixel Zeilenabstand auf dem Handy, 60 auf 67,5 Pixel auf dem Tablet und 72 auf 81 Pixel auf dem Desktop. Das sind überall 112,5 Prozent. Bisher waren es 45, 58,5 und 72 Pixel, und auf dem Tablet war der Zeilenabstand des Titels mit 138 Prozent sehr locker. Auf dem Handy bricht der Titel der Startseite dadurch in fünf Zeilen um.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
@@ -277,7 +305,7 @@ Stand 06.11.2026, neue offene Punkte:
 
 Optische Größe der Schrift: Display nur bei Überschriften oder überall ist noch nicht entschieden. Max vergleicht die Varianten mit dem lokalen Schalter. Wird die optische Größe auf einen Wert festgelegt, kann die Achse aus der Schrift entfallen. Gemessen am 06.11.2026 wird die Datei dadurch rund ein Drittel kleiner. Nachtrag vom 06.11.2026: Entschieden, Display überall, siehe Abschnitt "Schrift: Display überall und Laufweite".
 
-Größenreihe: Die Größen 14,6, 45 und 58,5 Pixel stammen aus dem Entwurf und gehören keiner klassischen Reihe an. Möglich wäre eine Angleichung an 14, 48 und 60 Pixel. Nicht entschieden.
+Größenreihe: Die Größen 14,6, 45 und 58,5 Pixel stammen aus dem Entwurf und gehören keiner klassischen Reihe an. Möglich wäre eine Angleichung an 14, 48 und 60 Pixel. Nicht entschieden. Nachtrag vom 06.11.2026: Die Seitentitel stehen jetzt in 48, 60 und 72 Pixel, siehe Abschnitt "Grundlinienraster". Die kleine Größe von 14,6 Pixel bleibt vorerst.
 
 CDN-Knoten warm halten: Gemessen am 06.11.2026 war jede Seite am Wiener Knoten von GitHub Pages nach 10 Minuten wieder kalt. Ein Treffer kostet 23 bis 30 Millisekunden, ein Fehltreffer 160 bis 190. Ein Abruf aller Dateien alle 5 Minuten vom Homeserver aus könnte den Knoten warm halten. Unbelegt ist, ob das auch für andere Besucher wirkt. Nicht umgesetzt.
 

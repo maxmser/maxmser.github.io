@@ -9,7 +9,7 @@
 //   asked in the background whether it changed, for the next visit.
 // - Both go to the server, not to the browser's HTTP cache (GitHub Pages allows
 //   10 minutes there), so a new version is never filled with old pages.
-// - The font is not checked on every page: it only changes with a deploy.
+// - The fonts are not checked on every page: they only change with a deploy.
 // Kill switch, if this ever goes wrong: replace this file with one that deletes all
 // caches and calls self.registration.unregister(), then deploy.
 //
@@ -22,7 +22,7 @@
   {{- $lean := .OutputFormats.Get "lean" }}
   {{- if $lean }}{{ $pages = $pages | append .RelPermalink $lean.RelPermalink }}{{ end }}
 {{- end }}
-{{- $assets := slice ("fonts/inter/InterVariable.woff2" | relURL) }}
+{{- $assets := slice ("fonts/inter/InterVariable.woff2" | relURL) ("fonts/crimson/CrimsonPro.woff2" | relURL) }}
 
 const VERSION = {{ now.UnixMilli | string }};
 const CACHE = "site-" + VERSION;
