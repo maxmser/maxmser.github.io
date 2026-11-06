@@ -11,6 +11,9 @@
 //    1 px: browsers round font metrics to whole pixels, and Inter 18 px and
 //    Crimson Pro 21 px differ by 0.6 px before rounding (1.2 px at double size).
 //    At normal size both round to the same pixel.
+//    Small text on lines that are not a multiple of the grid (captions and project
+//    meta on 20.25 px lines): only the first baseline of such a block must be on the
+//    grid; its following lines lie in between on purpose (see main.css).
 // 2. Heights: every block with its own text whose line height is on the grid is a
 //    whole number of half lines tall, so nothing below it leaves the grid (an inline
 //    element in another font or a superscript can stretch a line). Elements with a
@@ -89,6 +92,15 @@ const MEASURE = `(() => {
     if (/flex|grid/.test(cs.display)) continue; // text directly in a grid or flex box is an anonymous item
     const text = [...el.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim());
     if (!text) continue;
+    {
+      const lh = parseFloat(cs.lineHeight);
+      if (Math.abs(lh / G - Math.round(lh / G)) > 0.001) {
+        let root = el;
+        while (root.parentElement && parseFloat(getComputedStyle(root.parentElement).lineHeight) === lh) root = root.parentElement;
+        const first = [...root.querySelectorAll('*'), root].find((x) => [...x.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()));
+        if (first !== el) continue;
+      }
+    }
     const marker = document.createElement('span');
     marker.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
     el.insertBefore(marker, text);

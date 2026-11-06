@@ -63,6 +63,24 @@
     <main id="main" class="site-main">
       {{ block "main" . }}{{ end }}
     </main>
+    {{- /* Small text on 20.25 px lines (captions, project meta, see main.css):
+         pads each block to whole half lines, so the text after it lands on the
+         baseline grid again. A caption with an even number of lines gets one
+         half line more, so its last line keeps enough distance to the text below.
+         ResizeObserver runs before paint, and again when fonts or the width change.
+         Without JavaScript the text below may sit a quarter line off the grid. */}}
+    <script>
+    { const ro = new ResizeObserver((entries) => {
+        const g = parseFloat(getComputedStyle(document.documentElement).lineHeight) / 2;
+        for (const e of entries) {
+          const h = e.contentRect.height;
+          let pad = Math.ceil(h / g - 0.001) * g - h;
+          if (e.target.matches("figcaption") && pad < g / 4) pad += g;
+          e.target.style.paddingBottom = pad + "px";
+        }
+      });
+      document.querySelectorAll(".figure figcaption, .project-meta").forEach((el) => ro.observe(el)); }
+    </script>
     <footer class="site-footer">
       {{ with site.GetPage "/imprint" }}<a href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a>{{ end }}
     </footer>

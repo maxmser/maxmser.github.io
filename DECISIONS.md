@@ -379,6 +379,14 @@ Fünftens stehen im Lauftext jetzt Mediävalziffern, wie es Regel 5.2 der Typogr
 
 Geschmackssache und offen sind: die Spalte mit den Nummern in der Projektliste, die auf dem Handy viel Breite kostet; weniger Abstand über dem Titel auf dem Handy; ein engerer Zeilenabstand für Codeblöcke (heute 171 Prozent); dieselbe rechte Kante für Vorspann und Lauftext auf dem Tablet; die Null mit Strich nur dort, wo sie Verwechslungen verhindert; die Kennzeichnung von Zitaten zugleich durch Kursiv, Linie und Einzug; größere Tippflächen für Navigation und Fußzeile. Vor einer deutschen Fassung fehlen das schmale Leerzeichen in beiden Schriften und Silbentrennung in den Abschnittsnamen, weil lange deutsche Wörter dort sonst ohne Trennstrich umbrechen.
 
+## Zurück zum Raster aus halben Zeilen
+
+Stand 06.11.2026. Mit eingezeichnetem Raster (rot ganze Zeilen, blau halbe) sah Max, dass Text stellenweise zwischen den Linien saß. Gemessen lag nach einer Bildunterschrift mit gerader Zeilenzahl der folgende Text eine Viertelzeile neben dem Raster, auf dem Handy ebenso alles vor Status und Stack. Ursache war das Raster aus Viertelzeilen: Der Abstand nach Abbildungen betrug 1¾ Zeilen, und drei Zeilen kleiner Schrift zu 20,25 Pixel ergeben 4½ halbe Zeilen. Die Prüfung war grün, weil sie auf Viertelzeilen prüfte, während das sichtbare Raster halbe Zeilen zeigt.
+
+Max wollte den Zeilenabstand der Bildunterschriften von 138 Prozent behalten und den Text darunter auf eine Linie schieben. Das ist jetzt so gelöst: Das Raster besteht wieder aus halben Zeilen (`--baseline-grid: 0.5rlh`). Bildunterschriften sowie Status und Stack laufen weiter auf 20,25 Pixel, ihre erste Grundlinie liegt auf dem Raster, die folgenden Zeilen bewusst dazwischen. Ein kurzes Skript am Ende jeder Seite (`layouts/baseof.html`) misst diese Blöcke und polstert sie unten auf ganze halbe Zeilen auf, sodass der folgende Text wieder auf einer Linie steht. Es nutzt `ResizeObserver`, das laut MDN vor dem Zeichnen läuft, und läuft erneut, wenn Schrift oder Breite sich ändern. Unterschriften mit gerader Zeilenzahl bekommen eine halbe Zeile mehr, damit ihre letzte Zeile genug Abstand zum Text darunter hat. Nach Abbildungen folgen anderthalb Zeilen Abstand. Gemessen liegen über dem Bild 55,5 Pixel Weißraum und darunter 55,5 Pixel, nach einer Unterschrift mit gerader Zeilenzahl 62,25 Pixel. Ohne JavaScript kann der Text nach solchen Blöcken eine Viertelzeile neben dem Raster liegen.
+
+Die Prüfung `tools/raster-check.mjs` prüft wieder auf halbe Zeilen. Bei kleiner Schrift auf 20,25 Pixel prüft sie nur die erste Grundlinie eines Blocks, dessen Höhe aber streng. Am 06.11.2026 lagen auf acht Seiten in fünf Ansichten alle geprüften Grundlinien auf dem Raster, und eine eigene Messung bestätigte, dass auf Desktop, Tablet und Handy der Text nach jeder Unterschrift wieder auf einer Linie steht.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

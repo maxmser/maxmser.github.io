@@ -3,10 +3,11 @@
   Rules (see DECISIONS.md, "Design-Grundlagen"):
   - Font size and line height are set on html, so 1rlh is exactly one line of body text.
   - Every vertical distance is a whole or half multiple of 1rlh.
-  - Every baseline sits at the same height in a grid of quarter lines (6.75 px),
+  - Every baseline sits at the same height in a grid of half lines (13.5 px),
     whatever the font: see --baseline-grid, --snap-* and tools/raster-check.mjs.
-    Running text runs on 27 px lines (four quarters), small text on 20.25 px
-    (three quarters, 138 %).
+    Small text (captions, project meta) runs on 20.25 px lines (138 %); its first
+    baseline is on the grid, and a small script in baseof.html pads the block to
+    whole half lines, so the text below lands on the grid again.
   - Grid: 4 columns, 8 from 40em, 12 from 64em. Gutter is 1rlh.
   - Rules (hairlines) are drawn as backgrounds, not borders, so they do not shift the rhythm.
   - Font sizes in rem, media queries in em, so zoom and user settings scale everything.
@@ -154,7 +155,7 @@
      so nothing else moves). Measured values, checked by tools/raster-check.mjs.
      In rlh, not px, so they grow with the reader's text size setting.
      Change a font size and these must be measured again. */
-  --baseline-grid: 0.25rlh;   /* 6.75 px; tools/raster-check.mjs reads it */
+  --baseline-grid: 0.5rlh;    /* 13.5 px; tools/raster-check.mjs reads it */
   --snap-small: 0.0741rlh;    /* 2 px: Inter 14.6 px on 27 px lines */
   --snap-small-tight: 0.1852rlh; /* 5 px: Inter 14.6 px on 20.25 px lines */
   --snap-standfirst: -2px;    /* Crimson 24 px; px, not rlh: measured, see DECISIONS.md */
@@ -570,14 +571,14 @@ a:hover {
    12 px above its baseline) and stands on a baseline, as in Müller-Brockmann's
    grid systems: top 5.5 px above a grid line, height n * 13.5 + 12 px, then 7 px
    to the next grid line. The caption's first baseline lies one line below the
-   image's. The same white space above and below a figure: 55.5 px from the last
-   baseline before it to the image, and from the caption's last baseline (or the
-   image) to the capitals after it. See DECISIONS.md, "Bilder im Raster".
+   image's; the script in baseof.html pads the caption so the text after it is on
+   the grid. White space: 55.5 px above the image; below, 55.5 px from the
+   caption's last baseline (or the image) to the next capitals, 62.25 px after a
+   caption with an even number of lines. See DECISIONS.md, "Bilder im Raster".
    --ratio (width / height) comes from the template. Browsers without round()
    or container units show the image at its natural height. */
 .prose > .figure { margin-top: 2rlh; }
-.prose > .figure + * { margin-top: 1.75rlh; }
-.prose > .figure:not(:has(figcaption)) + * { margin-top: 1.5rlh; }
+.prose > .figure + * { margin-top: 1.5rlh; }
 
 .figure {
   display: flow-root;
