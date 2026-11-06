@@ -320,7 +320,7 @@ a:hover {
 /* ---------- Header ---------- */
 
 .site-header {
-  margin-bottom: 4rlh;
+  margin-bottom: 3rlh; /* 95 px to the title on phones; 4 lines from 40em (media query) */
   font-size: var(--step--1);
   font-weight: var(--weight-medium);
 }
@@ -675,6 +675,8 @@ sub {
 /* ---------- 8 columns ---------- */
 
 @media (min-width: 40em) {
+  .site-header { margin-bottom: 4rlh; }
+
   .display { grid-column: 1 / 8; }
 
   .intro-text { grid-row: 2; grid-column: 3 / 8; }

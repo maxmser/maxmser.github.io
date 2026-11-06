@@ -407,6 +407,8 @@ Status und Stack auf dem Handy: Nach einem Text vor dem ersten Abschnitt standen
 
 Abstand vor der Fußzeile: Vom letzten Text bis zur Linie über der Fußzeile lagen 94,5 Pixel, so viel wie zwischen zwei Abschnitten, sodass die Fußzeile wie ein weiterer Abschnitt wirkte. Es ist jetzt eine Zeile mehr, gemessen 121,5 Pixel, genauso viel wie zwischen Einleitung und erstem Abschnitt. Max hat am 06.11.2026 zugestimmt.
 
+Abstand oben auf dem Handy: Zwischen Navigation und Titel lagen auf dem Handy 122 Pixel, so viel wie auf dem Desktop, obwohl der Titel dort nur halb so groß ist. Auf dem Handy ist es jetzt eine Zeile weniger, gemessen 95 Pixel. Ab 40em bleiben es vier Zeilen. Max hat am 06.11.2026 zugestimmt.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
