@@ -451,6 +451,10 @@ Stand 06.11.2026. Die Seite ist auf britisches Englisch gestellt (`locale = "en-
 
 Anlass war die Silbentrennung in Safari. Safari holt die Trennstellen vom Betriebssystem. Mit `lang="en"` nimmt es das amerikanische Wörterbuch von Apple, und das trennt "dri-ving". Gemessen am 06.11.2026 mit der Systemfunktion `CFStringGetHyphenationLocationBeforeIndex` auf macOS: Das amerikanische Wörterbuch liefert "dri-ving", "ar-chiving" und "au-tomation", das britische "driv-ing", "archiv-ing" und "auto-ma-tion". Von 106 geprüften Wörtern trennt das britische Wörterbuch 55 anders, nach britischem Brauch, etwa "pro-ject" und "re-cords". Chrome trennt mit beiden Angaben fast gleich. Für einzelne Wörter, die auch das britische Wörterbuch schlecht trennt (aufgefallen ist "amp-li-fi-er"), wäre später eine Ausnahmeliste mit weichen Trennstellen möglich. Laut CSS-Spezifikation gelten in einem Wort mit weicher Trennstelle nur noch diese.
 
+## Hochformat-Bilder zentriert
+
+Stand 06.11.2026. Bilder im Hochformat, etwa Bildschirmfotos vom Handy, stehen jetzt mittig in der Textspalte. Ihre Unterschrift bleibt linksbündig und beginnt an der linken Kante des Bildes, sodass Bild und Unterschrift einen Block bilden. Breite Bilder gehen ohnehin über die ganze Textbreite und ändern sich nicht. Die Bildgutachten hatten vom Zentrieren abgeraten, weil die Kanten eines zentrierten Bildes mitten in Spalten liegen und nicht an der linken Kante hängen, an der sonst alles ausgerichtet ist. Max hat die Fassungen linksbündig, zentriert mit zentrierter Unterschrift, die Unterschrift neben dem Bild sowie zentriert mit der Unterschrift an der Bildkante oder an der Textkante als Bilder verglichen und sich am 06.11.2026 für das zentrierte Bild mit der Unterschrift an der Bildkante entschieden. Die Unterschrift neben dem Bild ist damit verworfen.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

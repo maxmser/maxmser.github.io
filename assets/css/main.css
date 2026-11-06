@@ -716,11 +716,15 @@ a:hover {
   }
 }
 
-/* Phone screenshots and other tall images, on the columns of the grid: 3 of the
-   4 columns on phones, 4 of the 6 text columns from 40em, 3 from 64em (see the
-   media queries), so a screenshot fits on one screen. */
+/* Phone screenshots and other tall images: 3 of the 4 columns on phones, 4 of
+   the 6 text columns from 40em, 3 from 64em, 3 of 5 from 92em (see the media
+   queries), so a screenshot fits on one screen. Centred in the text column, with
+   the caption left-aligned under the image, starting at its left edge (Max's
+   choice, 2026-11-06; the image edges then lie inside columns, see DECISIONS.md,
+   "Hochformat-Bilder zentriert"). */
 .figure-portrait {
   width: calc((100% + var(--gutter)) * 3 / 4 - var(--gutter));
+  margin-inline: auto;
 }
 
 .figure figcaption {
