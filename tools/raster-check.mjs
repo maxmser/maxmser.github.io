@@ -4,7 +4,8 @@
 //
 // For every page reachable from the home page and every width in WIDTHS:
 // 1. Baselines: every element with its own text has its first baseline at the same
-//    height in the grid of half lines (0.5rlh). The reference is the first paragraph
+//    height in the baseline grid (--baseline-grid in the CSS, half lines by default).
+//    The reference is the first paragraph
 //    of running text. Fails if any baseline is off by more than the tolerance:
 //    0.25 px at the normal text size. With the text size at 200 % the tolerance is
 //    1 px: browsers round font metrics to whole pixels, and Inter 18 px and
@@ -74,7 +75,8 @@ async function open(url, width, font = 16) {
 // Runs in the page. Returns the measurements.
 const MEASURE = `(() => {
   const L = parseFloat(getComputedStyle(document.documentElement).lineHeight);
-  const G = L / 2;
+  const probe = document.createElement('div'); probe.style.cssText = 'position:absolute;height:var(--baseline-grid, 0.5rlh)';
+  document.body.appendChild(probe); const G = probe.getBoundingClientRect().height || L / 2; probe.remove();
   const top0 = document.documentElement.getBoundingClientRect().top;
   const name = (el) => el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\\s+/).join('.') : '');
   const items = [];

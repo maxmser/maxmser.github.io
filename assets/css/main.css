@@ -150,6 +150,7 @@
      so nothing else moves). Measured values, checked by tools/raster-check.mjs.
      In rlh, not px, so they grow with the reader's text size setting.
      Change a font size and these must be measured again. */
+  --baseline-grid: 0.5rlh;    /* 13.5 px; tools/raster-check.mjs reads it */
   --snap-small: 0.0741rlh;    /* 2 px: Inter 14.6 px */
   --snap-mono: 0.03704rlh;      /* 1 px: code blocks, SF Mono at 0.75em (other systems' monospace fonts may differ) */
   --snap-display: 0.1111rlh;  /* 3 px: page title, 48 px */
