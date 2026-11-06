@@ -199,6 +199,8 @@ Rechtlich gilt nach den Leitlinien 2/2023 des Europäischen Datenschutzausschuss
 
 Stand 06.11.2026. Max hat zusätzlich zu cv16 drei Varianten gewählt: cv05 "l" mit Schweif, cv10 "G" mit Sporn wie bei Helvetica und ss02 zur Unterscheidung ähnlicher Zeichen, also Null mit Strich, großes "I" mit Serifen und "l" mit Schweif. ss02 enthält den Schweif am "l" schon, cv05 ist damit doppelt, schadet aber nicht. Der Sporn am "G" ist sehr fein und erst bei starker Vergrößerung deutlich.
 
+Geändert am 06.11.2026: Max möchte das große "I" ohne Querstriche. In der Schrift fasst ss02 vier Einzelvarianten zusammen, nämlich cv05 für das "l" und das "ł" mit Schweif, cv07 für die andere Form des "ß", cv08 für das "I" mit Querstrichen und `zero` für die Null mit Strich. Das steht in der Ersetzungstabelle der Schrift selbst. Statt ss02 sind deshalb jetzt cv07 und `zero` eingeschaltet, sodass nur cv08 wegfällt und alles andere gleich aussieht. Geändert wurden `font-feature-settings` in `assets/css/main.css` und die Liste `features` in `data/font.toml`, danach wurde die Schrift neu gebaut. Die normale Datei wiegt jetzt 22.276 statt 22.264 Byte, die kursive 23.544 statt 23.512 Byte. Dass ss02 auch das "ß" verändert, stand vorher nicht in diesem Abschnitt. Es bleibt vorerst so, bis Max anders entscheidet.
+
 Geprüft am 06.11.2026: Der Quellcode von Inter hat nur den Zweig `master` auf Commit 353b61b. Gegenüber der offiziellen Version 4.1 sind nur cv15 "Simplified tabular one" und cv16 neu. Über keine Funktion erreichbar sind nur fünf Glyphen, nämlich kyrillische Gegenstücke zum Schweif-a und Bauteile. Weitere versteckte Varianten gibt es nicht.
 
 Zum Vergleichen gibt es die Musterseite `design/schriftmuster/index.html`. Sie zeigt alle 24 benannten Varianten und weitere Funktionen jeweils links normal und rechts verändert, dazu alle 2849 Zeichen der vollständigen Schrift, markiert danach, ob sie in der Schrift der Seite sind. Sie wird mit `python3 design/schriftmuster/build.py` erzeugt, liest `data/font.toml` und ist weder veröffentlicht noch im Repository, nur ihr Skript.
@@ -227,6 +229,36 @@ Die Schriftdatei wird im Service Worker nicht mehr bei jedem Seitenwechsel beim 
 
 Getestet am 06.11.2026 mit einem Testserver, der jede Seite 800 Millisekunden zurückhält. Der Erstbesuch bekam in Chrome, Safari und Firefox die Seite mit Base64, die Schrift war sofort geladen. Danach holte der Service Worker die sieben schlanken Seiten und einmal die Schrift. Nach dem Klick kam die schlanke Seite aus dem Speicher, in Chrome nach 18, in Safari nach 5 und in Firefox nach 86 Millisekunden, die Schrift war geladen, ohne neuen Download. Auch das Update nach einem Deploy funktioniert: Die erste Seite kommt einmal in der alten Fassung, danach holt der neue Service Worker alle schlanken Seiten der neuen Fassung.
 
+## Schrift: Display überall und Laufweite
+
+Stand 06.11.2026. Max hat entschieden, Inter Display für alle Texte zu verwenden, also auch für Fließtext und kleine Angaben. Damit ist die optische Größe auf 32 festgelegt. Die Achse steckt nicht mehr in der Datei, `data/font.toml` legt sie mit `optical_size = 32` fest. Die normale Schriftdatei ist dadurch von 34,6 KB auf 22,3 KB geschrumpft, die Seite für den ersten Besuch gezippt von 38 KB auf 25,6 KB. Der lokale Schriftschalter ist entfernt.
+
+Max fand die Buchstaben von Display bei kleinen Größen zu eng. Das bestätigt die Messung. Display ist für große Größen gemacht und deshalb enger gesetzt als die optische Größe, die Inter bei kleiner Schrift selbst vorsieht. Gemessen am 06.11.2026, gewichtet nach englischer Buchstabenhäufigkeit, als Unterschied zwischen Display und der optischen Größe, die der Schriftgröße entspricht: Bei 18 Pixel in Stärke 400 sind die Seitenabstände der Buchstaben zusammen 0,020 em kleiner, die Buchstaben selbst 0,015 em schmaler. Bei 14,6 Pixel sind es 0,025 em und 0,018 em in Stärke 400 sowie 0,022 em und 0,016 em in Stärke 500.
+
+Ausgeglichen wird nur der Abstand, nicht die schmaleren Buchstaben, denn die sind der Charakter von Display. Die Laufweite beträgt deshalb +0,020 em bei 18 Pixel und +0,024 em bei 14,6 Pixel. Die großen Titel behalten ihre leicht negative Laufweite aus dem Entwurf. Ein Vergleichsbild hat Max am 06.11.2026 gesehen.
+
+Zur Herkunft: Inter 3 hatte eine Formel für die Laufweite je Schriftgröße, Laufweite in em = −0,0223 + 0,185 × e^(−0,1745 × Schriftgröße in Pixel), Stand 07.02.2019. Die Seite dazu ist auf rsms.me nicht mehr vorhanden, nur noch im Archiv unter d.rsms.me/inter-website/v3/dynmetrics/. In Inter 4 übernimmt die Achse für die optische Größe diese Aufgabe. Dass die Achse die Formel ersetzt, ist eine Schlussfolgerung aus dem Wegfall der Seite, eine ausdrückliche Aussage von Rasmus Andersson dazu wurde nicht gefunden. Die Formel wurde deshalb nicht zusätzlich angewendet.
+
+## Abgleich mit den Typografie-Regeln des Lebenslauf-Generators
+
+Stand 06.11.2026. Max hat auf das Dokument `Jobsuche/cv-generator/typografie_regeln.md` vom 22.10.2026 hingewiesen. Es ist das einzige Dokument zu Typografie und Rhythmus im Projekte-Ordner. Es wurde für die Lebensläufe geschrieben, viele Regeln gelten aber auch hier. Der Abgleich am 06.11.2026 ergab Folgendes.
+
+Schon erfüllt: Senkrechte Abstände in festen Schritten (Bringhurst 2.2.2) sind die Grundlage des Rasters. Die Zeilenlänge liegt mit höchstens 62 Zeichen im empfohlenen Bereich von 45 bis 75 Zeichen. Überschriften stehen näher am folgenden Text als am vorigen. Tabellenziffern stehen in der nummerierten Liste, Proportionalziffern im Text. Ligaturen sind kein Thema, weil Inter für Englisch keine störenden Ligaturen setzt.
+
+Neu umgesetzt am 06.11.2026: Erstens bekommt jeder Absatz `text-wrap: pretty`, damit kein einzelnes kurzes Wort allein in der letzten Zeile steht (Regel 8.4). Das wirkt in Chrome, Edge und Safari ab Version 26, Firefox ignoriert es. Zweitens hängen Aufzählungszeichen und Nummern in Listen links vor der Textachse, damit der Text bündig am Raster bleibt (Regel 4.2). Drittens bekommen auch Titel, Kurzbeschreibungen, Status, Stack und die Liste "More projects" typografische Zeichen. Hugo setzt im Fließtext bereits gerundete Anführungszeichen und Apostrophe, aus `--` den Halbgeviertstrich, aus `---` den Geviertstrich und aus drei Punkten die Auslassungspunkte. Für Angaben aus dem Kopf der Inhaltsdateien galt das bisher nicht. Das erledigt jetzt die Teilvorlage `typo.html`. Geprüft mit einem Testsatz.
+
+Regeln für Max beim Schreiben der englischen Texte: Gedankenstrich als Halbgeviertstrich mit Leerzeichen nach Bringhurst, geschrieben als ` -- `. Zeiträume mit Halbgeviertstrich ohne Leerzeichen, geschrieben als `2008--2012`. Kein Leerzeichen vor dem Prozentzeichen, also 12%. Währungszeichen direkt vor der Zahl, also €40 million. Zahl und Einheit nicht trennen, bei Bedarf mit `&nbsp;`. Das Et-Zeichen nur in Namen. Zahlen von eins bis neun in Wörtern, ab zehn in Ziffern. Anführungszeichen und Apostrophe können gerade getippt werden, sie werden automatisch gesetzt.
+
+Bewusst nicht umgesetzt oder offen: Die Größenreihe der Seite (14,6, 18, 45, 58,5 und 72 Pixel) folgt nicht der klassischen Reihe, die das Dokument nennt (unter anderem 14, 18, 48, 60, 72). Bringhurst verlangt eine feste Reihe, nicht unbedingt die klassische. Eine Angleichung wäre möglich, siehe offene Punkte. Der Zeilenabstand beträgt 150 Prozent und liegt damit leicht über den 120 bis 145 Prozent, die das Dokument nennt. Er bleibt, weil er die Grundeinheit des Rasters ist und Display bei kleiner Größe etwas mehr Luft verträgt. Silbentrennung bleibt aus. Folgen von Großbuchstaben werden nicht gesperrt. Inter hätte dafür die Funktion `cpsp`, die ließe sich für Abkürzungen gezielt einschalten, wenn sie in den Texten häufig vorkommen.
+
+## Ersatzschrift: Nachtrag zu Display überall
+
+Stand 06.11.2026. Mit Display überall gibt es nur noch eine Ersatzschrift mit je einem Satz Werte für Stärke 400 (`size-adjust: 98.05%`, `ascent-override: 98.80%`, `descent-override: 24.60%`) und Stärke 500 (`size-adjust: 100.16%`, `ascent-override: 96.72%`, `descent-override: 24.08%`). Vorher bekamen die halbfetten Projekttitel die Werte der Stärke 400.
+
+Ehrliche Einschränkung, gemessen am 06.11.2026: Eine Ersatzschrift kann den Sprung nicht für jeden Text ausschließen. Bei 412 Pixel Breite passt der Platzhalter "TODO: One-sentence summary." mit Inter gerade noch in eine Zeile, mit der Ersatzschrift nicht. Auf langsamem 4G entsteht dadurch wieder ein kleiner Sprung von 0,007, auf normalem 4G keiner. Lighthouse wertet alles unter 0,1 als gut. Mit den echten Texten wird das neu gemessen.
+
+Gemessen am 06.11.2026 gegen den Stand von Commit 1c945ed, je sieben Erstbesuche: Auf langsamem 4G erscheint Text nach 292 statt nach 348 Millisekunden, auf normalem 4G nach 100 statt nach 108 Millisekunden.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
@@ -243,7 +275,9 @@ Design: Das eigentliche Layout im Stil von Müller-Brockmann folgt in einer eige
 
 Stand 06.11.2026, neue offene Punkte:
 
-Optische Größe der Schrift: Display nur bei Überschriften oder überall ist noch nicht entschieden. Max vergleicht die Varianten mit dem lokalen Schalter. Wird die optische Größe auf einen Wert festgelegt, kann die Achse aus der Schrift entfallen. Gemessen am 06.11.2026 wird die Datei dadurch rund ein Drittel kleiner.
+Optische Größe der Schrift: Display nur bei Überschriften oder überall ist noch nicht entschieden. Max vergleicht die Varianten mit dem lokalen Schalter. Wird die optische Größe auf einen Wert festgelegt, kann die Achse aus der Schrift entfallen. Gemessen am 06.11.2026 wird die Datei dadurch rund ein Drittel kleiner. Nachtrag vom 06.11.2026: Entschieden, Display überall, siehe Abschnitt "Schrift: Display überall und Laufweite".
+
+Größenreihe: Die Größen 14,6, 45 und 58,5 Pixel stammen aus dem Entwurf und gehören keiner klassischen Reihe an. Möglich wäre eine Angleichung an 14, 48 und 60 Pixel. Nicht entschieden.
 
 CDN-Knoten warm halten: Gemessen am 06.11.2026 war jede Seite am Wiener Knoten von GitHub Pages nach 10 Minuten wieder kalt. Ein Treffer kostet 23 bis 30 Millisekunden, ein Fehltreffer 160 bis 190. Ein Abruf aller Dateien alle 5 Minuten vom Homeserver aus könnte den Knoten warm halten. Unbelegt ist, ob das auch für andere Besucher wirkt. Nicht umgesetzt.
 

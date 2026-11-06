@@ -3,9 +3,9 @@
   {{- range $i, $p := .ByWeight }}
   <li>
     <span class="num" aria-hidden="true">{{ printf "%02d" (add $i 1) }}</span>
-    <a class="title" href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+    <a class="title" href="{{ $p.RelPermalink }}">{{ partial "typo.html" (dict "page" $p "text" $p.Title) }}</a>
     {{- with $p.Params.summary }}
-    <p class="summary">{{ . }}</p>
+    <p class="summary">{{ partial "typo.html" (dict "page" $p "text" .) }}</p>
     {{- end }}
   </li>
   {{- end }}

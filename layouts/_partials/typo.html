@@ -1,0 +1,10 @@
+{{- /*
+  Returns front matter text with the same typographic characters as the body
+  text: curly quotes and apostrophes, dashes from -- and ---, the ellipsis from
+  "..." (Goldmark typographer, Hugo's default). Hugo applies these only to the
+  Markdown content, not to titles, summaries or other front matter.
+  Usage: partial "typo.html" (dict "page" . "text" .Title)
+*/ -}}
+{{- $out := "" }}
+{{- with .text }}{{ $out = $.page.RenderString (string .) | plainify | htmlUnescape }}{{ end }}
+{{- return $out }}

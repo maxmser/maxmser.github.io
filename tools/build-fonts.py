@@ -2,7 +2,7 @@
 """Builds the web fonts in static/fonts/inter/ from the full fonts in tools/fonts-src/.
 
 Settings (characters, features, weight range) come from data/font.toml.
-Steps per file: limit the weight axis, keep only the characters and features
+Steps per file: limit the weight axis and fix the optical size, keep only the characters and features
 from the settings, write WOFF2 with Brotli at its highest quality (the fontTools
 default) and the optional hmtx transform.
 
@@ -37,7 +37,10 @@ def main():
     cfg = tomllib.loads((ROOT / "data" / "font.toml").read_text())
     for name in FILES:
         font = TTFont(SRC / name)
-        font = instantiateVariableFont(font, {"wght": (cfg["weight_min"], cfg["weight_max"])})
+        limits = {"wght": (cfg["weight_min"], cfg["weight_max"])}
+        if "optical_size" in cfg:
+            limits["opsz"] = cfg["optical_size"]
+        font = instantiateVariableFont(font, limits)
         # Save and reload once: the subsetter needs the fully compiled variation tables.
         buf = io.BytesIO()
         font.save(buf)

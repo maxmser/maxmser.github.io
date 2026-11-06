@@ -13,7 +13,7 @@ hugo server          # preview at http://localhost:1313/
 hugo build --gc --minify   # writes the site to ./public
 ```
 
-Under `hugo server` the site shows a font switch in the bottom right corner and has no service worker. The published build has no font switch and registers the service worker.
+Under `hugo server` there is no service worker, so edits show up at once. The published build registers it.
 
 Every page is built twice: `index.html` with the font inline for a first visit, and `lean.html` with the font as a file, which the service worker serves on later visits.
 
@@ -42,7 +42,7 @@ Every push to `main` builds and deploys the site to GitHub Pages via GitHub Acti
 - `assets/js/sw.js`: the service worker (a Hugo template, published as `/sw.js`). Kill switch: see DECISIONS.md
 - `data/font.toml`: characters and OpenType features of the web font. The build stops if a page uses a character outside this set
 - `tools/build-fonts.py`: builds `static/fonts/inter/` from the full fonts in `tools/fonts-src/` with the settings in `data/font.toml`
-- `static/fonts/inter/`: Inter, subset to English and German and weights 400 to 500, with its license
+- `static/fonts/inter/`: Inter Display, subset to English and German and weights 400 to 500, with its license
 - `i18n/`: interface strings, prepared for a later German version
 - `design/`: the static design draft of 2026-11-06 and the font specimen (`python3 design/schriftmuster/build.py`), not published
 - `DECISIONS.md`: decisions and open points (in German)

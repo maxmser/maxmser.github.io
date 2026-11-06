@@ -44,22 +44,24 @@
   Fallback faces with Inter's proportions, so the layout does not jump when
   Inter replaces them. Arial and Helvetica have the same widths, so one set of
   values fits macOS, iOS and Windows. Values measured on 2026-11-06 against
-  Inter at the sizes the site uses (see DECISIONS.md, "Ersatzschrift").
+  Inter Display, one face per weight (400 and 500), see DECISIONS.md,
+  "Ersatzschrift". Letter-spacing applies to both fonts alike and is not part
+  of these values.
   Android has neither font and falls back to the unadjusted system font.
 */
 @font-face {
-  font-family: "InterFallbackText";
-  font-weight: 400 500;
+  font-family: "InterFallback";
+  font-weight: 400;
   src: local("Arial"), local("ArialMT"), local("Helvetica");
-  size-adjust: 107.48%;
-  ascent-override: 90.14%;
-  descent-override: 22.44%;
+  size-adjust: 98.05%;
+  ascent-override: 98.80%;
+  descent-override: 24.60%;
   line-gap-override: 0%;
 }
 
 @font-face {
-  font-family: "InterFallbackDisplay";
-  font-weight: 400 500;
+  font-family: "InterFallback";
+  font-weight: 500;
   src: local("Arial"), local("ArialMT"), local("Helvetica");
   size-adjust: 100.16%;
   ascent-override: 96.72%;
@@ -71,14 +73,17 @@
 
 :root {
   /* Fonts: Inter first, system stack as fallback. */
-  --font-body: "InterVariable", "InterFallbackText", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "InterVariable", "InterFallbackDisplay", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: "InterVariable", "InterFallback", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "InterVariable", "InterFallback", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* Optical size of Inter: 14 is the text design, 32 is Inter Display.
-     Display is used for the large headings only (decision of 2026-11-06). */
-  --opsz-text: 14;
-  --opsz-display: 32;
+  /* All text is Inter Display (optical size 32, fixed in the font file,
+     decision of 2026-11-06). Display is spaced for large sizes, so small
+     text gets extra letter-spacing. The values are the measured difference
+     in side bearings between Display and the optical size Inter itself would
+     use at that size (see DECISIONS.md, "Laufweite"). */
+  --tracking-0: 0.02em;    /* 18 px */
+  --tracking--1: 0.024em;  /* 14.6 px */
 
   /* Base: 18 px text on 27 px lines. 1rem = 18 px from here on. */
   --root-size: 1.125rem;
@@ -140,12 +145,12 @@ html {
   font-size: var(--root-size);
   line-height: var(--root-leading);
   font-weight: var(--weight-regular);
-  font-variation-settings: "opsz" var(--opsz-text);
   /* Variants chosen on 2026-11-06, see design/schriftmuster/:
      cv16 lower-case a with tail (upright only; the italic has no such variant),
      cv05 lower-case l with tail, cv10 capital G with spur,
-     ss02 disambiguation (slashed zero, capital I with serifs). */
-  font-feature-settings: "cv16", "cv05", "cv10", "ss02";
+     cv07 alternate sharp s, zero slashed zero.
+     cv07 and zero replace ss02 since 2026-11-06: ss02 also gave the capital I serifs (cv08), which is not wanted. */
+  font-feature-settings: "cv16", "cv05", "cv10", "cv07", "zero";
   color: var(--ink);
   background: var(--paper);
   -webkit-text-size-adjust: 100%;
@@ -157,7 +162,25 @@ body {
   /* A length, not a factor: every element inherits exactly one root line,
      also text in the small size. */
   line-height: 1rlh;
+  letter-spacing: var(--tracking-0);
   overflow-wrap: break-word;
+}
+
+/* Small text: letter-spacing in em resolves at the element's own size, so
+   every element in the small size sets it again. */
+.site-header,
+.block-label,
+.project-meta,
+.num,
+.site-footer,
+.skip-link {
+  letter-spacing: var(--tracking--1);
+}
+
+/* No single short word alone in the last line of a paragraph (Chrome, Edge,
+   Safari 26; other browsers ignore it). */
+p, li, dd {
+  text-wrap: pretty;
 }
 
 h1, h2, h3, h4, p, ul, ol, dl, dd, figure, blockquote, pre {
@@ -249,7 +272,6 @@ a:hover {
   font-size: var(--display-size);
   line-height: var(--display-leading);
   letter-spacing: var(--display-tracking);
-  font-variation-settings: "opsz" var(--opsz-display);
 }
 
 .intro-text {
@@ -341,15 +363,18 @@ a:hover {
   text-underline-offset: 0.2em;
 }
 
+/* Bullets and numbers hang outside the text column, so the text stays
+   flush with the grid. */
 .prose ul,
 .prose ol {
-  padding-left: 1.25em;
+  padding-left: 0;
 }
 
 .prose code,
 .prose pre {
   font-family: var(--font-mono);
   font-size: 0.875em;
+  letter-spacing: 0;
 }
 
 .prose pre {

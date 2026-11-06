@@ -2,7 +2,7 @@
 {{ define "main" }}
 <article class="article">
   <header class="intro">
-    <h1 class="display">{{ .Title }}</h1>
+    <h1 class="display">{{ partial "typo.html" (dict "page" . "text" .Title) }}</h1>
   </header>
   {{ partial "sections.html" .Content }}
 </article>

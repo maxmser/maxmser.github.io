@@ -1,6 +1,6 @@
 {{ define "main" }}
 <section class="intro">
-  <h1 class="display">{{ .Title }}</h1>
+  <h1 class="display">{{ partial "typo.html" (dict "page" . "text" .Title) }}</h1>
   {{- with .Content }}
   <div class="intro-text prose">{{ . }}</div>
   {{- end }}

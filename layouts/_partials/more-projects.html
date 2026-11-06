@@ -1,12 +1,13 @@
 {{- /* Reads more_projects from the front matter of content/projects/_index.md. Entries with hidden: true are skipped. */}}
 {{- with site.GetPage "/projects" }}
+{{- $page := . }}
 {{- $items := where .Params.more_projects "hidden" "!=" true }}
 {{- with $items }}
 <section class="block" aria-labelledby="more-projects-heading">
   <h2 id="more-projects-heading" class="block-label">{{ T "moreProjects" }}</h2>
   <ul class="list list-plain block-body">
     {{- range . }}
-    <li>{{ .name }}</li>
+    <li>{{ partial "typo.html" (dict "page" $page "text" .name) }}</li>
     {{- end }}
   </ul>
 </section>

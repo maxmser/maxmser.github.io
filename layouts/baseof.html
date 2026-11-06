@@ -9,9 +9,9 @@
   {{- if not $lean }}{{ partial "font-check.html" . }}{{ end }}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} – {{ site.Title }}{{ end }}</title>
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ partial "typo.html" (dict "page" . "text" .Title) }} – {{ site.Title }}{{ end }}</title>
   {{- with .Params.summary }}
-  <meta name="description" content="{{ . }}">
+  <meta name="description" content="{{ partial "typo.html" (dict "page" $ "text" .) }}">
   {{- end }}
   {{- if or site.Params.noindex $lean }}
   <meta name="robots" content="noindex">
@@ -72,10 +72,6 @@
   {{- with resources.Get "js/sw.js" | resources.ExecuteAsTemplate "sw.js" site.Home }}
   <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("{{ .RelPermalink }}"));</script>
   {{- end }}
-  {{- end }}
-  {{- /* Local tool for the font decision. Only under "hugo server", never published. */}}
-  {{- if hugo.IsServer }}
-  {{ partial "dev-font-switch.html" . }}
   {{- end }}
 </body>
 </html>

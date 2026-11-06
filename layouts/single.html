@@ -1,23 +1,23 @@
 {{ define "main" }}
 <article class="article">
   <header class="intro">
-    <h1 class="display">{{ .Title }}</h1>
+    <h1 class="display">{{ partial "typo.html" (dict "page" . "text" .Title) }}</h1>
     {{- with .Params.summary }}
-    <p class="intro-text">{{ . }}</p>
+    <p class="intro-text">{{ partial "typo.html" (dict "page" $ "text" .) }}</p>
     {{- end }}
     {{- if or .Params.status .Params.stack }}
     <dl class="project-meta">
       {{- with .Params.status }}
       <div>
         <dt>{{ T "status" }}</dt>
-        <dd>{{ . }}</dd>
+        <dd>{{ partial "typo.html" (dict "page" $ "text" .) }}</dd>
       </div>
       {{- end }}
       {{- with .Params.stack }}
       <div>
         <dt>{{ T "stack" }}</dt>
         {{- range . }}
-        <dd>{{ . }}</dd>
+        <dd>{{ partial "typo.html" (dict "page" $ "text" .) }}</dd>
         {{- end }}
       </div>
       {{- end }}

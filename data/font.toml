@@ -23,8 +23,12 @@ unicodes = [
 
 # OpenType features kept in addition to the default set of fontTools
 # (kerning, ligatures, contextual alternates, marks, fractions and similar).
-features = ["cv16", "cv05", "cv10", "ss02", "tnum"]
+features = ["cv16", "cv05", "cv10", "cv07", "zero", "tnum"]
 
-# Weight range kept from the variable font. The optical size axis stays complete.
+# Weight range kept from the variable font.
 weight_min = 400
 weight_max = 500
+
+# Optical size, fixed: 32 is Inter Display, used for all text since 2026-11-06.
+# Fixing it removes the axis from the file. Delete this line to keep the axis.
+optical_size = 32
