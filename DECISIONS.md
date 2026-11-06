@@ -409,6 +409,8 @@ Abstand vor der Fußzeile: Vom letzten Text bis zur Linie über der Fußzeile la
 
 Abstand oben auf dem Handy: Zwischen Navigation und Titel lagen auf dem Handy 122 Pixel, so viel wie auf dem Desktop, obwohl der Titel dort nur halb so groß ist. Auf dem Handy ist es jetzt eine Zeile weniger, gemessen 95 Pixel. Ab 40em bleiben es vier Zeilen. Max hat am 06.11.2026 zugestimmt.
 
+Abstand zwischen Absätzen: Zwischen Absätzen, vor Listen, Zitaten und Code stand eine ganze Leerzeile, 42 Pixel Weißraum. Der Text zerfiel in einzelne Blöcke, und Bilder, Zwischenüberschriften und Abschnitte hoben sich davon nur wenig ab. Es ist jetzt eine halbe Leerzeile, gemessen 28,5 Pixel. Vor Zwischenüberschriften (68 Pixel) und um Bilder (69 Pixel) bleibt es wie zuvor, sodass sich diese Stufen jetzt deutlicher absetzen. Max fand diese Fassung besser und hat am 06.11.2026 zugestimmt.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

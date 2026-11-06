@@ -517,8 +517,11 @@ a:hover {
   max-width: var(--measure);
 }
 
+/* Half a line between paragraphs, lists, quotations and code (28.5 px of white
+   space), so running text holds together and figures, h3 and sections, with
+   their larger steps, stand out clearly. */
 .prose > * + * {
-  margin-top: 1rlh;
+  margin-top: 0.5rlh;
 }
 
 .prose a {
