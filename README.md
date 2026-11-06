@@ -22,7 +22,7 @@ Every page is built twice: `index.html` with the fonts inline for a first visit,
 Every baseline on every page sits on a grid of half lines (13.5 px). With `hugo server` running:
 
 ```sh
-node tools/raster-check.mjs   # needs Node 22+ and Google Chrome; exit code 1 if anything is off the grid
+node tools/raster-check.mjs http://localhost:1313 /projects/layout-test/   # needs Node 22+ and Google Chrome; exit code 1 if anything is off the grid
 ```
 
 Run it after any change to font sizes, line heights or fonts. If it fails, measure again and adjust `--snap-small` and `--snap-display` in `assets/css/main.css` (see DECISIONS.md, "Grundlinienraster").
@@ -37,7 +37,9 @@ Two fonts: Inter for titles, navigation and labels, Crimson Pro for introduction
 hugo new content projects/<slug>/index.md
 ```
 
-The archetype in `archetypes/projects.md` creates the front matter and the four sections.
+The archetype in `archetypes/projects.md` creates the front matter and the four sections. Images go into the project folder next to `index.md` and into the text as `![Alt text](file.jpg "Caption")`; Hugo makes WebP versions in several widths.
+
+`/projects/layout-test/` is a test page with sample text and images that shows every element of running text. It is built but not listed anywhere.
 
 ## Publish
 

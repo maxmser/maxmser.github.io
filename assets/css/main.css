@@ -451,10 +451,79 @@ a:hover {
   overflow-x: auto;
 }
 
+/* Code inside a code block keeps the block's size (otherwise 0.875em twice). */
+.prose pre code {
+  font-size: inherit;
+}
+
 .prose img {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+/* Smaller heading inside a section: Inter like the other structure, closer to
+   the text after it than to the text before it. */
+.prose h3 {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  letter-spacing: var(--tracking-0);
+}
+
+.prose * + h3 {
+  margin-top: 2rlh;
+}
+
+.prose h3 + * {
+  margin-top: 0;
+}
+
+/* Quotation: indented by one line, with a hairline drawn as background. */
+.prose blockquote {
+  padding-left: 1rlh;
+  font-style: italic;
+  background: linear-gradient(var(--ink), var(--ink)) left / 1px 100% no-repeat;
+}
+
+/* ---------- Figures (layouts/_markup/render-image.html) ---------- */
+
+/* Figures get two lines of space before and after. */
+.prose > .figure,
+.prose > .figure + * {
+  margin-top: 2rlh;
+}
+
+/* The image height is rounded down to half a line, so everything below stays on
+   the grid. The image is cropped by at most 13.5 px (object-fit: cover).
+   --ratio (width / height) comes from the template. Browsers without round()
+   or container units show the image at its natural height. */
+.figure {
+  container-type: inline-size;
+}
+
+.figure img {
+  width: 100%;
+}
+
+@supports (height: round(down, 100cqi, 1px)) {
+  .figure img {
+    height: round(down, calc(100cqi / var(--ratio)), 0.5rlh);
+    object-fit: cover;
+  }
+}
+
+/* Phone screenshots and other tall images: about the width of a phone
+   (12 lines = 324 px), so they do not fill several screens. */
+.figure-portrait {
+  max-width: 12rlh;
+}
+
+.figure figcaption {
+  margin-top: 0.5rlh;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  letter-spacing: var(--tracking--1);
+  color: var(--muted);
 }
 
 /* Text before the first section heading on a page. */
@@ -476,6 +545,7 @@ sub {
 .site-header,
 .block-label,
 .project-meta,
+.figure figcaption,
 .site-footer {
   position: relative;
   top: var(--snap-small);

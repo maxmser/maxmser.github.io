@@ -1,0 +1,38 @@
+{{- /*
+  Images in Markdown: ![Alt text](file.jpg "Caption")
+  The file lies in the page bundle next to index.md. An image on a line of its own
+  becomes a figure; the title, if any, becomes its caption.
+  - WebP in several widths with srcset, so a phone does not load the desktop size.
+  - width and height are set, so the page does not jump while the image loads.
+  - --ratio passes the aspect ratio to main.css, which rounds the height down to
+    the baseline grid (see DECISIONS.md, "Bilder im Raster").
+  - Images taller than wide (phone screenshots) get a narrower figure.
+  The build stops if the file is missing or the alt text is empty.
+*/ -}}
+{{- $img := .PageInner.Resources.Get .Destination }}
+{{- if not $img }}{{ errorf "%s: image %q not found in the page bundle" .Page.Path .Destination }}{{ end }}
+{{- if not .PlainText }}{{ errorf "%s: image %q needs an alt text" .Page.Path .Destination }}{{ end }}
+{{- $widths := slice }}
+{{- range slice 480 720 960 1440 1920 }}{{ if le . $img.Width }}{{ $widths = $widths | append . }}{{ end }}{{ end }}
+{{- if not $widths }}{{ $widths = slice $img.Width }}{{ end }}
+{{- $srcset := slice }}
+{{- $src := "" }}
+{{- range $widths }}
+  {{- $r := $img.Resize (printf "%dx webp q80" .) }}
+  {{- $srcset = $srcset | append (printf "%s %dw" $r.RelPermalink $r.Width) }}
+  {{- if or (not $src) (le $r.Width 960) }}{{ $src = $r }}{{ end }}
+{{- end }}
+{{- $portrait := gt $img.Height $img.Width }}
+{{- $ratio := printf "%.4f" (div (float $img.Width) $img.Height) }}
+{{- $sizes := cond $portrait "min(324px, 100vw)" "(min-width: 64em) 40rem, (min-width: 40em) 70vw, 100vw" }}
+{{- $tag := printf `<img src="%s" srcset="%s" sizes="%s" width="%d" height="%d" alt="%s" loading="lazy" decoding="async">` $src.RelPermalink (delimit $srcset ", ") $sizes $src.Width $src.Height (.PlainText | htmlEscape) }}
+{{- if .IsBlock }}
+<figure class="figure{{ if $portrait }} figure-portrait{{ end }}" style="--ratio: {{ $ratio | safeCSS }}">
+  {{ $tag | safeHTML }}
+  {{- with .Title }}
+  <figcaption>{{ partial "typo.html" (dict "page" $.Page "text" .) }}</figcaption>
+  {{- end }}
+</figure>
+{{- else }}
+{{- $tag | safeHTML }}
+{{- end }}

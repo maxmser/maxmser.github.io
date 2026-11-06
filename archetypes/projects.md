@@ -8,6 +8,10 @@ status: "TODO"
 stack: []
 # Order on the home page and the project overview (lower comes first).
 weight: 0
+# Images go next to this file and into the text as ![Alt text](file.jpg "Caption").
+# Only the resized versions are published, not the originals.
+build:
+  publishResources: false
 ---
 
 ## Problem

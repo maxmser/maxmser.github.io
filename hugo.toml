@@ -28,6 +28,16 @@ disableKinds = ["taxonomy", "term", "rss", "sitemap"]
 [caches.images]
   dir = ":cacheDir/images"
 
+# An image on a line of its own becomes a figure (layouts/_markup/render-image.html),
+# not an image inside a paragraph.
+[markup.goldmark.parser]
+  wrapStandAloneImageWithinParagraph = false
+
+# Code blocks without syntax colours: Hugo's default would add a dark Monokai
+# background as inline styles, which does not fit the black-and-white design.
+[markup.highlight]
+  codeFences = false
+
 [params]
   # While the content is still placeholder text, search engines are asked
   # not to index the site. Set to false (or delete) when the content is ready.

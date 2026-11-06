@@ -287,6 +287,18 @@ Geprüft wird das mit `node tools/raster-check.mjs` gegen `hugo server`. Das Skr
 
 Zugleich wurde die Größenreihe der Seitentitel an die klassische Reihe angeglichen: 48 Pixel auf 54 Pixel Zeilenabstand auf dem Handy, 60 auf 67,5 Pixel auf dem Tablet und 72 auf 81 Pixel auf dem Desktop. Das sind überall 112,5 Prozent. Bisher waren es 45, 58,5 und 72 Pixel, und auf dem Tablet war der Zeilenabstand des Titels mit 138 Prozent sehr locker. Auf dem Handy bricht der Titel der Startseite dadurch in fünf Zeilen um.
 
+## Bilder im Raster und Testseite
+
+Stand 06.11.2026. Max wollte Lauftext und Bilder auf einer Projektseite sehen, um das Layout zu prüfen. Weil keine Projekttexte erfunden werden, gibt es dafür die Testseite `content/projects/layout-test/` mit Text aus Herman Melvilles "Moby-Dick" von 1851, der gemeinfrei ist, und zwei erzeugten Testbildern. Die Seite wird gebaut und ist unter `/projects/layout-test/` erreichbar, erscheint aber in keiner Liste und wird vom Service Worker nicht vorgeladen (`build: list: never`). Sie enthält alle Elemente, die im Lauftext vorkommen können: Einleitung, Abschnitte, Zwischenüberschrift, Listen, Zitat, Code im Text und als Block, Hervorhebungen, einen Link und Bilder mit Bildunterschrift.
+
+Bilder liegen neben der Markdown-Datei und werden mit `![Alternativtext](datei.jpg "Bildunterschrift")` eingebunden. Ein Bild in einer eigenen Zeile wird zu einer Abbildung mit Unterschrift (`layouts/_markup/render-image.html`). Hugo erzeugt daraus WebP-Dateien in bis zu fünf Breiten, und der Browser lädt die passende. Breite und Höhe stehen im HTML, damit nichts springt, und die Bilder laden erst, wenn sie in die Nähe des sichtbaren Bereichs kommen. Veröffentlicht werden nur die verkleinerten Fassungen, nicht die Originale. Fehlt eine Datei oder ein Alternativtext, bricht der Build ab.
+
+Damit Bilder das Grundlinienraster nicht stören, wird ihre Höhe mit der CSS-Funktion `round()` auf halbe Zeilen abgerundet. Das Bild wird dabei um höchstens 13,5 Pixel beschnitten. Laut MDN ist `round()` seit Mai 2024 in allen aktuellen Browsern verfügbar (Chrome 125, Firefox 118, Safari 15.4), die nötigen Containereinheiten seit Chrome 105, Firefox 110 und Safari 16. Ältere Browser zeigen das Bild in seiner natürlichen Höhe. Bilder im Hochformat, etwa Bildschirmfotos vom Handy, stehen in der Breite eines Handys, also zwölf Zeilen oder 324 Pixel.
+
+Dabei aufgefallen und behoben: Hugo hat Codeblöcke bisher mit dunklem Hintergrund im Stil "Monokai" eingefärbt, als feste Stilangaben im HTML. Das passte nicht zum schwarz-weißen Design und war nur nicht sichtbar, weil es noch keinen Codeblock gab. Die Färbung ist jetzt aus. Außerdem war Code in einem Codeblock doppelt verkleinert, auf 0,875 von 0,875 der Schriftgröße.
+
+Die Prüfung `tools/raster-check.mjs` kontrolliert jetzt auch die Höhe aller Blöcke im Lauftext, also Abbildungen, Listen, Zitate und Code. Seiten, die nirgends verlinkt sind, werden als zusätzliche Pfade übergeben: `node tools/raster-check.mjs http://localhost:1313 /projects/layout-test/`. Am 06.11.2026 lagen alle Grundlinien auf acht Seiten in fünf Ansichten im Raster. Code steht in der Festbreitenschrift des Betriebssystems, deren Maße je nach System verschieden sind. Bei doppelter Textgröße liegt er deshalb zwei Pixel neben dem Raster, und die Prüfung lässt dort zwei Pixel zu.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

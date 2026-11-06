@@ -10,13 +10,19 @@
 //    1 px: browsers round font metrics to whole pixels, and Inter 18 px and
 //    Crimson Pro 21 px differ by 0.6 px before rounding (1.2 px at double size).
 //    At normal size both round to the same pixel.
+//    Text in code blocks gets 2 px: it is set in the system's monospace font
+//    (SF Mono, Consolas, ...), whose metrics differ by operating system.
 // 2. Heights: every block with its own text whose line height is on the grid is a
 //    whole number of half lines tall, so nothing below it leaves the grid (an inline
 //    element in another font or a superscript can stretch a line). Elements with a
 //    smaller line height on purpose (the numbers in project lists) are skipped.
-// 3. No horizontal scrolling.
+// 3. Blocks in running text (figures, lists, quotations, code) are a whole number of
+//    half lines tall, so an image cannot push the text below it off the grid.
+// 4. No horizontal scrolling.
 //
-// Usage: node tools/raster-check.mjs [base URL]   (default http://localhost:1313, e.g. hugo server)
+// Usage: node tools/raster-check.mjs [base URL] [extra paths...]
+//   Default base URL http://localhost:1313 (hugo server). Pages not linked from the
+//   site, such as /projects/layout-test/, can be added as extra paths.
 // Needs Node 22 or newer and Google Chrome; set CHROME to its path if it is not in the
 // default macOS location. Exit code 0 when everything sits, 1 otherwise.
 import { spawn } from 'node:child_process';
@@ -25,6 +31,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const BASE = (process.argv[2] || 'http://localhost:1313').replace(/\/$/, '');
+const EXTRA = process.argv.slice(3);
 // Widths, plus the widest one with the browser's text size at 200 % (default font 32 px).
 const VIEWS = [{ width: 320 }, { width: 375 }, { width: 768 }, { width: 1440 }, { width: 1440, font: 32, tolerance: 1 }];
 const MAX_PAGES = 40;
@@ -89,13 +96,14 @@ const MEASURE = `(() => {
     const onGrid = Math.abs(lh / G - Math.round(lh / G)) < 0.001 && lh >= G;
     const block = /^(block|list-item)$/.test(cs.display) && onGrid;
     items.push({ el: name(el), font: cs.fontFamily.split(',')[0].replace(/"/g, ''), size: parseFloat(cs.fontSize),
-      phase: ((baseline % G) + G) % G, height: block ? r.height : null, prose: !!el.closest('.prose') && el.tagName === 'P' });
+      phase: ((baseline % G) + G) % G, mono: !!el.closest('pre'), height: block ? r.height : null, prose: !!el.closest('.prose') && el.tagName === 'P' });
   }
-  return { L, G, items, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+  const blocks = [...document.querySelectorAll('.prose > *')].map((el) => ({ el: name(el), height: el.getBoundingClientRect().height }));
+  return { L, G, items, blocks, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
 })()`;
 
 // Collect pages: everything on the same site linked from the home page and from those pages.
-const pages = ['/'];
+const pages = ['/', ...EXTRA];
 for (let i = 0; i < pages.length && pages.length < MAX_PAGES; i++) {
   await open(BASE + pages[i], 1440);
   const links = await evaluate(`[...document.querySelectorAll('a[href]')].map((a) => new URL(a.href, location.href)).filter((u) => u.origin === location.origin && !u.hash && !/\\.(html|xml|txt|woff2)$/.test(u.pathname)).map((u) => u.pathname)`);
@@ -114,11 +122,15 @@ for (const view of VIEWS) {
     if (!ref) { fail(`${where}: no text found`); continue; }
     for (const i of m.items) {
       let d = Math.abs(i.phase - ref.phase); d = Math.min(d, m.G - d);
-      if (d > (view.tolerance || 0.25) + 1e-6) fail(`${where}: baseline of ${i.el} (${i.font} ${i.size}px) is ${(i.phase - ref.phase).toFixed(2)}px off the grid`);
+      if (d > Math.max(view.tolerance || 0.25, i.mono ? 2 : 0) + 1e-6) fail(`${where}: baseline of ${i.el} (${i.font} ${i.size}px) is ${(i.phase - ref.phase).toFixed(2)}px off the grid`);
       if (i.height !== null) {
         const rest = i.height % m.G;
         if (Math.min(rest, m.G - rest) > 0.01) fail(`${where}: ${i.el} is ${i.height.toFixed(2)}px tall, not a multiple of ${m.G}px`);
       }
+    }
+    for (const b of m.blocks) {
+      const rest = b.height % m.G;
+      if (Math.min(rest, m.G - rest) > 0.01) fail(`${where}: block ${b.el} is ${b.height.toFixed(2)}px tall, not a multiple of ${m.G}px`);
     }
     if (m.overflow > 0) fail(`${where}: scrolls sideways by ${m.overflow}px`);
     console.log(`${failures === before ? 'ok  ' : 'FAIL'} ${where}: ${m.items.length} texts`);
