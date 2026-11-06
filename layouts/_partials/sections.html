@@ -11,7 +11,7 @@
     {{- $pieces := split $part "</h2>" }}
 <section class="block">
   {{ printf "<h2 class=\"block-label\"%s</h2>" (index $pieces 0) | safeHTML }}
-  <div class="block-body prose">{{ delimit (after 1 $pieces) "</h2>" | safeHTML }}</div>
+  <div class="block-body prose">{{ delimit (after 1 $pieces) "</h2>" | partial "dash-nbsp.html" | safeHTML }}</div>
 </section>
   {{- end }}
 {{- end }}

@@ -3,8 +3,10 @@
   Rules (see DECISIONS.md, "Design-Grundlagen"):
   - Font size and line height are set on html, so 1rlh is exactly one line of body text.
   - Every vertical distance is a whole or half multiple of 1rlh.
-  - Every baseline sits at the same height in a grid of half lines (13.5 px),
-    whatever the font: see --snap-* and tools/raster-check.mjs.
+  - Every baseline sits at the same height in a grid of quarter lines (6.75 px),
+    whatever the font: see --baseline-grid, --snap-* and tools/raster-check.mjs.
+    Running text runs on 27 px lines (four quarters), small text on 20.25 px
+    (three quarters, 138 %).
   - Grid: 4 columns, 8 from 40em, 12 from 64em. Gutter is 1rlh.
   - Rules (hairlines) are drawn as backgrounds, not borders, so they do not shift the rhythm.
   - Font sizes in rem, media queries in em, so zoom and user settings scale everything.
@@ -135,13 +137,15 @@
 
   /* Type scale: small, base, running text and the display size of the page
      title. The display size grows with the grid (see media queries) and follows
-     the classic scale 48, 60, 72 px. Every line height is a multiple of half a
-     line (0.5rlh = 13.5 px), the baseline grid. */
+     the classic scale 36, 60, 72 px. Every line height is a multiple of a
+     quarter line (0.25rlh = 6.75 px), the baseline grid. */
   --step--1: 0.8125rem;   /* 14.6 px, Inter */
   --step-0: 1rem;         /* 18 px, Inter */
   --step-text: 1.16667rem; /* 21 px, Crimson Pro on 27 px lines (129 %) */
-  --display-size: 2.66667rem; /* 48 px */
-  --display-leading: 2rlh;    /* 54 px */
+  --step-standfirst: 1.33333rem; /* 24 px, Crimson Pro, the summary below the title */
+  --leading-small: 0.75rlh;   /* 20.25 px: small text, 138 % */
+  --display-size: 2rem;       /* 36 px on phones */
+  --display-leading: 1.5rlh;  /* 40.5 px */
   --display-tracking: -0.02em;
 
   /* Baseline snap: every baseline sits at the same height in the 13.5 px grid,
@@ -150,10 +154,12 @@
      so nothing else moves). Measured values, checked by tools/raster-check.mjs.
      In rlh, not px, so they grow with the reader's text size setting.
      Change a font size and these must be measured again. */
-  --baseline-grid: 0.5rlh;    /* 13.5 px; tools/raster-check.mjs reads it */
-  --snap-small: 0.0741rlh;    /* 2 px: Inter 14.6 px */
+  --baseline-grid: 0.25rlh;   /* 6.75 px; tools/raster-check.mjs reads it */
+  --snap-small: 0.0741rlh;    /* 2 px: Inter 14.6 px on 27 px lines */
+  --snap-small-tight: 0.1852rlh; /* 5 px: Inter 14.6 px on 20.25 px lines */
+  --snap-standfirst: -2px;    /* Crimson 24 px; px, not rlh: measured, see DECISIONS.md */
   --snap-mono: 0.03704rlh;      /* 1 px: code blocks, SF Mono at 0.75em (other systems' monospace fonts may differ) */
-  --snap-display: 0.1111rlh;  /* 3 px: page title, 48 px */
+  --snap-display: 0.0185rlh;  /* 0.5 px: page title, 36 px */
 
   /* Two weights only. */
   --weight-regular: 400;
@@ -162,9 +168,13 @@
   /* Grid */
   --cols: 4;
   --gutter: 1rlh;
-  --margin: clamp(1rlh, 5vw, 4rlh);
+  --margin: clamp(0.75rlh, 5vw, 4rlh); /* 20.25 px on phones */
   --max-width: 96rem;
-  --measure: 62ch;
+  /* Line length comes from the grid: running text spans 6 columns, 5 from 92em,
+     so a line never exceeds about 72 characters. --measure is only a safety net
+     outside the grid; it never binds in the grid layouts (62ch was 736 px: the
+     zero of Crimson is wide, and lines reached 86 characters on wide screens). */
+  --measure: 37rem;
 
   /* Colours */
   --ink: #000;
@@ -357,6 +367,50 @@ a:hover {
   max-width: var(--measure);
 }
 
+/* The summary below the title as a standfirst, one classic step above the text. */
+.intro-text {
+  font-size: var(--step-standfirst);
+  position: relative;
+  top: var(--snap-standfirst);
+}
+
+/* Hyphenation in running text and captions (lang from the html element; Safari
+   before 17 needs the prefix). Not in the standfirst, headings or code: large
+   text and commands are not split. Words of 6 letters or more, at least 3 letters
+   before the break and 3 letters plus punctuation after it (Chrome counts a
+   following comma or period, hence 4). hyphenate-limit-chars works in Chrome and
+   Firefox; for Safari the old -webkit- limits are set too (whether current Safari
+   honours them is unverified). See DECISIONS.md, "B als Standard". */
+.prose,
+.figure figcaption {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 6 3 4;
+  -webkit-hyphenate-limit-before: 3;
+  -webkit-hyphenate-limit-after: 3;
+}
+
+.prose h3,
+.prose code,
+.prose pre {
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}
+
+/* Oldstyle figures in running text (Bringhurst 3.2.1, rule 5.2 of the CV
+   typography rules); the standfirst keeps lining figures like the titles. */
+.prose {
+  font-variant-numeric: oldstyle-nums;
+}
+
+/* The standfirst on the home and project pages is also .prose: no hyphenation,
+   lining figures, like the standfirst on project pages. */
+.prose.intro-text {
+  -webkit-hyphens: manual;
+  hyphens: manual;
+  font-variant-numeric: normal;
+}
+
 .intro-text + .intro-lead {
   margin-top: 1rlh;
 }
@@ -366,6 +420,7 @@ a:hover {
 .project-meta {
   margin-top: 1rlh;
   font-size: var(--step--1);
+  line-height: var(--leading-small);
   display: grid;
   grid-template-columns: subgrid;
 }
@@ -393,7 +448,7 @@ a:hover {
    never ranks below its own subheading. The rank comes from the rule above,
    the left column and the space before (see DECISIONS.md, "Gestaltungs-Review"). */
 .block-label {
-  margin-bottom: 1rlh;
+  margin-bottom: 0.5rlh; /* on phones; beside the text from 40em */
 }
 
 /* ---------- Lists of projects ---------- */
@@ -511,40 +566,46 @@ a:hover {
 
 /* ---------- Figures (layouts/_markup/render-image.html) ---------- */
 
-/* Figures get two lines of space before and after. */
-.prose > .figure,
-.prose > .figure + * {
-  margin-top: 2rlh;
-}
-
-/* The image height is rounded down to half a line, so everything below stays on
-   the grid. The image is cropped by at most 13.5 px (object-fit: cover).
+/* Figures: the image hangs from the cap height of a text line (Crimson 21 px:
+   12 px above its baseline) and stands on a baseline, as in Müller-Brockmann's
+   grid systems: top 5.5 px above a grid line, height n * 13.5 + 12 px, then 7 px
+   to the next grid line. The caption's first baseline lies one line below the
+   image's. The same white space above and below a figure: 55.5 px from the last
+   baseline before it to the image, and from the caption's last baseline (or the
+   image) to the capitals after it. See DECISIONS.md, "Bilder im Raster".
    --ratio (width / height) comes from the template. Browsers without round()
    or container units show the image at its natural height. */
+.prose > .figure { margin-top: 2rlh; }
+.prose > .figure + * { margin-top: 1.75rlh; }
+.prose > .figure:not(:has(figcaption)) + * { margin-top: 1.5rlh; }
+
 .figure {
+  display: flow-root;
   container-type: inline-size;
 }
 
 .figure img {
   width: 100%;
+  margin-top: calc(-5.5rlh / 27);
+  margin-bottom: calc(7rlh / 27);
 }
 
 @supports (height: round(down, 100cqi, 1px)) {
   .figure img {
-    height: round(down, calc(100cqi / var(--ratio)), 0.5rlh);
+    height: calc(round(down, calc(100cqi / var(--ratio) - 12rlh / 27), 0.5rlh) + 12rlh / 27);
     object-fit: cover;
   }
 }
 
-/* Phone screenshots and other tall images: about the width of a phone, on the
-   columns of the grid: 4 of the 6 text columns from 40em, 3 from 64em
-   (see the media queries). On phones the full text width. */
+/* Phone screenshots and other tall images, on the columns of the grid: 3 of the
+   4 columns on phones, 4 of the 6 text columns from 40em, 3 from 64em (see the
+   media queries), so a screenshot fits on one screen. */
 .figure-portrait {
-  max-width: 12rlh;
+  width: calc((100% + var(--gutter)) * 3 / 4 - var(--gutter));
 }
 
 .figure figcaption {
-  margin-top: 0.5rlh;
+  line-height: var(--leading-small);
   font-family: var(--font-body);
   font-size: var(--step--1);
   letter-spacing: var(--tracking--1);
@@ -563,19 +624,25 @@ sub {
 
 /* Inter 14.6 px elements, moved onto the baseline grid (see --snap-small). */
 .site-header,
-.project-meta,
-.figure figcaption,
 .site-footer {
   position: relative;
   top: var(--snap-small);
 }
 
+/* Inter 14.6 px on 20.25 px lines. */
+.project-meta,
+.figure figcaption {
+  position: relative;
+  top: var(--snap-small-tight);
+}
+
 /* ---------- Footer ---------- */
 
+/* A grey rule, so the footer does not read as one more empty section. */
 .site-footer {
   font-size: var(--step--1);
   padding-top: 0.5rlh;
-  background: linear-gradient(var(--ink), var(--ink)) top / 100% 1px no-repeat;
+  background: linear-gradient(var(--rule), var(--rule)) top / 100% 1px no-repeat;
 }
 
 /* ---------- 8 columns ---------- */
@@ -601,8 +668,12 @@ sub {
   }
 
   .figure-portrait {
-    max-width: none;
     width: calc((100% + var(--gutter)) * 4 / 6 - var(--gutter));
+  }
+
+  /* Captions at most 4 of the 6 text columns wide (about 60 characters). */
+  .figure:not(.figure-portrait) figcaption {
+    max-width: calc((100% + var(--gutter)) * 4 / 6 - var(--gutter));
   }
 
   .block-label {
@@ -636,6 +707,23 @@ sub {
 
   .title { grid-column: 2 / 5; }
   .summary { grid-column: 5 / -1; }
+}
+
+/* ---------- Wide screens: 5 text columns ---------- */
+
+/* From 92em six columns would exceed 75 characters per line. */
+@media (min-width: 92em) {
+  .intro-text,
+  .intro-lead,
+  .prose.block-body { grid-column: 4 / 9; }
+
+  /* Figures stay on the columns: 3 of the 5 text columns, captions 4 of 5. */
+  .figure-portrait {
+    width: calc((100% + var(--gutter)) * 3 / 5 - var(--gutter));
+  }
+  .figure:not(.figure-portrait) figcaption {
+    max-width: calc((100% + var(--gutter)) * 4 / 5 - var(--gutter));
+  }
 }
 
 /* ---------- Accessibility ---------- */

@@ -1,0 +1,10 @@
+{{- /*
+  Expects text or HTML. Puts a no-break space before every spaced en or em dash,
+  so a line never begins with a dash (Bringhurst 5.2.1; rule 1.3 of the CV
+  typography rules). Covers the character itself and Hugo's &ndash;/&mdash;.
+*/ -}}
+{{- $s := string . }}
+{{- range slice "–" "—" "&ndash;" "&mdash;" }}
+  {{- $s = replace $s (printf " %s " .) (printf " %s " .) }}
+{{- end }}
+{{- return $s }}

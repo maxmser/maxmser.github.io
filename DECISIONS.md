@@ -243,13 +243,13 @@ Zur Herkunft: Inter 3 hatte eine Formel für die Laufweite je Schriftgröße, La
 
 Stand 06.11.2026. Max hat auf das Dokument `Jobsuche/cv-generator/typografie_regeln.md` vom 22.10.2026 hingewiesen. Es ist das einzige Dokument zu Typografie und Rhythmus im Projekte-Ordner. Es wurde für die Lebensläufe geschrieben, viele Regeln gelten aber auch hier. Der Abgleich am 06.11.2026 ergab Folgendes.
 
-Schon erfüllt: Senkrechte Abstände in festen Schritten (Bringhurst 2.2.2) sind die Grundlage des Rasters. Die Zeilenlänge liegt mit höchstens 62 Zeichen im empfohlenen Bereich von 45 bis 75 Zeichen. Überschriften stehen näher am folgenden Text als am vorigen. Tabellenziffern stehen in der nummerierten Liste, Proportionalziffern im Text. Ligaturen sind kein Thema, weil Inter für Englisch keine störenden Ligaturen setzt.
+Schon erfüllt: Senkrechte Abstände in festen Schritten (Bringhurst 2.2.2) sind die Grundlage des Rasters. Die Zeilenlänge liegt mit höchstens 62 Zeichen im empfohlenen Bereich von 45 bis 75 Zeichen. Korrektur vom 06.11.2026: Das stimmte nicht. Gemeint war die Angabe `62ch`, und gemessen ergab sie mit Inter etwa 77 und später mit Crimson Pro auf breiten Bildschirmen bis zu 86 Zeichen. Siehe Abschnitt "B als Standard". Überschriften stehen näher am folgenden Text als am vorigen. Tabellenziffern stehen in der nummerierten Liste, Proportionalziffern im Text. Ligaturen sind kein Thema, weil Inter für Englisch keine störenden Ligaturen setzt.
 
 Neu umgesetzt am 06.11.2026: Erstens bekommt jeder Absatz `text-wrap: pretty`, damit kein einzelnes kurzes Wort allein in der letzten Zeile steht (Regel 8.4). Das wirkt in Chrome, Edge und Safari ab Version 26, Firefox ignoriert es. Zweitens hängen Aufzählungszeichen und Nummern in Listen links vor der Textachse, damit der Text bündig am Raster bleibt (Regel 4.2). Drittens bekommen auch Titel, Kurzbeschreibungen, Status, Stack und die Liste "More projects" typografische Zeichen. Hugo setzt im Fließtext bereits gerundete Anführungszeichen und Apostrophe, aus `--` den Halbgeviertstrich, aus `---` den Geviertstrich und aus drei Punkten die Auslassungspunkte. Für Angaben aus dem Kopf der Inhaltsdateien galt das bisher nicht. Das erledigt jetzt die Teilvorlage `typo.html`. Geprüft mit einem Testsatz.
 
 Regeln für Max beim Schreiben der englischen Texte: Gedankenstrich als Halbgeviertstrich mit Leerzeichen nach Bringhurst, geschrieben als ` -- `. Zeiträume mit Halbgeviertstrich ohne Leerzeichen, geschrieben als `2008--2012`. Kein Leerzeichen vor dem Prozentzeichen, also 12%. Währungszeichen direkt vor der Zahl, also €40 million. Zahl und Einheit nicht trennen, bei Bedarf mit `&nbsp;`. Das Et-Zeichen nur in Namen. Zahlen von eins bis neun in Wörtern, ab zehn in Ziffern. Anführungszeichen und Apostrophe können gerade getippt werden, sie werden automatisch gesetzt.
 
-Bewusst nicht umgesetzt oder offen: Die Größenreihe der Seite (14,6, 18, 45, 58,5 und 72 Pixel) folgt nicht der klassischen Reihe, die das Dokument nennt (unter anderem 14, 18, 48, 60, 72). Bringhurst verlangt eine feste Reihe, nicht unbedingt die klassische. Eine Angleichung wäre möglich, siehe offene Punkte. Der Zeilenabstand beträgt 150 Prozent und liegt damit leicht über den 120 bis 145 Prozent, die das Dokument nennt. Er bleibt, weil er die Grundeinheit des Rasters ist und Display bei kleiner Größe etwas mehr Luft verträgt. Silbentrennung bleibt aus. Folgen von Großbuchstaben werden nicht gesperrt. Inter hätte dafür die Funktion `cpsp`, die ließe sich für Abkürzungen gezielt einschalten, wenn sie in den Texten häufig vorkommen.
+Bewusst nicht umgesetzt oder offen: Die Größenreihe der Seite (14,6, 18, 45, 58,5 und 72 Pixel) folgt nicht der klassischen Reihe, die das Dokument nennt (unter anderem 14, 18, 48, 60, 72). Bringhurst verlangt eine feste Reihe, nicht unbedingt die klassische. Eine Angleichung wäre möglich, siehe offene Punkte. Der Zeilenabstand beträgt 150 Prozent und liegt damit leicht über den 120 bis 145 Prozent, die das Dokument nennt. Er bleibt, weil er die Grundeinheit des Rasters ist und Display bei kleiner Größe etwas mehr Luft verträgt. Silbentrennung bleibt aus. Nachtrag vom 06.11.2026: Max wünscht Silbentrennung, sie ist jetzt im Lauftext eingeschaltet, siehe Abschnitt "B als Standard". Folgen von Großbuchstaben werden nicht gesperrt. Inter hätte dafür die Funktion `cpsp`, die ließe sich für Abkürzungen gezielt einschalten, wenn sie in den Texten häufig vorkommen.
 
 ## Ersatzschrift: Nachtrag zu Display überall
 
@@ -309,7 +309,7 @@ Zweitens war der Abschnittsname mit 14,6 Pixel kleiner als die Zwischenüberschr
 
 Drittens hingen die Aufzählungszeichen auf dem Handy im Seitenrand, etwa zehn Pixel vom Bildschirmrand entfernt. Listen sind dort jetzt um eine Zeile eingerückt. Ab 40em hängen die Zeichen wie bisher im Zwischenraum vor der Textspalte.
 
-Viertens lagen Bilder im Hochformat mit 324 Pixel Breite nicht auf den Spalten des Rasters. Sie sind jetzt auf dem Desktop genau drei und auf dem Tablet vier der sechs Textspalten breit, auf dem Handy so breit wie der Text.
+Viertens lagen Bilder im Hochformat mit 324 Pixel Breite nicht auf den Spalten des Rasters. Sie sind jetzt auf dem Desktop genau drei und auf dem Tablet vier der sechs Textspalten breit, auf dem Handy so breit wie der Text. Nachtrag vom 06.11.2026: Auf dem Handy sind es inzwischen drei von vier Spalten, siehe Abschnitt "B als Standard".
 
 Fünftens war Code zu groß: Die x-Höhe lag 14 Prozent über der von Crimson Pro. Code steht jetzt in 0,75 der Textgröße. Ein Versuch mit 0,8 brachte nichts, weil Chrome die Maße der Festbreitenschrift des Systems anders rundet als berechnet. Korrektur vom selben Tag: Zunächst stand hier, der Codeblock sitze bei normaler Textgröße genau im Raster. Das stimmte nur für die alte Größe 0,875. Mit 0,75 lag er einen Pixel daneben, was eine großzügige Toleranz der Prüfung verdeckt hatte. Codeblöcke werden jetzt wie die übrigen Schriften um einen gemessenen Betrag verschoben (`--snap-mono`, ein Pixel), und die Sonderregel in der Prüfung ist entfernt. Auf macOS liegen sie damit bei normaler und doppelter Textgröße im Raster. Andere Systeme haben eine andere Festbreitenschrift und können abweichen.
 
@@ -349,9 +349,35 @@ Damit alle drei Fassungen genau gleich im Raster stehen, bekommen XCharter und d
 
 ## Entscheidung: Lauftext bleibt Crimson Pro
 
-Stand 06.11.2026. Nach dem Vergleich der Charter-Fassungen hat Max entschieden, bei Crimson Pro als Schrift für Einleitung und Lauftext zu bleiben, weil sie am meisten Charakter hat. Charter in allen drei Fassungen ist damit verworfen. Die Versionen C, D und E der Testseite bleiben vorerst als Vergleich erhalten.
+Stand 06.11.2026. Nach dem Vergleich der Charter-Fassungen hat Max entschieden, bei Crimson Pro als Schrift für Einleitung und Lauftext zu bleiben, weil sie am meisten Charakter hat. Charter in allen drei Fassungen ist damit verworfen. Die Versionen C, D und E der Testseite bleiben vorerst als Vergleich erhalten. Nachtrag vom selben Tag: Mit "B als Standard" sind der Schalter und die Charter-Versionen entfernt.
 
 Die Seite, die alle Charter-Fassungen untereinander zeigt (`/projects/charter-compare/`), ist auf Wunsch von Max nicht veröffentlicht, sondern nur gesichert. Sie liegt im lokalen Zweig `archiv/charter-vergleich` (Commit 149531b) und lässt sich mit `git cherry-pick 149531b` zurückholen.
+
+## B als Standard
+
+Stand 06.11.2026. Max hat Version B zum Standard für alle Seiten gemacht. Seither rastet die Seite auf Viertelzeilen von 6,75 Pixel ein. Bilder hängen an der Versalhöhe und stehen auf einer Grundlinie. Bildunterschriften sowie Status und Stack laufen auf 20,25 Pixel Zeilenabstand. Die Kurzbeschreibung steht als Vorspann in Crimson Pro 24 Pixel, der Seitentitel auf dem Handy in 36 auf 40,5 Pixel. Die Linie über der Fußzeile ist grau, und der Abschnittsname steht auf dem Handy eine halbe Zeile über dem Text. Der Schalter zwischen den Versionen und die Charter-Versionen samt ihren Schriftdateien sind entfernt. Die Geschichte bleibt in Git, die Vergleichsseite im lokalen Zweig `archiv/charter-vergleich`.
+
+Der Vorspann in 24 Pixel lag bei doppelter Textgröße bisher zwei Pixel neben dem Raster. Seine Verschiebung steht jetzt in Pixel statt in Zeilen (`--snap-standfirst: -2px`). Gemessen braucht er bei normaler und bei doppelter Textgröße dieselben zwei Pixel, weil Chrome die Höhenmaße der Schrift auf ganze Pixel rundet. Für andere Textgrößen ist das nicht gemessen.
+
+Max wünschte auf dem iPhone weniger Rand. Der Seitenrand ist auf dem Handy jetzt 20,25 Pixel statt 27 (`--margin: clamp(0.75rlh, 5vw, 4rlh)`). Das entspricht dem üblichen Randabstand von iOS. Der Spaltenabstand bleibt eine Zeile.
+
+Silbentrennung ist im Lauftext und in Bildunterschriften eingeschaltet (`hyphens: auto`, mit `-webkit-` für Safari vor Version 17). Laut MDN ist das seit September 2023 in allen verbreiteten Browsern verfügbar, und getrennt wird nur bei passender Sprachangabe, hier Englisch. Nicht getrennt werden der Vorspann, Überschriften und Code, weil große Schrift und Befehle nicht zerlegt werden sollen. Getrennt werden Wörter ab sechs Buchstaben, mit mindestens drei Buchstaben vor und drei nach der Trennung (`hyphenate-limit-chars: 6 3 4`). Die vier ist Absicht: Chrome zählt ein folgendes Satzzeichen mit. Diese Grenzen kennen laut MDN nur Chrome und Firefox. Für Safari sind zusätzlich die alten Angaben mit `-webkit-` gesetzt, ob das aktuelle Safari sie beachtet, ist nicht geprüft. Gemessen sinkt die Lücke am rechten Rand auf dem Handy von 9,8 auf etwa 9 Prozent der Zeilenbreite.
+
+## Typografische Prüfung und gestalterische Prüfung
+
+Stand 06.11.2026. Nach dem Umstieg auf B haben ein Gestalter und ein Typograf die Seite unabhängig geprüft. Die Befunde wurden nachgemessen. Umgesetzt wurden die klaren Mängel.
+
+Erstens hatte der schmalere Rand Bilder im Hochformat auf dem Handy von den Spalten gelöst: 324 Pixel bei einer Textspalte von 334,5 Pixel. Sie sind jetzt drei von vier Spalten breit, so passt ein Bildschirmfoto auf einen Bildschirm.
+
+Zweitens waren die Zeilen auf breiten Bildschirmen zu lang. `62ch` ergab mit Crimson Pro 736 Pixel, weil ihre Null breit ist, und gemessen bis zu 86 Zeichen ab etwa 1700 Pixel Breite. Die Zeilenlänge kommt jetzt aus dem Raster: Lauftext und Vorspann laufen über sechs Spalten, ab 92em über fünf. Gemessen liegen die Zeilen zwischen 1440 und 2560 Pixel im Mittel bei 62 bis 75 Zeichen. Bilder und Unterschriften bleiben auf den Spalten, ab 92em drei beziehungsweise vier von fünf. `--measure` ist nur noch ein Sicherheitsnetz, das in diesem Raster nicht greift.
+
+Drittens konnte eine Zeile mit einem Gedankenstrich beginnen. Vor jedem Gedanken- und Geviertstrich mit Leerzeichen steht jetzt ein geschütztes Leerzeichen (`layouts/_partials/dash-nbsp.html`, angewandt auf Lauftext, Einleitungen, Titel und Bildunterschriften).
+
+Viertens wurde die Silbentrennung an die Elemente vererbt, wo sie nicht hingehört. Inline-Code wurde getrennt, und wer ihn kopiert, hätte einen falschen Bindestrich übernommen. Überschriften, Code und der Vorspann sind jetzt ausgenommen, und die Grenzen sind wie oben beschrieben angepasst.
+
+Fünftens stehen im Lauftext jetzt Mediävalziffern, wie es Regel 5.2 der Typografie-Regeln nach Bringhurst empfiehlt. Crimson Pro hat sie, die gekürzte Schrift enthält dafür jetzt die Funktionen `onum` und `lnum` und wiegt 22,3 statt 19,6 Kilobyte. Der Vorspann behält Versalziffern wie die Titel.
+
+Geschmackssache und offen sind: die Spalte mit den Nummern in der Projektliste, die auf dem Handy viel Breite kostet; weniger Abstand über dem Titel auf dem Handy; ein engerer Zeilenabstand für Codeblöcke (heute 171 Prozent); dieselbe rechte Kante für Vorspann und Lauftext auf dem Tablet; die Null mit Strich nur dort, wo sie Verwechslungen verhindert; die Kennzeichnung von Zitaten zugleich durch Kursiv, Linie und Einzug; größere Tippflächen für Navigation und Fußzeile. Vor einer deutschen Fassung fehlen das schmale Leerzeichen in beiden Schriften und Silbentrennung in den Abschnittsnamen, weil lange deutsche Wörter dort sonst ohne Trennstrich umbrechen.
 
 ## Offene Punkte
 

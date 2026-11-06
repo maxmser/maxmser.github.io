@@ -47,29 +47,6 @@ unicodes = [
   "2013", "2014", "2018", "2019", "201A", "201C", "201D", "201E",
   "2022", "2026", "2032", "2033", "20AC", "2122", "2212",
 ]
-features = ["tnum"]
+features = ["tnum", "onum", "lnum"]  # oldstyle figures in running text, lining on request
 weight_min = 400
 weight_max = 500
-
-# Test only: Charter as running text in version C of /projects/layout-test/ (?v=c).
-# XCharter 1.26 from CTAN, an extension of Bitstream Charter, free under Bitstream's
-# license (tools/fonts-src/charter/LICENSE.txt). Static fonts, no weight axis.
-# The source has two different sets of vertical metrics (hhea and typo) with
-# USE_TYPO_METRICS set, so browsers would place the baseline differently, and the
-# italic is taller than roman and bold, so an italic word would make its line
-# taller. The build gives every style the same metrics in every table, with no line
-# gaps: those of the Charter built into macOS and iOS (0.98 and -0.24 of the font
-# size), so all Charter versions of the test page sit on the grid alike
-# (vertical_metrics: ascent, descent in em).
-[charter]
-characters = "serif"   # use the character list and features of [serif]
-vertical_metrics = [0.98, -0.2402]
-
-# Test only: Charis SIL 6.101 (google/fonts, commit dfad63d), a redrawing of Charter
-# under the SIL Open Font License, version E of /projects/layout-test/ (?v=e).
-# "Charis" and "SIL" are Reserved Font Names, and subsetting is a modification
-# (OFL-FAQ 2.6), so the build renames the font (rename) and never uses those names.
-[charis]
-characters = "serif"
-vertical_metrics = [0.98, -0.2402]
-rename = "Test Serif E"

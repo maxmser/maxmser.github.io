@@ -6,5 +6,5 @@
   Usage: partial "typo.html" (dict "page" . "text" .Title)
 */ -}}
 {{- $out := "" }}
-{{- with .text }}{{ $out = $.page.RenderString (string .) | plainify | htmlUnescape }}{{ end }}
+{{- with .text }}{{ $out = $.page.RenderString (string .) | plainify | htmlUnescape | partial "dash-nbsp.html" }}{{ end }}
 {{- return $out }}

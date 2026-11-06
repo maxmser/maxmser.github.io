@@ -4,4 +4,5 @@
   page header right after the summary, so it reads as part of the introduction
   (see DECISIONS.md, "Gestaltungs-Review").
 */ -}}
-{{- return strings.TrimSpace (index (split (string .) "<h2") 0) }}
+{{- $lead := strings.TrimSpace (index (split (string .) "<h2") 0) }}
+{{- return partial "dash-nbsp.html" $lead }}

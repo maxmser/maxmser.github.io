@@ -2,7 +2,7 @@
 <section class="intro">
   <h1 class="display">{{ partial "typo.html" (dict "page" . "text" .Title) }}</h1>
   {{- with .Content }}
-  <div class="intro-text prose">{{ . }}</div>
+  <div class="intro-text prose">{{ partial "dash-nbsp.html" . | safeHTML }}</div>
   {{- end }}
 </section>
 {{- /* No label here: the page title already says "Projects". The left column stays empty on purpose. */}}

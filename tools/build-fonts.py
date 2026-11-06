@@ -11,7 +11,6 @@ Sources:
 - Inter: built from the Inter source code, commit 353b61b
   (see DECISIONS.md, "Schrift: Inter mit a mit Schweif").
 - Crimson Pro 1.003 from google/fonts, commit 5c70a79 (see DECISIONS.md, "Lauftext in Crimson Pro").
-- XCharter 1.26 from CTAN, test only (table [charter], see DECISIONS.md, "Version C mit Charter").
 
 Usage: python3 tools/build-fonts.py   (needs fontTools and brotli)
 """
@@ -108,20 +107,11 @@ def build(src, out, cfg):
 def main():
     cfg = tomllib.loads((ROOT / "data" / "font.toml").read_text())
     serif = cfg.pop("serif")
-    charter, charis = cfg.pop("charter"), cfg.pop("charis")
-    charter = {**serif, **charter} if charter.get("characters") == "serif" else charter
-    charis = {**serif, **charis} if charis.get("characters") == "serif" else charis
     jobs = [
         (SRC / "InterVariable.woff2", OUT / "inter" / "InterVariable.woff2", cfg),
         (SRC / "InterVariable-Italic.woff2", OUT / "inter" / "InterVariable-Italic.woff2", cfg),
         (SRC / "crimson" / "CrimsonPro.woff2", OUT / "crimson" / "CrimsonPro.woff2", serif),
         (SRC / "crimson" / "CrimsonPro-Italic.woff2", OUT / "crimson" / "CrimsonPro-Italic.woff2", serif),
-    ] + [
-        (SRC / "charter" / f"XCharter-{n}.woff2", OUT / "charter" / f"XCharter-{n}.woff2", charter)
-        for n in ("Roman", "Italic", "Bold")
-    ] + [
-        (SRC / "charis" / f"CharisSIL-{n}.woff2", OUT / "test-serif-e" / f"TestSerifE-{n}.woff2", charis)
-        for n in ("Regular", "Italic", "Bold")
     ]
     for src, out, settings in jobs:
         build(src, out, settings)
