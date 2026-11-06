@@ -9,10 +9,16 @@
   finer grid of quarter lines, so captions and the project meta can have 138 %
   leading.
   Nothing is stored; the script only reads the address.
+  Version C is version B with Charter (XCharter) as running text instead of
+  Crimson Pro (see DECISIONS.md, "Version C mit Charter").
   Call with "head" for the style and script, "bar" for the switch.
 */ -}}
 {{- if eq . "head" }}
-<script>if (new URLSearchParams(location.search).get("v") === "b") document.documentElement.classList.add("v-b");</script>
+<script>
+{ const v = new URLSearchParams(location.search).get("v");
+  if (v === "b" || v === "c") document.documentElement.classList.add("v-b");
+  if (v === "c") document.documentElement.classList.add("v-c"); }
+</script>
 <style>
 html.v-b .intro-text { font-size: 1.33333rem; position: relative; top: var(--snap-standfirst, 0px); }
 html.v-b { --snap-standfirst: -0.0741rlh; } /* -2 px, measured */
@@ -48,6 +54,24 @@ html.v-b .prose > .figure:not(:has(figcaption)) + * { margin-top: 1.5rlh; }
 @media (min-width: 40em) {
   html.v-b .figure:not(.figure-portrait) figcaption { max-width: calc((100% + var(--gutter)) * 4 / 6 - var(--gutter)); }
 }
+/* Version C: Charter for introductions and running text. Static fonts: Regular,
+   Italic and Bold (bold text uses Bold, there is no Medium). */
+@font-face { font-family: "XCharter"; font-weight: 400; font-display: swap; src: url("/fonts/charter/XCharter-Roman.woff2") format("woff2"); }
+@font-face { font-family: "XCharter"; font-weight: 400; font-style: italic; font-display: swap; src: url("/fonts/charter/XCharter-Italic.woff2") format("woff2"); }
+@font-face { font-family: "XCharter"; font-weight: 500 700; font-display: swap; src: url("/fonts/charter/XCharter-Bold.woff2") format("woff2"); }
+html.v-c { --charter-size: 1.05556rem; --charter-standfirst: 1.16667rem; --charter-cap: 0.671em; --snap-charter: 0px; --snap-charter-standfirst: -0.037rlh; } /* 19 px body lands on the grid by itself; 21 px standfirst -1 px, measured */
+html.v-c .prose,
+html.v-c .intro-text { font-family: "XCharter", var(--font-text); }
+html.v-c .prose { font-size: var(--charter-size); }
+html.v-c .intro-text { font-size: var(--charter-standfirst); top: var(--snap-charter-standfirst); }
+/* Code keeps 15.75 px as in A and B (the code-block snap is measured for that size). */
+html.v-c .prose code, html.v-c .prose pre { font-size: calc(15.75em / 19); }
+html.v-c .prose pre code { font-size: inherit; }
+/* Images hang from Charter's cap height (19 px: 12.75 px above the baseline). */
+html.v-c .figure img { margin-top: calc(-6.25rlh / 27); }
+@supports (height: round(down, 100cqi, 1px)) {
+  html.v-c .figure img { height: calc(round(down, calc(100cqi / var(--ratio) - 12.75rlh / 27), 0.5rlh) + 12.75rlh / 27); }
+}
 .variant-switch { position: fixed; z-index: 10; left: 50%; bottom: 0.5rlh; translate: -50% 0; display: flex; gap: 0.5rlh; padding: 0 0.5rlh; background: var(--paper); box-shadow: 0 0 0 1px var(--rule); font-size: var(--step--1); letter-spacing: var(--tracking--1); white-space: nowrap; }
 .variant-switch a { padding: 0 0.25rlh; }
 .variant-switch a[aria-current] { font-weight: var(--weight-medium); text-decoration: underline; text-underline-offset: 0.2em; }
@@ -56,6 +80,7 @@ html.v-b .prose > .figure:not(:has(figcaption)) + * { margin-top: 1.5rlh; }
 <nav class="variant-switch" aria-label="Design version">
   <a href="?v=a" id="v-a">A: current</a>
   <a href="?v=b" id="v-b">B: proposals</a>
+  <a href="?v=c" id="v-c">C: Charter</a>
 </nav>
-<script>document.getElementById(document.documentElement.classList.contains("v-b") ? "v-b" : "v-a").setAttribute("aria-current", "true");</script>
+<script>{ const c = document.documentElement.classList; document.getElementById(c.contains("v-c") ? "v-c" : c.contains("v-b") ? "v-b" : "v-a").setAttribute("aria-current", "true"); }</script>
 {{- end }}

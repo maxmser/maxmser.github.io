@@ -11,6 +11,7 @@ Sources:
 - Inter: built from the Inter source code, commit 353b61b
   (see DECISIONS.md, "Schrift: Inter mit a mit Schweif").
 - Crimson Pro 1.003 from google/fonts, commit 5c70a79 (see DECISIONS.md, "Lauftext in Crimson Pro").
+- XCharter 1.26 from CTAN, test only (table [charter], see DECISIONS.md, "Version C mit Charter").
 
 Usage: python3 tools/build-fonts.py   (needs fontTools and brotli)
 """
@@ -43,10 +44,19 @@ def build(src, out, cfg):
     if missing:
         sys.exit(f"{src.relative_to(ROOT)} lacks {' '.join(missing)}: remove them from data/font.toml")
 
-    limits = {"wght": (cfg["weight_min"], cfg["weight_max"])}
-    if "optical_size" in cfg:
-        limits["opsz"] = cfg["optical_size"]
-    font = instantiateVariableFont(font, limits)
+    if "fvar" in font:  # variable fonts: limit the axes; static fonts stay as they are
+        limits = {"wght": (cfg["weight_min"], cfg["weight_max"])}
+        if "optical_size" in cfg:
+            limits["opsz"] = cfg["optical_size"]
+        font = instantiateVariableFont(font, limits)
+    if "vertical_metrics" in cfg:
+        # The same vertical metrics in every table and every style, no line gaps,
+        # so all browsers place the baseline alike and no style makes a line taller.
+        asc, desc = cfg["vertical_metrics"]
+        hhea, os2 = font["hhea"], font["OS/2"]
+        hhea.ascent, hhea.descent = os2.sTypoAscender, os2.sTypoDescender = asc, desc
+        os2.sTypoLineGap = hhea.lineGap = 0
+        os2.usWinAscent, os2.usWinDescent = asc, -desc
     # Save and reload once: the subsetter needs the fully compiled variation tables.
     buf = io.BytesIO()
     font.save(buf)
@@ -69,11 +79,12 @@ def build(src, out, cfg):
     font.save(sfnt)
     sfnt.seek(0)
     with open(out, "wb") as f:
-        woff2.compress(sfnt, f, transform_tables=["glyf", "loca", "hmtx"])
+        # The hmtx transform needs TrueType outlines (glyf); CFF fonts get the default.
+        woff2.compress(sfnt, f, transform_tables=["glyf", "loca", "hmtx"] if "glyf" in font else None)
 
     check = TTFont(out)
     tags = sorted({r.FeatureTag for r in check["GSUB"].table.FeatureList.FeatureRecord})
-    axes = [(a.axisTag, a.minValue, a.maxValue) for a in check["fvar"].axes]
+    axes = [(a.axisTag, a.minValue, a.maxValue) for a in check["fvar"].axes] if "fvar" in check else "static"
     print(f"{out.relative_to(ROOT)}: {out.stat().st_size} bytes, {len(check.getBestCmap())} characters, axes {axes}")
     print(f"  features: {' '.join(tags)}")
 
@@ -81,11 +92,16 @@ def build(src, out, cfg):
 def main():
     cfg = tomllib.loads((ROOT / "data" / "font.toml").read_text())
     serif = cfg.pop("serif")
+    charter = cfg.pop("charter")
+    charter = {**serif, **charter} if charter.get("characters") == "serif" else charter
     jobs = [
         (SRC / "InterVariable.woff2", OUT / "inter" / "InterVariable.woff2", cfg),
         (SRC / "InterVariable-Italic.woff2", OUT / "inter" / "InterVariable-Italic.woff2", cfg),
         (SRC / "crimson" / "CrimsonPro.woff2", OUT / "crimson" / "CrimsonPro.woff2", serif),
         (SRC / "crimson" / "CrimsonPro-Italic.woff2", OUT / "crimson" / "CrimsonPro-Italic.woff2", serif),
+    ] + [
+        (SRC / "charter" / f"XCharter-{n}.woff2", OUT / "charter" / f"XCharter-{n}.woff2", charter)
+        for n in ("Roman", "Italic", "Bold")
     ]
     for src, out, settings in jobs:
         build(src, out, settings)
