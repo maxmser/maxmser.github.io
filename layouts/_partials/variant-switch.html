@@ -1,0 +1,31 @@
+{{- /*
+  Test only: two versions of the layout test page, switched with ?v=b in the
+  address. Used by pages with "variants: true" in the front matter.
+  Version A is the site as it is: text-wrap: pretty on paragraphs and list items.
+  Version B turns pretty off, to see whether Safari hyphenates without it
+  (WebKit's pretty evens out the whole paragraph and reduces hyphenation;
+  see DECISIONS.md, "Silbentrennung in Safari").
+  Nothing is stored; the script only reads the address.
+  Call with "head" for the style and script, "bar" for the switch.
+  Earlier versions of this switch are in git history (removed in fb6bce8).
+*/ -}}
+{{- if eq . "head" }}
+<script>
+{ if (new URLSearchParams(location.search).get("v") === "b") document.documentElement.classList.add("v-b"); }
+</script>
+<style>
+html.v-b p, html.v-b li, html.v-b dd { text-wrap: wrap; }
+.variant-switch { position: fixed; z-index: 10; left: 50%; bottom: 0.5rlh; translate: -50% 0; display: flex; gap: 0.5rlh; padding: 0 0.5rlh; background: var(--paper); box-shadow: 0 0 0 1px var(--rule); font-size: var(--step--1); letter-spacing: var(--tracking--1); white-space: nowrap; }
+.variant-switch a { padding: 0 0.25rlh; }
+.variant-switch a[aria-current] { font-weight: var(--weight-semibold); text-decoration: underline; text-underline-offset: 0.2em; }
+</style>
+{{- else }}
+<nav class="variant-switch" aria-label="Test version">
+  <a href="?v=a" id="v-a">A: pretty on</a>
+  <a href="?v=b" id="v-b">B: pretty off</a>
+</nav>
+<script>{
+  const id = document.documentElement.classList.contains("v-b") ? "v-b" : "v-a";
+  document.getElementById(id).setAttribute("aria-current", "true");
+}</script>
+{{- end }}

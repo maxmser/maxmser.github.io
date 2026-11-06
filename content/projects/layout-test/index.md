@@ -7,6 +7,8 @@ stack: ["Hugo", "CSS"]
 weight: 999
 # Built and reachable at /projects/layout-test/, but not shown in any list.
 # Text: Herman Melville, Moby-Dick (1851), public domain. Images: generated test images.
+# Switch text-wrap: pretty on and off (?v=b), see layouts/_partials/variant-switch.html.
+variants: true
 build:
   list: never
   publishResources: false  # only the resized images are published, not the originals

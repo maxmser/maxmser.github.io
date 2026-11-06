@@ -431,6 +431,12 @@ Umgesetzt sind Punkt und Nummer mit `::before`, weil sich das Zeichen des Browse
 
 Bekannte Schwäche, nicht geändert: Ab 40em sind verschachtelte Listen nicht eingerückt, ihre Einträge stehen bündig mit denen der äußeren Liste. Das war schon vorher so.
 
+## Silbentrennung in Safari
+
+Stand 06.11.2026. Auf Max' iPhone trennt Safari im Fließtext kein einziges Wort, obwohl die Silbentrennung eingeschaltet ist und die Seite die Sprache Englisch angibt. Chrome trennt an denselben Stellen. Vermutete Ursache ist `text-wrap: pretty`, das an Absätzen und Listeneinträgen gesetzt ist, damit kein einzelnes Wort allein in der letzten Zeile steht. Laut dem Artikel des WebKit-Teams zu `pretty` gleicht Safari damit die Zeilenlängen im ganzen Absatz an und vermeidet dabei Trennungen, während Chrome nur die letzten vier Zeilen eines Absatzes neu verteilt. Nicht bestätigt ist, ob Safari mit `pretty` gar nicht mehr trennt oder nur seltener. Ein älterer WebKit-Fehler, bei dem `overflow-wrap: break-word` die Trennung verhinderte, ist seit 2021 behoben und scheidet deshalb aus.
+
+Zum Vergleich hat die Testseite einen Schalter: Mit `?v=b` in der Adresse ist `pretty` ausgeschaltet. Max vergleicht beide Fassungen auf dem iPhone. Danach wird entschieden und der Schalter wieder entfernt.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
