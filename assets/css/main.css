@@ -833,6 +833,12 @@ sub {
     padding-left: 0;
   }
 
+  /* Nested lists keep their indent of one line, so sub-items stand apart
+     from the items they belong to (until 2026-11-07 they were flush). */
+  .prose li > :is(ul, ol) {
+    padding-left: var(--list-indent);
+  }
+
   .prose ul > li::before,
   .prose ol:not([start]) > li::before {
     left: auto;

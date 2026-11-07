@@ -429,7 +429,7 @@ Die Nummern stehen in Mediävalziffern wie der Fließtext, und zwar in gleicher 
 
 Umgesetzt sind Punkt und Nummer mit `::before`, weil sich das Zeichen des Browsers nicht genau platzieren lässt und Safari daran laut MDN nur Farbe und Größe ändern lässt, nicht die Ziffernform. Das Zeichen des Browsers bleibt unsichtbar bestehen, damit Listen für Bildschirmleser Listen bleiben. Das gezeichnete Zeichen hat einen leeren Alternativtext, damit es nicht doppelt vorgelesen wird. Laut MDN verstehen das Chrome ab 77, Firefox ab 128 und Safari ab 17.4, ältere Browser zeigen das Zeichen trotzdem. Die Nummern zählt ein eigener Zähler. Eine Liste, die nicht bei eins beginnt, behält deshalb die Nummern des Browsers, denn ein Zähler in CSS kann den Startwert nicht lesen. Ab 40em hängen Punkt und Nummer wie bisher links vor der Textspalte, im selben Abstand wie zuvor, gemessen 13,25 Pixel vom Punkt und 5,25 Pixel vom Punkt nach der Nummer bis zum Text.
 
-Bekannte Schwäche, nicht geändert: Ab 40em sind verschachtelte Listen nicht eingerückt, ihre Einträge stehen bündig mit denen der äußeren Liste. Das war schon vorher so.
+Bekannte Schwäche, nicht geändert: Ab 40em sind verschachtelte Listen nicht eingerückt, ihre Einträge stehen bündig mit denen der äußeren Liste. Das war schon vorher so. Nachtrag vom 07.11.2026: Behoben. Verschachtelte Listen sind ab 40em wie auf dem Handy eine Zeile eingerückt, Punkt und Nummer hängen davor. Max hat zugestimmt.
 
 ## Silbentrennung in Safari
 
