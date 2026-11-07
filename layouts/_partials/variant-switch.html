@@ -60,26 +60,59 @@ html.v-w400 { --weight-text: 400; }
 <script>{
   const q = new URLSearchParams(location.search);
   if ({{ if $always }}true || {{ end }}q.has("test") || q.has("f") || q.has("s") || q.has("w")) {
-    // The switch is only put into the page when a test parameter is set.
+    // The switch is put into the page by this script (it is a <template>).
     const tpl = document.getElementById("variant-switch");
     tpl.after(tpl.content.cloneNode(true));
-    const f = q.get("f") === "geist", t = q.get("s") === "thin";
-    const w = ["360", "380", "400"].includes(q.get("w")) ? q.get("w") : "";
-    const params = (ff, tt, ww) => [ff ? "f=geist" : "", tt ? "s=thin" : "", ww ? "w=" + ww : ""].filter(Boolean).join("&") || "test";
-    const set = (id, p, on) => { const a = document.getElementById(id); a.href = "?" + p; if (on) a.setAttribute("aria-current", "true"); };
-    set("v-inter", params(false, t, w), !f);
-    set("v-geist", params(true, t, w), f);
-    for (const x of ["", "360", "380", "400"]) set("v-w" + (x || "340"), params(f, t, x), w === x);
-    set("v-thin", params(f, !t, w), t);
-    // Carry the test parameters on to every other page of the site.
-    const keep = params(f, t, w);
-    addEventListener("DOMContentLoaded", () => {
+    const root = document.documentElement;
+    const state = { f: q.get("f") === "geist", t: q.get("s") === "thin",
+                    w: ["360", "380", "400"].includes(q.get("w")) ? q.get("w") : "" };
+    const params = (st) => [st.f ? "f=geist" : "", st.t ? "s=thin" : "", st.w ? "w=" + st.w : ""].filter(Boolean).join("&") || "test";
+    const links = { "v-inter": { f: false }, "v-geist": { f: true }, "v-thin": "toggle",
+                    "v-w340": { w: "" }, "v-w360": { w: "360" }, "v-w380": { w: "380" }, "v-w400": { w: "400" } };
+    const target = (id) => links[id] === "toggle" ? { ...state, t: !state.t } : { ...state, ...links[id] };
+    // Marks, link addresses (for opening in a new tab) and the parameters on all
+    // other links of the site, so the choice stays when moving between pages.
+    const render = () => {
+      for (const id in links) {
+        const a = document.getElementById(id), on = links[id] === "toggle" ? state.t : Object.entries(links[id]).every(([k, v]) => state[k] === v);
+        a.href = "?" + params(target(id));
+        on ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current");
+      }
       for (const a of document.querySelectorAll("a[href]")) {
         const u = new URL(a.href, location.href);
         if (u.origin !== location.origin || a.closest(".variant-switch") || u.hash) continue;
-        u.search = keep; a.href = u.pathname + u.search;
+        u.search = params(state); a.href = u.pathname + u.search;
       }
+    };
+    // Switching happens in place, without loading the page again, and keeps the
+    // reading position: the first block in view stays at the same height (Safari
+    // only anchors scrolling itself from version 27, MDN).
+    const anchor = () => {
+      for (const el of document.querySelectorAll("main :is(p, li, h1, h2, h3, figure, pre, blockquote, dd)")) {
+        const top = el.getBoundingClientRect().top;
+        if (top >= 0) return { el, top };
+      }
+    };
+    const apply = async () => {
+      if (state.f) await document.fonts.load('400 1em "GeistTest"'); // no flash of the fallback
+      const a = anchor();
+      root.style.overflowAnchor = "none";
+      root.classList.toggle("v-geist", state.f);
+      root.classList.toggle("v-thin", state.t);
+      for (const x of ["360", "380", "400"]) root.classList.toggle("v-w" + x, state.w === x);
+      await document.fonts.ready;
+      if (a) scrollBy(0, a.el.getBoundingClientRect().top - a.top);
+      root.style.overflowAnchor = "";
+      history.replaceState(null, "", location.pathname + "?" + params(state));
+      render();
+    };
+    for (const id in links) document.getElementById(id).addEventListener("click", (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; // new tab or window: normal link
+      e.preventDefault();
+      Object.assign(state, target(id));
+      apply();
     });
+    addEventListener("DOMContentLoaded", render);
   }
 }</script>
 {{- end }}
