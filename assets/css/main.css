@@ -861,6 +861,14 @@ sub {
   .summary { grid-column: 4 / -1; }
 }
 
+/* From 56em (896 px) to the switch to 12 columns, six of 8 columns gave lines of
+   up to 74 characters on average and 83 at most. Running text spans five, like
+   the standfirst and the introduction above it: 55 to 64 on average, at most 73
+   (measured on 2026-11-07). No iPad width falls in this range. */
+@media (min-width: 56em) and (max-width: 63.99em) {
+  .prose.block-body { grid-column: 3 / 8; }
+}
+
 /* ---------- 12 columns ---------- */
 
 @media (min-width: 64em) {

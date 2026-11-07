@@ -483,6 +483,12 @@ Stand 07.11.2026. Bildunterschriften breiter Bilder sind vier Spalten breit, ab 
 
 Stand 07.11.2026. In der Bildunterschrift "1179 × 2556 pixels" konnte die Zeile nach dem Malzeichen umbrechen. Die Teilvorlage `dash-nbsp.html`, die schon vor Gedankenstrichen geschützte Leerzeichen setzt, setzt sie jetzt auch um ein Malzeichen zwischen zwei Zahlen. Sie gilt für Titel, Kurzbeschreibungen, Bildunterschriften und Fließtext.
 
+## Fließtext im Raster mit acht Spalten
+
+Stand 07.11.2026. Zwischen 40em und 64em hat die Seite acht Spalten, der Fließtext lief über sechs davon, Einleitung und Kurzbeschreibung über fünf. Bei Fensterbreiten von etwa 900 bis 1023 Pixel ergab das zu lange Zeilen, im Schnitt bis 74 Zeichen und einzelne bis 83, und der rechte Rand des Fließtexts sprang gegenüber der Einleitung darüber um eine Spalte nach außen. Ab 56em, also 896 Pixel, läuft der Fließtext jetzt bis zum Wechsel auf zwölf Spalten über fünf Spalten. Gemessen sind es dort im Schnitt 55 bis 64 Zeichen und höchstens 73, und Fließtext und Einleitung enden an derselben Kante. Unter 896 Pixel ändert sich nichts, so bleiben alle iPad-Breiten unberührt, auch das iPad 11 Zoll hochkant mit 834 Pixel. Bilder im Text werden in diesem Bereich entsprechend schmaler und bleiben auf den Spalten. Max hat am 07.11.2026 zugestimmt.
+
+Max möchte Bilder später noch einmal angehen und ihnen, wo Platz ist, auch mehr Spalten erlauben als dem Text.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
@@ -508,3 +514,5 @@ CDN-Knoten warm halten: Gemessen am 06.11.2026 war jede Seite am Wiener Knoten v
 Beschreibung der Startseite: Die Startseite hat keine Meta-Beschreibung für Suchmaschinen, weil ihr Text noch fehlt. Lighthouse meldet das. Der Text kommt mit den übrigen Inhalten.
 
 Prüfung nach der Veröffentlichung: Service Worker auf der echten Seite, Test auf dem iPhone und eine Lighthouse-Messung gegen https://maxmser.github.io/. Eine Messung gegen `hugo server` taugt dafür nicht, weil der lokale Server ein Skript für das automatische Neuladen einbaut, nicht komprimiert und keine Cache-Angaben sendet.
+
+Bilder breiter als der Text: Max möchte Bildern später erlauben, über mehr Spalten zu laufen als der Fließtext, wo der Platz dafür reicht (Stand 07.11.2026). Noch nicht entworfen.
