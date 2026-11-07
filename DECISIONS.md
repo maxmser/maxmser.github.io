@@ -479,6 +479,10 @@ Stand 07.11.2026. Die Seite wird höchstens 96rem breit, das sind 1728 Pixel. De
 
 Stand 07.11.2026. Bildunterschriften breiter Bilder sind vier Spalten breit, ab 92em vier von fünf. Auf großen Bildschirmen ab etwa 1700 Pixel ergab das 500 Pixel und 74 Zeichen pro Zeile, geplant waren etwa 60. Ab 92em sind sie jetzt zusätzlich auf 23,5rem begrenzt, das sind 423 Pixel. Gemessen haben sie jetzt auf allen Breiten höchstens 60 Zeichen pro Zeile, bis 1512 Pixel ändert sich nichts. Ihr rechter Rand endet auf großen Bildschirmen nicht mehr genau an einer Spaltenkante, was im Flattersatz kaum auffällt. Max hat am 07.11.2026 zugestimmt.
 
+## Maße bleiben zusammen
+
+Stand 07.11.2026. In der Bildunterschrift "1179 × 2556 pixels" konnte die Zeile nach dem Malzeichen umbrechen. Die Teilvorlage `dash-nbsp.html`, die schon vor Gedankenstrichen geschützte Leerzeichen setzt, setzt sie jetzt auch um ein Malzeichen zwischen zwei Zahlen. Sie gilt für Titel, Kurzbeschreibungen, Bildunterschriften und Fließtext.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
