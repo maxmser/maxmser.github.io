@@ -22,7 +22,7 @@
   {{- $lean := .OutputFormats.Get "lean" }}
   {{- if $lean }}{{ $pages = $pages | append .RelPermalink $lean.RelPermalink }}{{ end }}
 {{- end }}
-{{- $assets := slice ("fonts/inter/InterVariable.woff2" | relURL) ("fonts/crimson/CrimsonPro.woff2" | relURL) }}
+{{- $assets := slice ("fonts/geist/Geist.woff2" | relURL) ("fonts/crimson/CrimsonPro.woff2" | relURL) }}
 
 const VERSION = {{ now.UnixMilli | string }};
 const CACHE = "site-" + VERSION;

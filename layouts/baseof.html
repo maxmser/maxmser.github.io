@@ -26,11 +26,11 @@
   <link rel="icon" href="data:,">
   {{- /* The stylesheet is inlined: it is small, and the browser can render
        without waiting for a second request. The source stays assets/css/main.css.
-       For a first visit the upright fonts (Inter and Crimson Pro) go inline as
+       For a first visit the upright fonts (Geist and Crimson Pro) go inline as
        base64 (font-display: block, the data is already there). Measured on
        2026-11-06, see DECISIONS.md. The italics always come as files. */}}
   {{- $css := (resources.Get "css/main.css").Content }}
-  {{- range slice "fonts/inter/InterVariable.woff2" "fonts/crimson/CrimsonPro.woff2" }}
+  {{- range slice "fonts/geist/Geist.woff2" "fonts/crimson/CrimsonPro.woff2" }}
   {{- if $lean }}
   <link rel="preload" href="{{ . | relURL }}" as="font" type="font/woff2" crossorigin>
   {{- else }}
@@ -49,7 +49,6 @@
        stores the lean ones instead. The conservative rule (on pointer or touch
        down) is the subset WebKit has agreed to; Safari can use it once it is on.
        All browsers: the service worker (assets/js/sw.js), registered below. */}}
-  {{ partial "variant-switch.html" (dict "part" "head" "always" true) }}
   <script type="speculationrules">
   {"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"conservative"}],
    "prerender":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}
@@ -57,7 +56,6 @@
 </head>
 <body>
   <a class="skip-link" href="#main">{{ T "skipToContent" }}</a>
-  {{ partial "variant-switch.html" (dict "part" "bar" "always" true) }}
   <div class="page">
     <header class="site-header">
       {{ partial "nav.html" . }}

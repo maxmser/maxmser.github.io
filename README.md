@@ -25,11 +25,11 @@ Every baseline on every page sits on a grid of half lines (13.5 px). With `hugo 
 node tools/raster-check.mjs http://localhost:1313 /projects/layout-test/   # needs Node 22+ and Google Chrome; exit code 1 if anything is off the grid
 ```
 
-Run it after any change to font sizes, line heights or fonts. If it fails, measure again and adjust `--snap-small` and `--snap-display` in `assets/css/main.css` (see DECISIONS.md, "Grundlinienraster").
+Run it after any change to font sizes, line heights or fonts. If it fails, measure again and adjust the `--snap-*` values (`--snap-body`, `--snap-small`, `--snap-small-tight`, `--snap-display`, `--snap-text`) in `assets/css/main.css` (see DECISIONS.md, "Grundlinienraster").
 
 ## Change the fonts
 
-Two fonts: Inter for titles, navigation and labels, Crimson Pro for introductions and running text. Edit `data/font.toml` (characters, features, weights; the table `[serif]` is Crimson Pro), then run `python3 tools/build-fonts.py` (needs fontTools and brotli). The same settings always give the same files.
+Two fonts: Geist for titles, navigation and labels, Crimson Pro for introductions and running text. Edit `data/font.toml` (characters, features, weights; the table `[serif]` is Crimson Pro), then run `python3 tools/build-fonts.py` (needs fontTools and brotli). The same settings always give the same files.
 
 ## Add a project
 
@@ -55,7 +55,8 @@ Every push to `main` builds and deploys the site to GitHub Pages via GitHub Acti
 - `data/font.toml`: characters and OpenType features of the web fonts. The build stops if a page uses a character its font lacks
 - `tools/build-fonts.py`: builds `static/fonts/` from the full fonts in `tools/fonts-src/` with the settings in `data/font.toml`
 - `tools/raster-check.mjs`: checks in Chrome that every baseline sits on the grid
-- `static/fonts/inter/`: Inter Display, subset to English and German and weights 400 to 500, with its license
+- `static/fonts/geist/`: Geist 1.9.2, subset to English and German and weights 400 to 600, with its license
+- `static/fonts/inter/`: Inter, no longer used since 2026-11-07; kept for one release so pages still open from before can load it, then delete
 - `static/fonts/crimson/`: Crimson Pro, subset the same way, with its license
 - `i18n/`: interface strings, prepared for a later German version
 - `design/`: the static design draft of 2026-11-06 and the font specimen (`python3 design/schriftmuster/build.py`), not published

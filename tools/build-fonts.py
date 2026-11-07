@@ -2,14 +2,15 @@
 """Builds the web fonts in static/fonts/ from the full fonts in tools/fonts-src/.
 
 Settings (characters, features, weight range) come from data/font.toml:
-the top level for Inter, the table [serif] for Crimson Pro.
-Steps per file: limit the weight axis (and fix Inter's optical size), keep only the
+the top level for Geist, the table [serif] for Crimson Pro.
+Steps per file: limit the weight axis (and fix an optical size if set), keep only the
 characters and features from the settings, write WOFF2 with Brotli at its highest
 quality (the fontTools default) and the optional hmtx transform.
 
 Sources:
-- Inter: built from the Inter source code, commit 353b61b
-  (see DECISIONS.md, "Schrift: Inter mit a mit Schweif").
+- Geist 1.9.2 from github.com/vercel/geist-font (release of 2026-11-06), SIL Open
+  Font License without reserved font name (see DECISIONS.md, "Geist als Schrift").
+  Until 2026-11-07 Inter, built from the Inter source code, commit 353b61b.
 - Crimson Pro 1.003 from google/fonts, commit 5c70a79 (see DECISIONS.md, "Lauftext in Crimson Pro").
 
 Usage: python3 tools/build-fonts.py   (needs fontTools and brotli)
@@ -108,8 +109,8 @@ def main():
     cfg = tomllib.loads((ROOT / "data" / "font.toml").read_text())
     serif = cfg.pop("serif")
     jobs = [
-        (SRC / "InterVariable.woff2", OUT / "inter" / "InterVariable.woff2", cfg),
-        (SRC / "InterVariable-Italic.woff2", OUT / "inter" / "InterVariable-Italic.woff2", cfg),
+        (SRC / "geist" / "GeistVariable.woff2", OUT / "geist" / "Geist.woff2", cfg),
+        (SRC / "geist" / "GeistVariable-Italic.woff2", OUT / "geist" / "Geist-Italic.woff2", cfg),
         (SRC / "crimson" / "CrimsonPro.woff2", OUT / "crimson" / "CrimsonPro.woff2", serif),
         (SRC / "crimson" / "CrimsonPro-Italic.woff2", OUT / "crimson" / "CrimsonPro-Italic.woff2", serif),
     ]

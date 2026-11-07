@@ -1,6 +1,7 @@
-# Character set and OpenType features of the web font.
+# Character set and OpenType features of the web fonts.
+# Top level: Geist, the sans-serif (since 2026-11-07, before that Inter). Table [serif]: Crimson Pro.
 # Single source for two places, so they never drift apart:
-# - tools/build-fonts.py builds static/fonts/inter/ from tools/fonts-src/ with these settings.
+# - tools/build-fonts.py builds static/fonts/geist/ and static/fonts/crimson/ from tools/fonts-src/ with these settings.
 # - layouts/_partials/font-check.html stops the build if a page uses a character outside this set.
 # After a change here: run `python3 tools/build-fonts.py`. See DECISIONS.md, "Schrift gekürzt".
 
@@ -12,7 +13,7 @@ unicodes = [
   "00B0", "00B7", "00D7", # degree, middle dot, multiplication sign
   "00C4", "00D6", "00DC", "00DF", "00E4", "00F6", "00FC", # German umlauts and sharp s
   "00E9",                 # e acute (café, résumé)
-  "2011", "2013", "2014", # non-breaking hyphen, en dash, em dash
+  "2013", "2014",         # en dash, em dash (Geist has no non-breaking hyphen U+2011)
   "2018", "2019", "201A", "201C", "201D", "201E", # English and German quotation marks
   "2022", "2026",         # bullet, ellipsis
   "2032", "2033",         # prime, double prime
@@ -23,15 +24,12 @@ unicodes = [
 
 # OpenType features kept in addition to the default set of fontTools
 # (kerning, ligatures, contextual alternates, marks, fractions and similar).
-features = ["cv16", "cv05", "cv10", "cv07", "zero", "tnum"]
+# ss09: slashed zero and footed one (Geist's only set for figures; replaces Inter's "zero").
+features = ["tnum", "ss09"]
 
 # Weight range kept from the variable font.
 weight_min = 400
 weight_max = 600
-
-# Optical size, fixed: 32 is Inter Display, used for all text since 2026-11-06.
-# Fixing it removes the axis from the file. Delete this line to keep the axis.
-optical_size = 32
 
 # Text font for introductions and running text (.intro-text, .prose), since 2026-11-06.
 # Crimson Pro 1.003 from google/fonts (commit 5c70a79), SIL Open Font License.

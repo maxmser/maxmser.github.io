@@ -4,13 +4,13 @@
   The allowed characters come from data/font.toml, the same lists that
   tools/build-fonts.py uses to build the fonts:
   - running text (.Content) and the summary are set in Crimson Pro (list [serif]),
-    the summary also appears in Inter in project lists; the Crimson list is the
+    the summary also appears in Geist in project lists; the Crimson list is the
     stricter one, so it covers both;
-  - titles, status, stack and other names are set in Inter (top-level list).
+  - titles, status, stack and other names are set in Geist (top-level list).
   To allow a character, add it there and rebuild the fonts.
 */ -}}
 {{- $classes := dict }}
-{{- range $name, $list := dict "Inter" hugo.Data.font.unicodes "Crimson Pro" hugo.Data.font.serif.unicodes }}
+{{- range $name, $list := dict "Geist" hugo.Data.font.unicodes "Crimson Pro" hugo.Data.font.serif.unicodes }}
   {{- $class := "" }}
   {{- range $list }}
     {{- $parts := split . "-" }}
@@ -19,10 +19,10 @@
   {{- end }}
   {{- $classes = merge $classes (dict $name $class) }}
 {{- end }}
-{{- $inter := slice site.Title .Title (.Params.status | default "") (delimit (.Params.stack | default slice) " ") }}
-{{- range .Params.more_projects }}{{ $inter = $inter | append .name }}{{ end }}
+{{- $sans := slice site.Title .Title (.Params.status | default "") (delimit (.Params.stack | default slice) " ") }}
+{{- range .Params.more_projects }}{{ $sans = $sans | append .name }}{{ end }}
 {{- $serif := slice (.Params.summary | default "") (.Content | plainify | htmlUnescape) }}
-{{- range $name, $texts := dict "Inter" $inter "Crimson Pro" $serif }}
+{{- range $name, $texts := dict "Geist" $sans "Crimson Pro" $serif }}
   {{- with findRE (printf `[^%s\s]` (index $classes $name)) (delimit $texts " ") | uniq }}
     {{- errorf "%s: characters not in the web font %s: %s (see data/font.toml and tools/build-fonts.py)" $.Path $name (delimit . " ") }}
   {{- end }}

@@ -18,40 +18,40 @@
 /* ---------- Fonts ---------- */
 
 /*
-  Inter (variable font), self-hosted, SIL Open Font License 1.1.
-  Built from the Inter source code (version 4.2 in development, commit 353b61b),
-  because only that version contains cv16, the lower-case a with tail.
-  Subset to English and German characters, the weights 400 to 600 and the
-  features in use (data/font.toml, built by tools/build-fonts.py).
-  Files and license: static/fonts/inter/. See DECISIONS.md.
+  Geist (variable font) for everything that structures the page, since
+  2026-11-07 (before that Inter). Version 1.9.2 from github.com/vercel/geist-font,
+  SIL Open Font License 1.1 without reserved font name. Subset to English and
+  German characters, the weights 400 to 600 and the features in use
+  (data/font.toml, built by tools/build-fonts.py). Files and license:
+  static/fonts/geist/. See DECISIONS.md, "Geist als Schrift".
 
   The upright face below is rewritten by baseof.html: on a first visit the page
-  carries the font inline as base64, so text appears in Inter at once. The lean
+  carries the font inline as base64, so text appears in Geist at once. The lean
   pages the service worker serves keep this URL. Keep the src line exactly as it
   is, the template looks for it.
 */
 @font-face {
-  font-family: "InterVariable";
+  font-family: "Geist";
   font-style: normal;
   font-weight: 400 600;
   font-display: swap;
-  src: url("/fonts/inter/InterVariable.woff2") format("woff2");
+  src: url("/fonts/geist/Geist.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "InterVariable";
+  font-family: "Geist";
   font-style: italic;
   font-weight: 400 600;
   font-display: swap;
-  src: url("/fonts/inter/InterVariable-Italic.woff2") format("woff2");
+  src: url("/fonts/geist/Geist-Italic.woff2") format("woff2");
 }
 
 /*
   Crimson Pro (variable font) for introductions and running text, since
   2026-11-06, weights 340 to 500 since 2026-11-07 (see --weight-text). Version 1.003 from google/fonts, SIL Open Font License 1.1.
-  Subset like Inter (data/font.toml, table [serif]), files and license in
+  Subset like Geist (data/font.toml, table [serif]), files and license in
   static/fonts/crimson/. See DECISIONS.md, "Lauftext in Crimson Pro".
-  The upright face is rewritten by baseof.html like Inter's: keep its src line
+  The upright face is rewritten by baseof.html like Geist's: keep its src line
   exactly as it is.
 */
 @font-face {
@@ -71,48 +71,49 @@
 }
 
 /*
-  Fallback faces with Inter's proportions, so the layout does not jump when
-  Inter replaces them. Arial and Helvetica have the same widths, so one set of
-  values fits macOS, iOS and Windows. Values measured on 2026-11-06 against
-  Inter Display, one face per weight (400, 500 and 600), see DECISIONS.md,
-  "Ersatzschrift". Letter-spacing applies to both fonts alike and is not part
-  of these values.
+  Fallback faces with Geist's proportions, so the layout does not jump when
+  Geist replaces them. Arial and Helvetica have the same widths, so one set of
+  values fits macOS, iOS and Windows. One face per weight (400, 500, 600),
+  measured on 2026-11-07: the method of the Inter fallback (English letter
+  frequency, see DECISIONS.md, "Ersatzschrift") left Arial 3.3 % too wide,
+  because Geist's kerning tightens text more than Arial's; these values are
+  calibrated on rendered text (DECISIONS.md, "Geist als Schrift").
   Android has neither font and falls back to the unadjusted system font.
 */
 @font-face {
-  font-family: "InterFallback";
+  font-family: "GeistFallback";
   font-weight: 400;
   src: local("Arial"), local("ArialMT"), local("Helvetica");
-  size-adjust: 98.05%;
-  ascent-override: 98.80%;
-  descent-override: 24.60%;
+  size-adjust: 102.53%;
+  ascent-override: 98.02%;
+  descent-override: 28.77%;
   line-gap-override: 0%;
 }
 
 @font-face {
-  font-family: "InterFallback";
+  font-family: "GeistFallback";
   font-weight: 500;
   src: local("Arial"), local("ArialMT"), local("Helvetica");
-  size-adjust: 100.16%;
-  ascent-override: 96.72%;
-  descent-override: 24.08%;
+  size-adjust: 104.83%;
+  ascent-override: 95.87%;
+  descent-override: 28.14%;
   line-gap-override: 0%;
 }
 
 @font-face {
-  font-family: "InterFallback";
+  font-family: "GeistFallback";
   font-weight: 600;
   src: local("Arial"), local("ArialMT"), local("Helvetica");
-  size-adjust: 102.28%;
-  ascent-override: 94.72%;
-  descent-override: 23.58%;
+  size-adjust: 107.13%;
+  ascent-override: 93.81%;
+  descent-override: 27.54%;
   line-gap-override: 0%;
 }
 
 /*
   Fallback for Crimson Pro: Georgia (macOS, iOS, Windows) with Crimson's
   average width and vertical metrics, measured on 2026-11-06 with the same
-  method as InterFallback (English letter frequency, weight 400). The vertical
+  method as the former Inter fallback (English letter frequency, weight 400). The vertical
   metrics matter most here: they keep the baselines on the grid while the font
   loads. One face for both weights; italic is synthesised until Crimson arrives.
 */
@@ -129,19 +130,17 @@
 /* ---------- Variables ---------- */
 
 :root {
-  /* Fonts: Inter first, system stack as fallback. */
-  --font-body: "InterVariable", "InterFallback", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "InterVariable", "InterFallback", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Fonts: Geist first, system stack as fallback. */
+  --font-body: "Geist", "GeistFallback", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Geist", "GeistFallback", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-text: "CrimsonPro", "CrimsonFallback", Georgia, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* All text is Inter Display (optical size 32, fixed in the font file,
-     decision of 2026-11-06). Display is spaced for large sizes, so small
-     text gets extra letter-spacing. The values are the measured difference
-     in side bearings between Display and the optical size Inter itself would
-     use at that size (see DECISIONS.md, "Laufweite"). */
-  --tracking-0: 0.02em;    /* 18 px */
-  --tracking--1: 0.024em;  /* 14.6 px */
+  /* Letter-spacing of the sans-serif. Geist needs none at 14.6 and 18 px: its
+     side bearings match Inter's text cut (measured, DECISIONS.md, "Geist als
+     Schrift"). Inter Display needed +0.02em and +0.024em. Kept as knobs. */
+  --tracking-0: 0em;       /* 18 px */
+  --tracking--1: 0em;      /* 14.6 px */
 
   /* Base: 18 px text on 27 px lines. 1rem = 18 px from here on. */
   --root-size: 1.125rem;
@@ -151,36 +150,42 @@
      title. The display size grows with the grid (see media queries) and follows
      the classic scale 36, 60, 72 px. Every line height is a multiple of a
      quarter line (0.25rlh = 6.75 px), the baseline grid. */
-  --step--1: 0.8125rem;   /* 14.6 px, Inter */
-  --step-0: 1rem;         /* 18 px, Inter */
+  --step--1: 0.8125rem;   /* 14.6 px, Geist */
+  --step-0: 1rem;         /* 18 px, Geist */
   --step-text: 1.16667rem; /* 21 px, Crimson Pro on 27 px lines (129 %) */
   --step-standfirst: 1.33333rem; /* 24 px, Crimson Pro, the summary below the title */
   --leading-small: 0.75rlh;   /* 20.25 px: small text, 138 % */
   --display-size: 2rem;       /* 36 px on phones */
   --display-leading: 1.5rlh;  /* 40.5 px */
-  --display-tracking: -0.02em;
+  --display-tracking: -0.045em; /* Geist runs about 6 % wider than Inter: titles keep Inter's line breaks */
 
   /* Baseline snap: every baseline sits at the same height in the 13.5 px grid,
-     whatever its font and size. Crimson 21 px and Inter 18 px land there by
-     themselves; the other styles are moved by these amounts (position: relative,
-     so nothing else moves). Measured values, checked by tools/raster-check.mjs.
-     In rlh, not px, so they grow with the reader's text size setting.
+     whatever its font and size. Crimson 21 px lands there by itself; the other
+     styles are moved by these amounts (position: relative, so nothing else
+     moves). Measured values, checked by tools/raster-check.mjs.
+     The Geist values mix rlh and px: Chrome rounds ascent and descent to whole
+     pixels, and with rlh alone Geist drifted up to 2 px off the grid at larger
+     text sizes. With these values it stays within a quarter pixel at 100 and
+     200 % and within a pixel in between (DECISIONS.md, "Geist als Schrift").
      Change a font size and these must be measured again. */
   --baseline-grid: 0.5rlh;    /* 13.5 px; tools/raster-check.mjs reads it */
-  --snap-small: 0.0741rlh;    /* 2 px: Inter 14.6 px on 27 px lines */
+  --snap-body: calc(2rlh / 27 - 2px);         /* 0 px at 100 %: Geist 18 px (section names, h3, lists) */
+  --snap-small: calc(3.25rlh / 27 - 2.25px);  /* 1 px at 100 %: Geist 14.6 px on 27 px lines */
   --rule-offset: calc(6.5rlh / 27); /* rules: 6.5 px below the box top = on a baseline grid line */
-  --snap-small-tight: 0.1852rlh; /* 5 px: Inter 14.6 px on 20.25 px lines */
+  --snap-small-tight: calc(5.75rlh / 27 - 0.75px); /* 5 px at 100 %: Geist 14.6 px on 20.25 px lines */
   --snap-standfirst: -2px;    /* Crimson 24 px; px, not rlh: measured, see DECISIONS.md */
   --snap-mono: 0.03704rlh;      /* 1 px: code blocks, SF Mono at 0.75em (other systems' monospace fonts may differ) */
   --snap-text: 0px;           /* Crimson 21 px lands on the grid by itself; 22 px from 80em needs a snap */
   --cap-height: calc(12rlh / 27); /* Crimson's capitals above the baseline: 0.573 em, 12 px at 21 px; figures hang from it */
-  --snap-display: 0.0185rlh;  /* 0.5 px: page title, 36 px */
+  --snap-display: calc(0.5rlh / 27 + 1px);  /* 1.5 px at 100 %: page title, 36 px */
 
-  /* Three weights: 600 only for section names and subheadings (Inter);
+  /* Three weights: 600 only for section names and subheadings (Geist);
      Crimson Pro stops at 500. Running text and standfirst in Crimson are
-     lighter: 340 on sharp screens (2x and more), 370 on others, where thin
-     serifs fade (see the media query below and DECISIONS.md, "Crimson leichter"). */
-  --weight-text: 340;
+     lighter: 360 on sharp screens (2x and more), 370 on others, where thin
+     serifs fade (see the media query below and DECISIONS.md, "Crimson leichter"
+     and "Geist als Schrift": Crimson 360 at 22 px has the stem width and grey
+     value of Geist 400 at 18 px). */
+  --weight-text: 360;
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
@@ -214,7 +219,7 @@
     --cols: 8;
     --display-size: 3.33333rem; /* 60 px */
     --display-leading: 2.5rlh;  /* 67.5 px */
-    --snap-display: 0.2037rlh;  /* 5.5 px */
+    --snap-display: calc(5.25rlh / 27 + 1.25px); /* 6.5 px at 100 % */
   }
 }
 
@@ -223,8 +228,8 @@
     --cols: 12;
     --display-size: 4rem;     /* 72 px */
     --display-leading: 3rlh;  /* 81 px */
-    --snap-display: -0.2407rlh; /* -6.5 px */
-    --display-tracking: -0.025em;
+    --snap-display: calc(-3.5rlh / 27 - 2px); /* -5.5 px at 100 % */
+    --display-tracking: -0.05em;
   }
 }
 
@@ -243,7 +248,7 @@
 @media (min-width: 80em) {
   :root {
     --step-text: 1.22222rem;   /* 22 px, Crimson Pro on 27 px lines (123 %) */
-    --snap-text: -0.03704rlh;  /* -1 px, measured; code blocks (16.5 px) keep --snap-mono */
+    --snap-text: -1px;  /* measured; px, not rlh: on the grid at 100 to 200 % text size (rlh was 1 to 2 px off at 200 %); code blocks (16.5 px) keep --snap-mono */
     --cap-height: calc(12.61rlh / 27); /* 0.5732 em at 22 px */
   }
 }
@@ -261,12 +266,10 @@ html {
   font-size: var(--root-size);
   line-height: var(--root-leading);
   font-weight: var(--weight-regular);
-  /* Variants chosen on 2026-11-06, see design/schriftmuster/:
-     cv16 lower-case a with tail (upright only; the italic has no such variant),
-     cv05 lower-case l with tail, cv10 capital G with spur,
-     cv07 alternate sharp s, zero slashed zero.
-     cv07 and zero replace ss02 since 2026-11-06: ss02 also gave the capital I serifs (cv08), which is not wanted. */
-  font-feature-settings: "cv16", "cv05", "cv10", "cv07", "zero";
+  /* Geist ss09: slashed zero and footed one (as the slashed zero chosen for
+     Inter on 2026-11-06). Geist's a and l have their tails by default.
+     Crimson's subset has no ss09; code blocks reset it. */
+  font-feature-settings: "ss09";
   color: var(--ink);
   background: var(--paper);
   -webkit-text-size-adjust: 100%;
@@ -405,8 +408,8 @@ a:hover {
 }
 
 /* Introductions and running text are set in Crimson Pro, everything that
-   structures the page in Inter (see DECISIONS.md, "Lauftext in Crimson Pro").
-   Crimson has its own spacing, so Inter's extra tracking does not apply. */
+   structures the page in Geist (see DECISIONS.md, "Lauftext in Crimson Pro").
+   Crimson has its own spacing; no letter-spacing. */
 .intro-text,
 .prose {
   font-family: var(--font-text);
@@ -415,12 +418,18 @@ a:hover {
   letter-spacing: 0;
 }
 
-/* Inter and the monospace font inside running text keep their regular weight
+/* Geist and the monospace font inside running text keep their regular weight
    (a system monospace would otherwise switch to its light cut). */
 .prose code,
 .prose pre,
 .prose figcaption {
   font-weight: var(--weight-regular);
+}
+
+/* Geist's ss09 (set on html) is not meant for the system monospace font. */
+.prose code,
+.prose pre {
+  font-feature-settings: normal;
 }
 
 /* Running text blocks moved onto the baseline grid where Crimson's size needs it
@@ -710,7 +719,7 @@ a:hover {
   height: auto;
 }
 
-/* Smaller heading inside a section: Inter like the other structure, closer to
+/* Smaller heading inside a section: Geist like the other structure, closer to
    the text after it than to the text before it. */
 .prose h3 {
   font-family: var(--font-body);
@@ -797,7 +806,21 @@ sub {
 
 /* ---------- Baseline snap ---------- */
 
-/* Inter 14.6 px elements, moved onto the baseline grid (see --snap-small). In the
+/* Geist 18 px: section names, subheadings and list rows (see --snap-body). The
+   rule between list rows is drawn on the row itself, so it moves back by the
+   same amount and stays on its grid line. */
+.block-label,
+.prose h3,
+.list li {
+  position: relative;
+  top: var(--snap-body);
+}
+
+.list li:not(:first-child) {
+  background-position: 0 calc(var(--rule-offset) - var(--snap-body));
+}
+
+/* Geist 14.6 px elements, moved onto the baseline grid (see --snap-small). In the
    footer only the link moves, so the footer's rule stays where --rule-offset puts it. */
 .site-header,
 .site-footer a {
@@ -805,7 +828,7 @@ sub {
   top: var(--snap-small);
 }
 
-/* Inter 14.6 px on 20.25 px lines. */
+/* Geist 14.6 px on 20.25 px lines. */
 .project-meta,
 .figure figcaption {
   position: relative;

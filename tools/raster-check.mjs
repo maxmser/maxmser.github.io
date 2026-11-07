@@ -8,9 +8,9 @@
 //    The reference is the first paragraph
 //    of running text. Fails if any baseline is off by more than the tolerance:
 //    0.25 px at the normal text size. With the text size at 200 % the tolerance is
-//    1 px: browsers round font metrics to whole pixels, and Inter 18 px and
-//    Crimson Pro 21 px differ by 0.6 px before rounding (1.2 px at double size).
-//    At normal size both round to the same pixel.
+//    1 px: browsers round font metrics to whole pixels, so at enlarged text sizes
+//    each font lands a fraction of a pixel differently (the Geist snaps in main.css
+//    mix rlh and px to keep this small). At normal size all land on the same pixel.
 //    Small text on lines that are not a multiple of the grid (captions and project
 //    meta on 20.25 px lines): only the first baseline of such a block must be on the
 //    grid; its following lines lie in between on purpose (see main.css).
@@ -37,7 +37,7 @@ import { join } from 'node:path';
 const BASE = (process.argv[2] || 'http://localhost:1313').replace(/\/$/, '');
 const EXTRA = process.argv.slice(3);
 // Widths, plus the widest one with the browser's text size at 200 % (default font 32 px).
-const VIEWS = [{ width: 320 }, { width: 375 }, { width: 768 }, { width: 1440 }, { width: 1440, font: 32, tolerance: 1 }];
+const VIEWS = [{ width: 320 }, { width: 375 }, { width: 768 }, { width: 1440 }, { width: 1440, font: 24, tolerance: 1 }, { width: 1440, font: 32, tolerance: 1 }, { width: 2600, font: 32, tolerance: 1 }];
 const MAX_PAGES = 40;
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT = 9400 + Math.floor(Math.random() * 400);
