@@ -475,6 +475,10 @@ Stand 07.11.2026. In zwei Seitentiteln stand das letzte Wort allein in der letzt
 
 Stand 07.11.2026. Die Seite wird höchstens 96rem breit, das sind 1728 Pixel. Der Seitenrand wuchs mit fünf Prozent der Bildschirmbreite aber weiter bis 108 Pixel, und weil er in der Seitenbreite enthalten ist, wurde die Textspalte auf großen Bildschirmen schmaler: 632 Pixel bei 1728, 624 bei 1920 und 614 bei 2560 Pixel. Der Rand hört jetzt bei fünf Prozent der größten Seitenbreite auf zu wachsen, bei 86,4 Pixel. Bis 1728 Pixel ändert sich nichts, darüber bleibt die Textspalte bei 632 Pixel (gemessen bei 1728, 1800, 1920, 2160 und 2560 Pixel). Max hat am 07.11.2026 zugestimmt.
 
+## Bildunterschriften höchstens etwa 60 Zeichen
+
+Stand 07.11.2026. Bildunterschriften breiter Bilder sind vier Spalten breit, ab 92em vier von fünf. Auf großen Bildschirmen ab etwa 1700 Pixel ergab das 500 Pixel und 74 Zeichen pro Zeile, geplant waren etwa 60. Ab 92em sind sie jetzt zusätzlich auf 23,5rem begrenzt, das sind 423 Pixel. Gemessen haben sie jetzt auf allen Breiten höchstens 60 Zeichen pro Zeile, bis 1512 Pixel ändert sich nichts. Ihr rechter Rand endet auf großen Bildschirmen nicht mehr genau an einer Spaltenkante, was im Flattersatz kaum auffällt. Max hat am 07.11.2026 zugestimmt.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

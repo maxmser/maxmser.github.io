@@ -886,12 +886,14 @@ sub {
   .intro-lead,
   .prose.block-body { grid-column: 4 / 9; }
 
-  /* Figures stay on the columns: 3 of the 5 text columns, captions 4 of 5. */
+  /* Figures stay on the columns: 3 of the 5 text columns, captions 4 of 5,
+     but no wider than 23.5rem (423 px). */
   .figure-portrait {
     width: calc((100% + var(--gutter)) * 3 / 5 - var(--gutter));
   }
+  /* At most about 60 characters: from about 1700 px the 4 columns gave 74. */
   .figure:not(.figure-portrait) figcaption {
-    max-width: calc((100% + var(--gutter)) * 4 / 5 - var(--gutter));
+    max-width: min(calc((100% + var(--gutter)) * 4 / 5 - var(--gutter)), 23.5rem);
   }
 }
 
