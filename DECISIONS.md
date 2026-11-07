@@ -558,3 +558,5 @@ Bilder breiter als der Text: Max möchte Bildern später erlauben, über mehr Sp
 Inter-Dateien löschen: `static/fonts/inter/` wird seit der Umstellung auf Geist am 07.11.2026 nicht mehr verwendet und bleibt nur für eine Veröffentlichung liegen. Danach löschen.
 
 Große Schrift auf dem Handy: Bei 200 Prozent Textgröße liegt auf der Startseite und der Projektliste alles unter der Projektliste rund 7,5 Pixel neben dem Raster, bei 175 Prozent liegen Codeblöcke 1,25 Pixel daneben. Beides gab es schon mit Inter. Ursache nicht untersucht.
+
+Laufweite der fetten Überschriften: Abschnittsnamen und Zwischenüberschriften (Geist 18 Pixel, Stärke 600) stehen mit Laufweite 0. Vercel setzt Geist in Stärke 600 bei 14 bis 20 Pixel mit -0,02em (Stylesheet von vercel.com/geist/typography, geprüft am 07.11.2026). Max hat Vergleichsbilder mit 0, -0,01em und -0,02em gesehen und am 07.11.2026 entschieden, vorläufig bei 0 zu bleiben. Alle anderen Laufweiten entsprechen Vercels Vorgaben oder sind, bei Crimson, 0.
