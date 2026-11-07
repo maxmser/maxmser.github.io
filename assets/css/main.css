@@ -376,6 +376,11 @@ a:hover {
   font-size: var(--display-size);
   line-height: var(--display-leading);
   letter-spacing: var(--display-tracking);
+  /* Words spread evenly over the lines, so no single word ends a title
+     ("them." on the home page at 320 px, "parents" at most widths). The number
+     of lines stays the same (measured), so the grid is not affected.
+     Chrome 114, Firefox 121, Safari 17.5 (MDN); older browsers wrap as before. */
+  text-wrap: balance;
 }
 
 .intro-text {

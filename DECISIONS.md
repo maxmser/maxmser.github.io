@@ -467,6 +467,10 @@ Bei der Prüfung aufgefallen und älter als diese Änderung: Bei doppelter Textg
 
 Weitere Funde der Gutachten, noch einzeln zu besprechen: Auf 320 Pixel steht im Seitentitel der Startseite "them." allein in der letzten Zeile. Über 1728 Pixel wird die Textspalte wieder schmaler, weil die größte Seitenbreite den wachsenden Rand einschließt. Der Kommentar zu `--measure` behauptet, die Zeilen überschritten nie etwa 72 Zeichen und die Grenze greife im Raster nicht; beides stimmt nicht, zwischen 1000 und 1023 Pixel begrenzt sie die Spalte. Der Abschnitt "Grundlinienraster" nennt für Handys noch 48 Pixel Titelgröße, es sind 36. Bildunterschriften werden ab 92em bis 74 Zeichen lang statt der geplanten etwa 60.
 
+## Seitentitel ausgeglichen umbrochen
+
+Stand 07.11.2026. In zwei Seitentiteln stand das letzte Wort allein in der letzten Zeile: "them." im Titel der Startseite bei 320 Pixel und "parents" im Titel "Fire TV setup for my parents" bei 360 bis 1024 Pixel. Seitentitel haben jetzt `text-wrap: balance`, der Browser verteilt die Wörter gleichmäßig auf die Zeilen. Gemessen auf fünf Seiten und neun Breiten von 320 bis 1440 Pixel bleibt die Zahl der Zeilen überall gleich, und nur diese beiden Titel brechen anders um. Die Alternative `pretty` behob den Fire-TV-Titel auf den meisten Breiten nicht. Laut MDN gibt es `balance` in Chrome ab 114, Firefox ab 121 und Safari ab 17.5. Max hat am 07.11.2026 zugestimmt.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
