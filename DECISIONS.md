@@ -527,6 +527,10 @@ Technisch: Der Zeilenabstand steht als Faktor knapp über dem genauen Wert (1,58
 
 Geprüft: Das Rasterskript ist in allen sieben Ansichten grün, zusätzlich bei zehn Breiten von 639 bis 2560 Pixel. Jede einzelne Zeile auf Testseite, Startseite und Projektliste liegt auf dem Raster, ausgenommen die zweiten Zeilen der kleinen Schrift mit 138 Prozent, wie beabsichtigt. Bildkanten sitzen auf 0,08 Pixel genau. Bei 125 Prozent Textgröße steht der große Seitentitel auf Seiten ohne Fließtext 1,17 Pixel daneben, knapp über der Toleranz von einem Pixel. Bei 200 Prozent auf dem Handy bleibt der ältere Fehler unter der Projektliste.
 
+## Wortabstand in Crimson
+
+Stand 07.11.2026. Bei einer optischen Prüfung von Crimson Pro im Satz waren Ligaturen, Mediävalziffern, typografische Satzzeichen, Kursive und Fett in Ordnung, ebenso die Laufweite: In den leichteren Stärken gibt Crimson selbst etwas mehr Abstand zwischen den Buchstaben (gemessen 0,053 der Schriftgröße bei 360 gegen 0,050 bei 400), zusätzliche Laufweite machte den Text nur körnig. Das Leerzeichen von Crimson ist aber mit 0,188 der Schriftgröße schmal, bei 22 Pixel 4,1 Pixel; bei Textschriften sind etwa 0,22 bis 0,25 üblich. Mit der leichteren Stärke 360 und dem größeren Zeilenabstand wirkten die Wörter dadurch gedrängt. Fließtext und Kurzbeschreibung haben jetzt 0,025em mehr Wortabstand, zusammen 0,213 der Schriftgröße. Max hat Vergleichsbilder mit +0,025em und +0,04em gesehen und am 07.11.2026 zugestimmt. Zwischenüberschriften, Code und Bildunterschriften innerhalb des Fließtexts behalten ihren normalen Wortabstand. Am Raster ändert der Wortabstand nichts.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

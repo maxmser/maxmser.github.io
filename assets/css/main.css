@@ -427,13 +427,21 @@ a:hover {
 
 /* Introductions and running text are set in Crimson Pro, everything that
    structures the page in Geist (see DECISIONS.md, "Lauftext in Crimson Pro").
-   Crimson has its own spacing; no letter-spacing. */
+   Crimson has its own letter spacing (no letter-spacing). Its word space is
+   narrow, 0.188 em, so words get 0.025 em more (0.213 em, as in common text
+   faces 0.22 to 0.25); see DECISIONS.md, "Wortabstand in Crimson". */
 .intro-text,
 .prose {
   font-family: var(--font-text);
   font-size: var(--step-text);
   font-weight: var(--weight-text);
   letter-spacing: 0;
+  word-spacing: 0.025em;
+}
+
+/* Geist and code inside running text keep their own word spacing. */
+.prose :is(h3, code, pre, figcaption) {
+  word-spacing: normal;
 }
 
 /* Geist and the monospace font inside running text keep their regular weight
