@@ -1,0 +1,50 @@
+{{- /*
+  Test only: compare the sans-serif Inter with Geist, and the thinner text
+  rendering on macOS. Used by pages with "variants: true" in the front matter
+  (the layout test page). Switched in the address: ?f=geist for Geist,
+  ?s=thin for -webkit-font-smoothing: antialiased (macOS only, MDN), both
+  combinable. Nothing is stored; the script only reads the address.
+  Geist: version 1.9.2 from github.com/vercel/geist-font, SIL Open Font License
+  1.1 without reserved font name, subset to the site's characters and the
+  weights 400 to 600 (static/fonts/test-geist/). See DECISIONS.md, "Geist im Test".
+  Call with "head" for the style and script, "bar" for the switch.
+*/ -}}
+{{- if eq . "head" }}
+<script>
+{ const q = new URLSearchParams(location.search), c = document.documentElement.classList;
+  if (q.get("f") === "geist") c.add("v-geist");
+  if (q.get("s") === "thin") c.add("v-thin"); }
+</script>
+<style>
+@font-face { font-family: "GeistTest"; font-weight: 400 600; font-display: swap; src: url("/fonts/test-geist/Geist.woff2") format("woff2"); }
+html.v-geist {
+  --font-body: "GeistTest", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-body);
+  --tracking-0: 0em;   /* Inter Display needed extra spacing at small sizes; Geist is a text face */
+  --tracking--1: 0em;
+  /* Baseline snaps measured for Geist (Inter's values plus the measured offset). */
+  --snap-small: 0.03704rlh;  /* 1 px, Inter 2 px */
+  --snap-display: 0.0556rlh; /* 1.5 px, Inter 0.5 px */
+}
+@media (min-width: 40em) { html.v-geist { --snap-display: 0.2407rlh; } }  /* 6.5 px, Inter 5.5 px */
+@media (min-width: 64em) { html.v-geist { --snap-display: -0.2037rlh; } } /* -5.5 px, Inter -6.5 px */
+html.v-thin { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.variant-switch { position: fixed; z-index: 10; left: 50%; bottom: 0.5rlh; translate: -50% 0; display: flex; gap: 0.5rlh; padding: 0 0.5rlh; background: var(--paper); box-shadow: 0 0 0 1px var(--rule); font-family: system-ui, sans-serif; font-size: 14px; white-space: nowrap; }
+.variant-switch a { padding: 0 0.25rlh; }
+.variant-switch a[aria-current] { font-weight: 600; text-decoration: underline; text-underline-offset: 0.2em; }
+</style>
+{{- else }}
+<nav class="variant-switch" aria-label="Test version">
+  <a id="v-inter">Inter</a>
+  <a id="v-geist">Geist</a>
+  <a id="v-thin">Mac: thin</a>
+</nav>
+<script>{
+  const q = new URLSearchParams(location.search), f = q.get("f") === "geist", t = q.get("s") === "thin";
+  const url = (ff, tt) => "?" + [ff ? "f=geist" : "", tt ? "s=thin" : ""].filter(Boolean).join("&");
+  const set = (id, href, on) => { const a = document.getElementById(id); a.href = href || "?"; if (on) a.setAttribute("aria-current", "true"); };
+  set("v-inter", url(false, t), !f);
+  set("v-geist", url(true, t), f);
+  set("v-thin", url(f, !t), t);
+}</script>
+{{- end }}

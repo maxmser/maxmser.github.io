@@ -489,6 +489,12 @@ Stand 07.11.2026. Zwischen 40em und 64em hat die Seite acht Spalten, der Fließt
 
 Max möchte Bilder später noch einmal angehen und ihnen, wo Platz ist, auch mehr Spalten erlauben als dem Text.
 
+## Geist im Test
+
+Stand 07.11.2026. Max überlegt, statt Inter Geist als Schrift ohne Serifen zu verwenden. Die Testseite hat dafür wieder einen Schalter: `?f=geist` zeigt Geist statt Inter, `?s=thin` die dünnere Darstellung auf dem Mac, beides kombinierbar. Geist stammt aus der offiziellen Veröffentlichung 1.9.2 von github.com/vercel/geist-font vom 06.11.2026 und steht unter der SIL Open Font License 1.1 ohne reservierten Schriftnamen, darf also gekürzt werden. Gekürzt auf die Zeichen der Seite und die Stärken 400 bis 600 ist die Datei 15.392 Bytes groß, Inter 23.588 Bytes. Geist fehlt nur der geschützte Bindestrich U+2011. Die Grundlinien sind für Geist neu gemessen: Navigation und Fußzeile 1 Pixel, der Seitentitel auf allen drei Größen 1 Pixel anders als bei Inter. Bei normaler Textgröße liegt Geist damit auf allen geprüften Breiten auf dem Raster, bei doppelter Textgröße stehen Abschnittsnamen und Navigation 2 Pixel daneben. Die zusätzliche Laufweite für kleine Inter-Schrift entfällt bei Geist, weil sie nur die engere Display-Fassung von Inter ausglich.
+
+Die dünnere Darstellung ist `-webkit-font-smoothing: antialiased` mit `-moz-osx-font-smoothing: grayscale`. Laut MDN wirkt sie nur auf macOS, nicht auf dem iPhone und nicht unter Windows. Sie schaltet auf dem Mac die Verdickung der Schrift durch das System ab.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
