@@ -48,5 +48,5 @@ unicodes = [
   "2022", "2026", "2032", "2033", "20AC", "2122", "2212",
 ]
 features = ["tnum", "onum", "lnum"]  # oldstyle figures in running text, lining on request
-weight_min = 400
+weight_min = 340
 weight_max = 500

@@ -48,7 +48,7 @@
 
 /*
   Crimson Pro (variable font) for introductions and running text, since
-  2026-11-06. Version 1.003 from google/fonts, SIL Open Font License 1.1.
+  2026-11-06, weights 340 to 500 since 2026-11-07 (see --weight-text). Version 1.003 from google/fonts, SIL Open Font License 1.1.
   Subset like Inter (data/font.toml, table [serif]), files and license in
   static/fonts/crimson/. See DECISIONS.md, "Lauftext in Crimson Pro".
   The upright face is rewritten by baseof.html like Inter's: keep its src line
@@ -57,7 +57,7 @@
 @font-face {
   font-family: "CrimsonPro";
   font-style: normal;
-  font-weight: 400 500;
+  font-weight: 340 500;
   font-display: swap;
   src: url("/fonts/crimson/CrimsonPro.woff2") format("woff2");
 }
@@ -65,7 +65,7 @@
 @font-face {
   font-family: "CrimsonPro";
   font-style: italic;
-  font-weight: 400 500;
+  font-weight: 340 500;
   font-display: swap;
   src: url("/fonts/crimson/CrimsonPro-Italic.woff2") format("woff2");
 }
@@ -118,7 +118,7 @@
 */
 @font-face {
   font-family: "CrimsonFallback";
-  font-weight: 400 500;
+  font-weight: 340 500;
   src: local("Georgia");
   size-adjust: 90.68%;
   ascent-override: 98.86%;
@@ -177,7 +177,10 @@
   --snap-display: 0.0185rlh;  /* 0.5 px: page title, 36 px */
 
   /* Three weights: 600 only for section names and subheadings (Inter);
-     Crimson Pro stops at 500. */
+     Crimson Pro stops at 500. Running text and standfirst in Crimson are
+     lighter: 340 on sharp screens (2x and more), 370 on others, where thin
+     serifs fade (see the media query below and DECISIONS.md, "Crimson leichter"). */
+  --weight-text: 340;
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
@@ -223,6 +226,13 @@
     --snap-display: -0.2407rlh; /* -6.5 px */
     --display-tracking: -0.025em;
   }
+}
+
+/* Screens below 2x (most external monitors, Windows at 100 to 150 % scaling):
+   Crimson a little heavier, thin serifs fade there. resolution: Chrome 29,
+   Firefox 8, Safari 16 (MDN). */
+@media (max-resolution: 1.99dppx) {
+  :root { --weight-text: 370; }
 }
 
 /* Laptops and desktops: running text one pixel larger. At 21 px the lines on the
@@ -401,7 +411,16 @@ a:hover {
 .prose {
   font-family: var(--font-text);
   font-size: var(--step-text);
+  font-weight: var(--weight-text);
   letter-spacing: 0;
+}
+
+/* Inter and the monospace font inside running text keep their regular weight
+   (a system monospace would otherwise switch to its light cut). */
+.prose code,
+.prose pre,
+.prose figcaption {
+  font-weight: var(--weight-regular);
 }
 
 /* Running text blocks moved onto the baseline grid where Crimson's size needs it

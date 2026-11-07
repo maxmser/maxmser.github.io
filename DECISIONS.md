@@ -495,7 +495,11 @@ Stand 07.11.2026. Max überlegt, statt Inter Geist als Schrift ohne Serifen zu v
 
 Die dünnere Darstellung ist `-webkit-font-smoothing: antialiased` mit `-moz-osx-font-smoothing: grayscale`. Laut MDN wirkt sie nur auf macOS, nicht auf dem iPhone und nicht unter Windows. Sie schaltet auf dem Mac die Verdickung der Schrift durch das System ab.
 
-Als dritte Möglichkeit kann der Schalter Crimson Pro dünner zeigen, in Stärke 370 oder 340 statt 400 (`?w=370`, `?w=340`), für Fließtext und Kurzbeschreibung. Crimson Pro ist eine variable Schrift mit Stärken von 200 bis 900. Für den Test gibt es eine eigene gekürzte Datei mit 300 bis 500 in `static/fonts/test-crimson-light/`, 28.128 Bytes statt 22.252 Bytes. Die veröffentlichte Schriftdatei bleibt unverändert. Die Stärke ändert die Lage der Grundlinien nicht, das Rasterskript ist auch mit 340 grün.
+Seit dem 07.11.2026 steht der Schalter auf jeder Seite, aber nur im HTML als Vorlage. Er erscheint erst, wenn die Adresse `?test`, `?f=geist` oder `?s=thin` enthält, andere Besucher sehen ihn nie. Links auf andere Seiten der Website nehmen die Parameter mit, gespeichert wird nichts, weder Cookie noch Speicher im Browser.
+
+## Crimson leichter
+
+Stand 07.11.2026. Max fand Crimson Pro in Stärke 340 statt 400 schöner, mit der Frage, ob das auf Bildschirmen ohne Retina und unter Windows gut aussieht. Auf einem nachgestellten Bildschirm ohne Retina (Chrome am Mac, 1x) wurden die feinen Serifen bei 340 deutlich blasser. Crimson Pro enthält kein Hinting für die einzelnen Buchstaben, nur die Tabellen `prep` und `gasp`; unter Windows dürfte 340 deshalb eher zu dünn wirken, geprüft ist das nicht. Fließtext und Kurzbeschreibung stehen jetzt auf Bildschirmen mit doppelter oder höherer Pixeldichte (iPhone, MacBook, 4K-Monitore) in Stärke 340, auf allen anderen in 370, über die Medienabfrage `max-resolution: 1.99dppx` (laut MDN Chrome ab 29, Firefox ab 8, Safari ab 16). Fett bleibt 500. Code und Bildunterschriften im Fließtext behalten Stärke 400, sonst würde die Monospace-Schrift des Systems in ihren dünnen Schnitt wechseln. Crimson Pro ist dafür jetzt von 340 bis 500 gekürzt, die gerade Datei wird 27.372 statt 22.252 Bytes groß, die kursive 28.600 statt 22.988. Die gerade Datei steht beim ersten Besuch im HTML, das wird damit um rund 6,8 Kilobyte in Base64 größer. Die Stärke ändert die Lage der Grundlinien nicht, das Rasterskript ist grün. Max hat am 07.11.2026 zugestimmt.
 
 ## Offene Punkte
 
