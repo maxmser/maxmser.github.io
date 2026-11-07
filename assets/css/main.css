@@ -144,7 +144,12 @@
 
   /* Base: 18 px text on 27 px lines. 1rem = 18 px from here on. */
   --root-size: 1.125rem;
-  --root-leading: 1.5;
+  /* 28.5 px; 30 px from 80em (media query), see DECISIONS.md, "Zeilenabstand".
+     Slightly above 28.5 / 18: Chrome rounds line heights down to 1/64 px, and
+     1.58333 gave 28.484 px, a difference that added up along the page. 1.583334
+     gives exactly 28.5 px, and exactly 35.625, 42.75, 49.875 and 57 px at 125 to
+     200 % text size. */
+  --root-leading: 1.583334;
 
   /* Type scale: small, base, running text and the display size of the page
      title. The display size grows with the grid (see media queries) and follows
@@ -152,11 +157,11 @@
      quarter line (0.25rlh = 6.75 px), the baseline grid. */
   --step--1: 0.8125rem;   /* 14.6 px, Geist */
   --step-0: 1rem;         /* 18 px, Geist */
-  --step-text: 1.16667rem; /* 21 px, Crimson Pro on 27 px lines (129 %) */
+  --step-text: 1.16667rem; /* 21 px, Crimson Pro on 28.5 px lines (136 %) */
   --step-standfirst: 1.33333rem; /* 24 px, Crimson Pro, the summary below the title */
-  --leading-small: 0.75rlh;   /* 20.25 px: small text, 138 % */
+  --leading-small: 1.38462em; /* 20.25 px at 14.6 px: small text, 138 % (Max's choice), whatever the grid */
   --display-size: 2rem;       /* 36 px on phones */
-  --display-leading: 1.5rlh;  /* 40.5 px */
+  --display-leading: 1.5rlh;  /* 42.75 px, 119 % (2.5 half lines would be tighter than the size) */
   --display-tracking: -0.045em; /* Geist runs about 6 % wider than Inter: titles keep Inter's line breaks */
 
   /* Baseline snap: every baseline sits at the same height in the 13.5 px grid,
@@ -169,15 +174,21 @@
      200 % and within a pixel in between (DECISIONS.md, "Geist als Schrift").
      Change a font size and these must be measured again. */
   --baseline-grid: 0.5rlh;    /* 13.5 px; tools/raster-check.mjs reads it */
-  --snap-body: calc(2rlh / 27 - 2px);         /* 0 px at 100 %: Geist 18 px (section names, h3, lists) */
-  --snap-small: calc(3.25rlh / 27 - 2.25px);  /* 1 px at 100 %: Geist 14.6 px on 27 px lines */
-  --rule-offset: calc(6.5rlh / 27); /* rules: 6.5 px below the box top = on a baseline grid line */
-  --snap-small-tight: calc(5.75rlh / 27 - 0.75px); /* 5 px at 100 %: Geist 14.6 px on 20.25 px lines */
-  --snap-standfirst: -2px;    /* Crimson 24 px; px, not rlh: measured, see DECISIONS.md */
-  --snap-mono: 0.03704rlh;      /* 1 px: code blocks, SF Mono at 0.75em (other systems' monospace fonts may differ) */
-  --snap-text: 0px;           /* Crimson 21 px lands on the grid by itself; 22 px from 80em needs a snap */
-  --cap-height: calc(12rlh / 27); /* Crimson's capitals above the baseline: 0.573 em, 12 px at 21 px; figures hang from it */
-  --snap-display: calc(0.5rlh / 27 + 1px);  /* 1.5 px at 100 %: page title, 36 px */
+  /* Measured on 2026-11-07 at 100, 125, 150, 175 and 200 % text size (the
+     factor of rlh follows the text size, the px part does not), exact to 0.12 px
+     at 100 % and within 1 px at the other sizes. Values at 100 % in the comments.
+     The baseline of the running text (Crimson) is the reference: it is not moved
+     (--snap-text stays 0), and the grid phase follows it. */
+  --phase: calc(0.2519rlh - 0.5px);       /* 6.68 px: baseline of running text below a grid line; rules and figures use it */
+  --rule-offset: var(--phase);            /* rules sit on the baseline grid lines */
+  --snap-text: 0px;
+  --snap-body: calc(0.0234rlh + 0.25px);  /* 0.92 px: Geist 18 px (section names, h3, lists) */
+  --snap-small: calc(0.0752rlh - 0.25px); /* 1.89 px: Geist 14.6 px on full lines (navigation, footer) */
+  --snap-small-tight: calc(0.2155rlh - 0.25px); /* 5.89 px: Geist 14.6 px on 20.25 px lines (captions, status) */
+  --snap-standfirst: calc(-0.0482rlh + 0.25px); /* -1.12 px: Crimson 24 px */
+  --snap-mono: calc(0.0501rlh + 0.5px);   /* 1.93 px: code blocks, SF Mono at 0.75em */
+  --snap-display: calc(0.0138rlh + 1.75px); /* 2.14 px: page title, 36 px */
+  --cap-height: 0.5732em; /* Crimson's capitals above the baseline (font file), at the size of the running text; figures hang from it */
 
   /* Three weights: 600 only for section names and subheadings (Geist);
      Crimson Pro stops at 500. Running text and standfirst in Crimson are
@@ -218,8 +229,8 @@
   :root {
     --cols: 8;
     --display-size: 3.33333rem; /* 60 px */
-    --display-leading: 2.5rlh;  /* 67.5 px */
-    --snap-display: calc(5.25rlh / 27 + 1.25px); /* 6.5 px at 100 % */
+    --display-leading: 2.5rlh;  /* 71.25 px, 119 % (whole half lines only: 2 would be 95 %) */
+    --snap-display: calc(-0.2847rlh + 1.5px); /* -6.61 px: page title, 60 px */
   }
 }
 
@@ -227,8 +238,8 @@
   :root {
     --cols: 12;
     --display-size: 4rem;     /* 72 px */
-    --display-leading: 3rlh;  /* 81 px */
-    --snap-display: calc(-3.5rlh / 27 - 2px); /* -5.5 px at 100 % */
+    --display-leading: 3rlh;    /* 85.5 px, 119 %; 90 px, 125 % from 80em (2.5 would be 99 %) */
+    --snap-display: -0.1459rlh; /* -4.16 px: page title, 72 px */
     --display-tracking: -0.05em;
   }
 }
@@ -247,9 +258,16 @@
    portrait would drop below 45 characters). See DECISIONS.md, "Fließtext am Desktop". */
 @media (min-width: 80em) {
   :root {
-    --step-text: 1.22222rem;   /* 22 px, Crimson Pro on 27 px lines (123 %) */
-    --snap-text: -1px;  /* measured; px, not rlh: on the grid at 100 to 200 % text size (rlh was 1 to 2 px off at 200 %); code blocks (16.5 px) keep --snap-mono */
-    --cap-height: calc(12.61rlh / 27); /* 0.5732 em at 22 px */
+    --step-text: 1.22222rem;   /* 22 px, Crimson Pro on 30 px lines (136 %) */
+    --root-leading: 1.666667;  /* 30 px: longer lines, more space between them */
+    /* The grid is 30 px here, so every snap is measured again (values at 100 %). */
+    --phase: calc(0.2692rlh - 1px);         /* 7.08 px */
+    --snap-body: calc(0.0611rlh - 0.75px);  /* 1.08 px */
+    --snap-small: calc(0.1026rlh - 1px);    /* 2.08 px */
+    --snap-small-tight: calc(0.2667rlh - 1px); /* 7 px */
+    --snap-standfirst: calc(0.019rlh - 1.5px); /* -0.93 px */
+    --snap-mono: calc(0.0611rlh + 0.25px);  /* 2.08 px */
+    --snap-display: calc(-0.0795rlh - 0.5px); /* -2.89 px: page title, 72 px */
   }
 }
 
@@ -766,13 +784,18 @@ a:hover {
 
 .figure img {
   width: 100%;
-  margin-top: calc(6.5rlh / 27 - var(--cap-height)); /* baselines lie 6.5 px below a grid line */
-  margin-bottom: calc(7rlh / 27);
+  /* Cap height and top margin rounded to 1/64 px, the unit of Chrome's layout;
+     the bottom margin is the remainder to the next grid line, so image and margins
+     always add up to whole half lines (at 150 % text size they were 0.02 px off). */
+  --fig-cap: round(var(--cap-height), 0.015625px);
+  --fig-top: round(calc(var(--phase) - var(--cap-height)), 0.015625px);
+  margin-top: var(--fig-top); /* top on the cap height of a text line */
+  margin-bottom: calc(var(--baseline-grid) - var(--fig-top) - var(--fig-cap)); /* bottom on a baseline, then to the next grid line */
 }
 
 @supports (height: round(down, 100cqi, 1px)) {
   .figure img {
-    height: calc(round(down, calc(100cqi / var(--ratio) - var(--cap-height)), 0.5rlh) + var(--cap-height));
+    height: calc(round(down, calc(100cqi / var(--ratio) - var(--cap-height)), 0.5rlh) + var(--fig-cap));
     object-fit: cover;
   }
 }

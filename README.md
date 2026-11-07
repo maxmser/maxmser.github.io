@@ -25,7 +25,7 @@ Every baseline on every page sits on a grid of half lines (13.5 px). With `hugo 
 node tools/raster-check.mjs http://localhost:1313 /projects/layout-test/   # needs Node 22+ and Google Chrome; exit code 1 if anything is off the grid
 ```
 
-Run it after any change to font sizes, line heights or fonts. If it fails, measure again and adjust the `--snap-*` values (`--snap-body`, `--snap-small`, `--snap-small-tight`, `--snap-display`, `--snap-text`) in `assets/css/main.css` (see DECISIONS.md, "Grundlinienraster").
+Run it after any change to font sizes, line heights or fonts. If it fails, measure again and adjust `--phase` and the `--snap-*` values in `assets/css/main.css` (measured per width range at 100 to 200 % text size; see DECISIONS.md, "Grundlinienraster" and "Zeilenabstand").
 
 ## Change the fonts
 
