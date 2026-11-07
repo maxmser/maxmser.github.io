@@ -495,7 +495,7 @@ Stand 07.11.2026. Max überlegt, statt Inter Geist als Schrift ohne Serifen zu v
 
 Die dünnere Darstellung ist `-webkit-font-smoothing: antialiased` mit `-moz-osx-font-smoothing: grayscale`. Laut MDN wirkt sie nur auf macOS, nicht auf dem iPhone und nicht unter Windows. Sie schaltet auf dem Mac die Verdickung der Schrift durch das System ab.
 
-Seit dem 07.11.2026 steht der Schalter auf jeder Seite, aber nur im HTML als Vorlage. Er erscheint erst, wenn die Adresse `?test`, `?f=geist` oder `?s=thin` enthält, andere Besucher sehen ihn nie. Links auf andere Seiten der Website nehmen die Parameter mit, gespeichert wird nichts, weder Cookie noch Speicher im Browser. Auf der Testseite steht er immer, weil Max ihn dort erwartet. Seit dem 07.11.2026 kann er außerdem die Stärke von Crimson Pro zeigen, 340, 360, 380 oder 400 (`?w=`), weil Max 340 auf dem iPhone eine Spur zu dünn vorkam.
+Seit dem 07.11.2026 steht der Schalter auf jeder Seite, aber nur im HTML als Vorlage. Er erscheint erst, wenn die Adresse `?test`, `?f=geist` oder `?s=thin` enthält, andere Besucher sehen ihn nie. Links auf andere Seiten der Website nehmen die Parameter mit, gespeichert wird nichts, weder Cookie noch Speicher im Browser. Auf der Testseite steht er immer, weil Max ihn dort erwartet. Seit dem 07.11.2026 kann er außerdem die Stärke von Crimson Pro zeigen, 340, 360, 380 oder 400 (`?w=`), weil Max 340 auf dem iPhone eine Spur zu dünn vorkam. Auf Max' Wunsch steht der Schalter seit dem 07.11.2026 bis zur Entscheidung auf jeder Seite für alle Besucher.
 
 ## Crimson leichter
 

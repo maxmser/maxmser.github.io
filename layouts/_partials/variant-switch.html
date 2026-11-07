@@ -4,9 +4,10 @@
   the address: ?f=geist for Geist, ?s=thin for -webkit-font-smoothing:
   antialiased (macOS only, MDN), ?w=360, 380 or 400 for Crimson (default 340 on
   sharp screens, 370 on others); ?test shows the switch without changing
-  anything. The switch is a <template> and is put into the page only with one
-  of these parameters, or always on pages with "variants: true" in the front
-  matter (the layout test page), so other visitors never see it. Links to other pages of the
+  anything. The switch is a <template>, put into the page by the script. Since
+  2026-11-07 baseof.html passes "always" true, at Max's request: the switch is
+  on every page for every visitor until the decision. Set "always" back to
+  .Params.variants to show it only on the test page (or with a parameter). Links to other pages of the
   site carry the parameters on. Nothing is stored (no cookie, no storage).
   Geist: version 1.9.2 from github.com/vercel/geist-font, SIL Open Font License
   1.1 without reserved font name, subset to the site's characters and the
