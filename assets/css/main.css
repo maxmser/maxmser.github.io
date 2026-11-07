@@ -172,6 +172,7 @@
   --snap-small-tight: 0.1852rlh; /* 5 px: Inter 14.6 px on 20.25 px lines */
   --snap-standfirst: -2px;    /* Crimson 24 px; px, not rlh: measured, see DECISIONS.md */
   --snap-mono: 0.03704rlh;      /* 1 px: code blocks, SF Mono at 0.75em (other systems' monospace fonts may differ) */
+  --snap-text: 0px;           /* Crimson 21 px lands on the grid by itself; 22 px from 80em needs a snap */
   --snap-display: 0.0185rlh;  /* 0.5 px: page title, 36 px */
 
   /* Three weights: 600 only for section names and subheadings (Inter);
@@ -214,6 +215,18 @@
     --display-leading: 3rlh;  /* 81 px */
     --snap-display: -0.2407rlh; /* -6.5 px */
     --display-tracking: -0.025em;
+  }
+}
+
+/* Laptops and desktops: running text one pixel larger. At 21 px the lines on the
+   common MacBook widths (1440 to 1728 px) averaged 70 to 74 characters, single
+   lines up to 82, and Crimson's small letters were lower than Inter's 18 px.
+   From 80em (1280 px) 22 px; phones and tablets keep 21 px (an iPad 13 in
+   portrait would drop below 45 characters). See DECISIONS.md, "Fließtext am Desktop". */
+@media (min-width: 80em) {
+  :root {
+    --step-text: 1.22222rem;   /* 22 px, Crimson Pro on 27 px lines (123 %) */
+    --snap-text: -0.03704rlh;  /* -1 px, measured; code blocks (16.5 px) keep --snap-mono */
   }
 }
 
@@ -376,6 +389,13 @@ a:hover {
   font-family: var(--font-text);
   font-size: var(--step-text);
   letter-spacing: 0;
+}
+
+/* Running text blocks moved onto the baseline grid where Crimson's size needs it
+   (--snap-text, 0 at 21 px). Figures, h3 and code blocks have their own placement. */
+.prose:not(.intro-text) > :is(p, ul, ol, blockquote) {
+  position: relative;
+  top: var(--snap-text);
 }
 
 /* Text before the first section heading: part of the introduction, one line
