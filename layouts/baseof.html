@@ -49,7 +49,7 @@
        stores the lean ones instead. The conservative rule (on pointer or touch
        down) is the subset WebKit has agreed to; Safari can use it once it is on.
        All browsers: the service worker (assets/js/sw.js), registered below. */}}
-  {{ partial "variant-switch.html" "head" }}
+  {{ partial "variant-switch.html" (dict "part" "head" "always" .Params.variants) }}
   <script type="speculationrules">
   {"prefetch":[{"where":{"href_matches":"/*"},"eagerness":"conservative"}],
    "prerender":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}
@@ -57,7 +57,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main">{{ T "skipToContent" }}</a>
-  {{ partial "variant-switch.html" "bar" }}
+  {{ partial "variant-switch.html" (dict "part" "bar" "always" .Params.variants) }}
   <div class="page">
     <header class="site-header">
       {{ partial "nav.html" . }}

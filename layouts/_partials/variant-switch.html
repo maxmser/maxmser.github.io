@@ -1,22 +1,26 @@
 {{- /*
   Test only, on every page: compare the sans-serif Inter with Geist, and the
-  thinner text rendering on macOS. Switched in the address: ?f=geist for Geist,
-  ?s=thin for -webkit-font-smoothing: antialiased (macOS only, MDN); ?test shows
-  the switch without changing anything. The switch is a <template> and is put
-  into the page only with one of these parameters, so other visitors never see
-  it. Links to other pages of the
+  thinner text rendering on macOS, and the weight of Crimson Pro. Switched in
+  the address: ?f=geist for Geist, ?s=thin for -webkit-font-smoothing:
+  antialiased (macOS only, MDN), ?w=360, 380 or 400 for Crimson (default 340 on
+  sharp screens, 370 on others); ?test shows the switch without changing
+  anything. The switch is a <template> and is put into the page only with one
+  of these parameters, or always on pages with "variants: true" in the front
+  matter (the layout test page), so other visitors never see it. Links to other pages of the
   site carry the parameters on. Nothing is stored (no cookie, no storage).
   Geist: version 1.9.2 from github.com/vercel/geist-font, SIL Open Font License
   1.1 without reserved font name, subset to the site's characters and the
   weights 400 to 600 (static/fonts/test-geist/). See DECISIONS.md, "Geist im Test".
-  Call with "head" for the style and script, "bar" for the switch.
+  Call with (dict "part" "head" "always" bool) for the style and script, and
+  "part" "bar" for the switch.
 */ -}}
-{{- if eq . "head" }}
+{{- $always := .always }}
+{{- if eq .part "head" }}
 <script>
 { const q = new URLSearchParams(location.search), c = document.documentElement.classList;
   if (q.get("f") === "geist") c.add("v-geist");
   if (q.get("s") === "thin") c.add("v-thin");
-  if (q.has("test") || q.has("f") || q.has("s")) c.add("v-test"); }
+  if (["360", "380", "400"].includes(q.get("w"))) c.add("v-w" + q.get("w")); }
 </script>
 <style>
 @font-face { font-family: "GeistTest"; font-weight: 400 600; font-display: swap; src: url("/fonts/test-geist/Geist.woff2") format("woff2"); }
@@ -32,7 +36,10 @@ html.v-geist {
 @media (min-width: 40em) { html.v-geist { --snap-display: 0.2407rlh; } }  /* 6.5 px, Inter 5.5 px */
 @media (min-width: 64em) { html.v-geist { --snap-display: -0.2037rlh; } } /* -5.5 px, Inter -6.5 px */
 html.v-thin { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-.variant-switch { position: fixed; z-index: 10; left: 50%; bottom: 0.5rlh; translate: -50% 0; display: flex; gap: 0.5rlh; padding: 0 0.5rlh; background: var(--paper); box-shadow: 0 0 0 1px var(--rule); font-family: system-ui, sans-serif; font-size: 14px; white-space: nowrap; }
+html.v-w360 { --weight-text: 360; }
+html.v-w380 { --weight-text: 380; }
+html.v-w400 { --weight-text: 400; }
+.variant-switch { position: fixed; z-index: 10; left: 50%; bottom: 0.5rlh; translate: -50% 0; display: flex; flex-wrap: wrap; justify-content: center; column-gap: 0.5rlh; width: max-content; max-width: calc(100vw - 2 * var(--margin)); padding: 0 0.5rlh; background: var(--paper); box-shadow: 0 0 0 1px var(--rule); font-family: system-ui, sans-serif; font-size: 14px; white-space: nowrap; }
 .variant-switch a { padding: 0 0.25rlh; }
 .variant-switch a[aria-current] { font-weight: 600; text-decoration: underline; text-underline-offset: 0.2em; }
 </style>
@@ -41,22 +48,30 @@ html.v-thin { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: gray
   <a id="v-inter">Inter</a>
   <a id="v-geist">Geist</a>
   <span>|</span>
+  <span>Crimson</span>
+  <a id="v-w340">340</a>
+  <a id="v-w360">360</a>
+  <a id="v-w380">380</a>
+  <a id="v-w400">400</a>
+  <span>|</span>
   <a id="v-thin">Mac: thin</a>
 </nav></template>
 <script>{
   const q = new URLSearchParams(location.search);
-  if (q.has("test") || q.has("f") || q.has("s")) {
+  if ({{ if $always }}true || {{ end }}q.has("test") || q.has("f") || q.has("s") || q.has("w")) {
     // The switch is only put into the page when a test parameter is set.
     const tpl = document.getElementById("variant-switch");
     tpl.after(tpl.content.cloneNode(true));
     const f = q.get("f") === "geist", t = q.get("s") === "thin";
-    const params = (ff, tt) => [ff ? "f=geist" : "", tt ? "s=thin" : ""].filter(Boolean).join("&") || "test";
+    const w = ["360", "380", "400"].includes(q.get("w")) ? q.get("w") : "";
+    const params = (ff, tt, ww) => [ff ? "f=geist" : "", tt ? "s=thin" : "", ww ? "w=" + ww : ""].filter(Boolean).join("&") || "test";
     const set = (id, p, on) => { const a = document.getElementById(id); a.href = "?" + p; if (on) a.setAttribute("aria-current", "true"); };
-    set("v-inter", params(false, t), !f);
-    set("v-geist", params(true, t), f);
-    set("v-thin", params(f, !t), t);
+    set("v-inter", params(false, t, w), !f);
+    set("v-geist", params(true, t, w), f);
+    for (const x of ["", "360", "380", "400"]) set("v-w" + (x || "340"), params(f, t, x), w === x);
+    set("v-thin", params(f, !t, w), t);
     // Carry the test parameters on to every other page of the site.
-    const keep = params(f, t);
+    const keep = params(f, t, w);
     addEventListener("DOMContentLoaded", () => {
       for (const a of document.querySelectorAll("a[href]")) {
         const u = new URL(a.href, location.href);
