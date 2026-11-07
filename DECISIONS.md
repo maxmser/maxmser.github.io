@@ -495,6 +495,8 @@ Stand 07.11.2026. Max überlegt, statt Inter Geist als Schrift ohne Serifen zu v
 
 Die dünnere Darstellung ist `-webkit-font-smoothing: antialiased` mit `-moz-osx-font-smoothing: grayscale`. Laut MDN wirkt sie nur auf macOS, nicht auf dem iPhone und nicht unter Windows. Sie schaltet auf dem Mac die Verdickung der Schrift durch das System ab.
 
+Als dritte Möglichkeit kann der Schalter Crimson Pro dünner zeigen, in Stärke 370 oder 340 statt 400 (`?w=370`, `?w=340`), für Fließtext und Kurzbeschreibung. Crimson Pro ist eine variable Schrift mit Stärken von 200 bis 900. Für den Test gibt es eine eigene gekürzte Datei mit 300 bis 500 in `static/fonts/test-crimson-light/`, 28.128 Bytes statt 22.252 Bytes. Die veröffentlichte Schriftdatei bleibt unverändert. Die Stärke ändert die Lage der Grundlinien nicht, das Rasterskript ist auch mit 340 grün.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
