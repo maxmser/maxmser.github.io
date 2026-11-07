@@ -471,6 +471,10 @@ Weitere Funde der Gutachten, noch einzeln zu besprechen: Auf 320 Pixel steht im 
 
 Stand 07.11.2026. In zwei Seitentiteln stand das letzte Wort allein in der letzten Zeile: "them." im Titel der Startseite bei 320 Pixel und "parents" im Titel "Fire TV setup for my parents" bei 360 bis 1024 Pixel. Seitentitel haben jetzt `text-wrap: balance`, der Browser verteilt die Wörter gleichmäßig auf die Zeilen. Gemessen auf fünf Seiten und neun Breiten von 320 bis 1440 Pixel bleibt die Zahl der Zeilen überall gleich, und nur diese beiden Titel brechen anders um. Die Alternative `pretty` behob den Fire-TV-Titel auf den meisten Breiten nicht. Laut MDN gibt es `balance` in Chrome ab 114, Firefox ab 121 und Safari ab 17.5. Max hat am 07.11.2026 zugestimmt.
 
+## Seitenrand auf großen Bildschirmen
+
+Stand 07.11.2026. Die Seite wird höchstens 96rem breit, das sind 1728 Pixel. Der Seitenrand wuchs mit fünf Prozent der Bildschirmbreite aber weiter bis 108 Pixel, und weil er in der Seitenbreite enthalten ist, wurde die Textspalte auf großen Bildschirmen schmaler: 632 Pixel bei 1728, 624 bei 1920 und 614 bei 2560 Pixel. Der Rand hört jetzt bei fünf Prozent der größten Seitenbreite auf zu wachsen, bei 86,4 Pixel. Bis 1728 Pixel ändert sich nichts, darüber bleibt die Textspalte bei 632 Pixel (gemessen bei 1728, 1800, 1920, 2160 und 2560 Pixel). Max hat am 07.11.2026 zugestimmt.
+
 ## Offene Punkte
 
 Stand 05.11.2026.

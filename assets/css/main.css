@@ -185,7 +185,11 @@
   /* Grid */
   --cols: 4;
   --gutter: 1rlh;
-  --margin: clamp(0.75rlh, 5vw, 4rlh); /* 20.25 px on phones */
+  /* 20.25 px on phones, 5 % of the width, at most 5 % of --max-width (86.4 px):
+     the margin stops growing when the page reaches its full width, so the
+     columns keep their width on larger screens (until 2026-11-07 it grew on to
+     108 px and the text column narrowed from 632 to 614 px). */
+  --margin: clamp(0.75rlh, 5vw, calc(var(--max-width) / 20));
   --max-width: 96rem;
   /* Line length comes from the grid: running text spans 6 columns, 5 from 92em,
      so a line never exceeds about 72 characters. --measure is only a safety net
