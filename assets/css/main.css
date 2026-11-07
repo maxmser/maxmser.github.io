@@ -191,10 +191,12 @@
      108 px and the text column narrowed from 632 to 614 px). */
   --margin: clamp(0.75rlh, 5vw, calc(var(--max-width) / 20));
   --max-width: 96rem;
-  /* Line length comes from the grid: running text spans 6 columns, 5 from 92em,
-     so a line never exceeds about 72 characters. --measure is only a safety net
-     outside the grid; it never binds in the grid layouts (62ch was 736 px: the
-     zero of Crimson is wide, and lines reached 86 characters on wide screens). */
+  /* Line length comes from the grid: running text spans 6 columns, 5 from 92em.
+     Measured on 2026-11-07: from 1024 px lines average 50 to 68 characters,
+     single lines up to 77. --measure (62ch was 736 px: the zero of Crimson is
+     wide) binds only in the 8-column layout between about 1000 and 1023 px,
+     where the column would otherwise grow past 666 px; there lines average 75
+     and reach 82 characters (open point in DECISIONS.md). */
   --measure: 37rem;
 
   /* Colours */
