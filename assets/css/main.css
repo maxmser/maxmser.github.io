@@ -173,6 +173,7 @@
   --snap-standfirst: -2px;    /* Crimson 24 px; px, not rlh: measured, see DECISIONS.md */
   --snap-mono: 0.03704rlh;      /* 1 px: code blocks, SF Mono at 0.75em (other systems' monospace fonts may differ) */
   --snap-text: 0px;           /* Crimson 21 px lands on the grid by itself; 22 px from 80em needs a snap */
+  --cap-height: calc(12rlh / 27); /* Crimson's capitals above the baseline: 0.573 em, 12 px at 21 px; figures hang from it */
   --snap-display: 0.0185rlh;  /* 0.5 px: page title, 36 px */
 
   /* Three weights: 600 only for section names and subheadings (Inter);
@@ -227,6 +228,7 @@
   :root {
     --step-text: 1.22222rem;   /* 22 px, Crimson Pro on 27 px lines (123 %) */
     --snap-text: -0.03704rlh;  /* -1 px, measured; code blocks (16.5 px) keep --snap-mono */
+    --cap-height: calc(12.61rlh / 27); /* 0.5732 em at 22 px */
   }
 }
 
@@ -704,10 +706,10 @@ a:hover {
 
 /* ---------- Figures (layouts/_markup/render-image.html) ---------- */
 
-/* Figures: the image hangs from the cap height of a text line (Crimson 21 px:
-   12 px above its baseline) and stands on a baseline, as in Müller-Brockmann's
-   grid systems: top 5.5 px above a grid line, height n * 13.5 + 12 px, then 7 px
-   to the next grid line. The caption's first baseline lies one line below the
+/* Figures: the image hangs from the cap height of a text line (--cap-height:
+   Crimson 21 px 12 px above its baseline, 22 px from 80em 12.6 px) and stands on a
+   baseline, as in Müller-Brockmann's grid systems: at 21 px top 5.5 px above a
+   grid line, height n * 13.5 + 12 px, then 7 px to the next grid line. The caption's first baseline lies one line below the
    image's; the script in baseof.html pads the caption so the text after it is on
    the grid. White space: 69 px above the image, as before an h3; below, 69 px
    from the caption's last baseline (or the image) to the next capitals, 75.75 px
@@ -725,13 +727,13 @@ a:hover {
 
 .figure img {
   width: 100%;
-  margin-top: calc(-5.5rlh / 27);
+  margin-top: calc(6.5rlh / 27 - var(--cap-height)); /* baselines lie 6.5 px below a grid line */
   margin-bottom: calc(7rlh / 27);
 }
 
 @supports (height: round(down, 100cqi, 1px)) {
   .figure img {
-    height: calc(round(down, calc(100cqi / var(--ratio) - 12rlh / 27), 0.5rlh) + 12rlh / 27);
+    height: calc(round(down, calc(100cqi / var(--ratio) - var(--cap-height)), 0.5rlh) + var(--cap-height));
     object-fit: cover;
   }
 }
