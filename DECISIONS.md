@@ -531,6 +531,14 @@ Geprüft: Das Rasterskript ist in allen sieben Ansichten grün, zusätzlich bei 
 
 Stand 07.11.2026. Bei einer optischen Prüfung von Crimson Pro im Satz waren Ligaturen, Mediävalziffern, typografische Satzzeichen, Kursive und Fett in Ordnung, ebenso die Laufweite: In den leichteren Stärken gibt Crimson selbst etwas mehr Abstand zwischen den Buchstaben (gemessen 0,053 der Schriftgröße bei 360 gegen 0,050 bei 400), zusätzliche Laufweite machte den Text nur körnig. Das Leerzeichen von Crimson ist aber mit 0,188 der Schriftgröße schmal, bei 22 Pixel 4,1 Pixel; bei Textschriften sind etwa 0,22 bis 0,25 üblich. Mit der leichteren Stärke 360 und dem größeren Zeilenabstand wirkten die Wörter dadurch gedrängt. Fließtext und Kurzbeschreibung haben jetzt 0,025em mehr Wortabstand, zusammen 0,213 der Schriftgröße. Max hat Vergleichsbilder mit +0,025em und +0,04em gesehen und am 07.11.2026 zugestimmt. Zwischenüberschriften, Code und Bildunterschriften innerhalb des Fließtexts behalten ihren normalen Wortabstand. Am Raster ändert der Wortabstand nichts.
 
+## Schrift für die Küchenschlacht-Mail
+
+Stand 09.11.2026. Unter `static/fonts/geist-mail/` liegt eine eigene Geist-Datei, die die Website selbst nicht verwendet. Sie gehört zu Max' privatem Küchenschlacht-Ticketwächter (`~/Documents/Projekte/Proxmox/kuechenschlacht-watch/`), der HTML-Mails verschickt. Die Mail steht in Helvetica Neue. Wo diese fehlt, etwa auf Android, soll Geist einspringen statt Roboto, weil Geist fast so breit läuft wie Helvetica Neue und die Zeilen gleich umbrechen. Max hat das am 09.11.2026 anhand von Vergleichsbildern entschieden und die Veröffentlichung über GitHub Pages freigegeben.
+
+Die Datei ist aus derselben Quelle gebaut wie die Schrift der Website, Geist 1.9.2 unter der SIL Open Font License 1.1 ohne reservierten Schriftnamen. Sie enthält die Stärken 300 bis 800, weil die Mail dünne und sehr fette Überschriftteile hat, und nur die 128 Zeichen der Mail. Sie wiegt 18.708 Bytes. Gebaut wird sie mit `tools/build_mail_font.py` im Mail-Projekt, nicht mit `tools/build-fonts.py` der Website. Die Lizenz liegt daneben. Gemessen am 09.11.2026 liefert GitHub Pages Schriften mit `access-control-allow-origin: *` aus, Mail-Programme dürfen sie also von fremden Adressen laden.
+
+Die Website lädt die Datei nie, der Service Worker legt sie nicht ab, und die Prüfung der Zeichen beim Build betrifft sie nicht. Wird sie gelöscht, fällt die Mail auf Android auf Roboto zurück.
+
 ## Offene Punkte
 
 Stand 05.11.2026.
